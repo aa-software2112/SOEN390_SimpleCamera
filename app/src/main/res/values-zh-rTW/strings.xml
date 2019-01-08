@@ -18,7 +18,7 @@
 
     <!-- FAQ -->
     <string name="faq_1_title">我應該設定什麼相片壓縮品質?</string>
-    <string name="faq_1_text">視你目標而定。對大多數一般人而言，建議使用75%-80%，圖片依然是相當高品質，但檔案大小比100%大幅減少很多。</string>
+    <string name="faq_1_text" formatted="false">視你目標而定。對大多數一般人而言，建議使用75%-80%，圖片依然是相當高品質，但檔案大小比100%大幅減少很多。</string>
 
     <!-- Settings -->
     <string name="save_photos">相片和影片儲存位置</string>

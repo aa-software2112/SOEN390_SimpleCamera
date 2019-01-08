@@ -18,7 +18,7 @@
 
     <!-- FAQ -->
     <string name="faq_1_title">Kokią nuotraukos suspaudimo kokybę turėčiau nustatyti?</string>
-    <string name="faq_1_text">Tai priklauso nuo Jūsų tikslų. Įprastiems tikslams dauguma žmonių pataria naudoti 75%-80%, kai nuotrauka vistiek yra geros kokybės, bet bylos dydis sumažėja kardinaliai palyginus su 100%.</string>
+    <string name="faq_1_text" formatted="false">Tai priklauso nuo Jūsų tikslų. Įprastiems tikslams dauguma žmonių pataria naudoti 75%-80%, kai nuotrauka vistiek yra geros kokybės, bet bylos dydis sumažėja kardinaliai palyginus su 100%.</string>
 
     <!-- Settings -->
     <string name="save_photos">Išsaugoti nuotraukas ir vaizdo įrašus į</string>

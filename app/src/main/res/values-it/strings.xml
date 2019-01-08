@@ -18,7 +18,7 @@
 
     <!-- FAQ -->
     <string name="faq_1_title">Che qualità di compressione dovrei impostare?</string>
-    <string name="faq_1_text">Dipende dal proprio obiettivo. In genere si consiglia di utilizzare una qualità del 75%-80%, in modo che l\'immagine sia ancora di ottima qualità, ma la dimensione del file viene ridotta drasticamente rispetto al 100%.</string>
+    <string name="faq_1_text" formatted="false">Dipende dal proprio obiettivo. In genere si consiglia di utilizzare una qualità del 75%-80%, in modo che l\'immagine sia ancora di ottima qualità, ma la dimensione del file viene ridotta drasticamente rispetto al 100%.</string>
 
     <!-- Settings -->
     <string name="save_photos">Salva foto e video in</string>

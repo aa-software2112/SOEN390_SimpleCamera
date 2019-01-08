@@ -18,7 +18,7 @@
 
     <!-- FAQ -->
     <string name="faq_1_title">Qué calidade de compresión debo escoller para a foto?</string>
-    <string name="faq_1_text">Depende do obxetivo. Para uso xeral a maioría de usuarias recomenda 75%-80%, que é un valor bastante bo, pero o tamaño do ficheiro redúcese drásticamente comparado co 100%.</string>
+    <string name="faq_1_text" formatted="false">Depende do obxetivo. Para uso xeral a maioría de usuarias recomenda 75%-80%, que é un valor bastante bo, pero o tamaño do ficheiro redúcese drásticamente comparado co 100%.</string>
 
     <!-- Settings -->
     <string name="save_photos">Gardar fotos e videos en</string>
