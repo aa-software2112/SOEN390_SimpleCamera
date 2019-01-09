@@ -18,7 +18,7 @@
 
     <!-- FAQ -->
     <string name="faq_1_title">Jaki poziom kompresji ustawić?</string>
-    <string name="faq_1_text">Zależy to od rodzaju zdjęcia. Generalnie zalecany jest poziom 75-80% - stanowi on często dobry kompromis między jakością a rozmiarem zdjęcia.</string>
+    <string name="faq_1_text" formatted="false">Zależy to od rodzaju zdjęcia. Generalnie zalecany jest poziom 75-80% - stanowi on często dobry kompromis między jakością a rozmiarem zdjęcia.</string>
 
     <!-- Settings -->
     <string name="save_photos">Zapisuj zdjęcia i filmy w</string>
