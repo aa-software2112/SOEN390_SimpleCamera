@@ -7,7 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.provider.MediaStore
-import android.view.*
+import android.view.* // ktlint-disable no-wildcard-imports
 import android.widget.RelativeLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -17,15 +17,15 @@ import com.simplemobiletools.camera.BuildConfig
 import com.simplemobiletools.camera.R
 import com.simplemobiletools.camera.extensions.config
 import com.simplemobiletools.camera.extensions.navBarHeight
-import com.simplemobiletools.camera.helpers.*
+import com.simplemobiletools.camera.helpers.* // ktlint-disable no-wildcard-imports
 import com.simplemobiletools.camera.implementations.MyCameraImpl
 import com.simplemobiletools.camera.interfaces.MyPreview
 import com.simplemobiletools.camera.views.CameraPreview
 import com.simplemobiletools.camera.views.FocusCircleView
-import com.simplemobiletools.commons.extensions.*
-import com.simplemobiletools.commons.helpers.*
+import com.simplemobiletools.commons.extensions.* // ktlint-disable no-wildcard-imports
+import com.simplemobiletools.commons.helpers.* // ktlint-disable no-wildcard-imports
 import com.simplemobiletools.commons.models.Release
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.* // ktlint-disable no-wildcard-imports
 
 class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     private val FADE_DELAY = 5000L

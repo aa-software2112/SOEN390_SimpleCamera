@@ -6,7 +6,7 @@ import android.view.WindowManager
 import com.simplemobiletools.camera.helpers.Config
 import java.io.File
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.* // ktlint-disable no-wildcard-imports
 
 val Context.config: Config get() = Config.newInstance(applicationContext)
 
