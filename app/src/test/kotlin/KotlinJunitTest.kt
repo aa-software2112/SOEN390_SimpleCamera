@@ -15,5 +15,3 @@ class KotlinJunitTest {
         Assert.assertTrue(1 == 1)
     }
 }
-
-
