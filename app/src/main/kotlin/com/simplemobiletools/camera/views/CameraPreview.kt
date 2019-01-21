@@ -6,7 +6,7 @@ import android.graphics.ImageFormat
 import android.graphics.Matrix
 import android.graphics.Rect
 import android.graphics.SurfaceTexture
-import android.hardware.camera2.*
+import android.hardware.camera2.* // ktlint-disable no-wildcard-imports
 import android.hardware.camera2.params.MeteringRectangle
 import android.hardware.camera2.params.StreamConfigurationMap
 import android.media.ImageReader
@@ -29,15 +29,15 @@ import com.simplemobiletools.camera.activities.MainActivity
 import com.simplemobiletools.camera.dialogs.ChangeResolutionDialog
 import com.simplemobiletools.camera.extensions.config
 import com.simplemobiletools.camera.extensions.getOutputMediaFile
-import com.simplemobiletools.camera.helpers.*
+import com.simplemobiletools.camera.helpers.* // ktlint-disable no-wildcard-imports
 import com.simplemobiletools.camera.implementations.MyCameraImpl
 import com.simplemobiletools.camera.interfaces.MyPreview
 import com.simplemobiletools.camera.models.FocusArea
 import com.simplemobiletools.camera.models.MySize
-import com.simplemobiletools.commons.extensions.*
+import com.simplemobiletools.commons.extensions.* // ktlint-disable no-wildcard-imports
 import com.simplemobiletools.commons.models.FileDirItem
 import java.io.File
-import java.util.*
+import java.util.* // ktlint-disable no-wildcard-imports
 import java.util.concurrent.Semaphore
 import java.util.concurrent.TimeUnit
 

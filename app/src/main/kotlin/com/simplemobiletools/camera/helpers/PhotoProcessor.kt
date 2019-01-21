@@ -11,15 +11,21 @@ import com.simplemobiletools.camera.R
 import com.simplemobiletools.camera.activities.MainActivity
 import com.simplemobiletools.camera.extensions.config
 import com.simplemobiletools.camera.extensions.getOutputMediaFile
-import com.simplemobiletools.commons.extensions.*
+import com.simplemobiletools.commons.extensions.* // ktlint-disable no-wildcard-imports
 import com.simplemobiletools.commons.helpers.isNougatPlus
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.OutputStream
 
-class PhotoProcessor(val activity: MainActivity, val saveUri: Uri?, val deviceOrientation: Int, val previewRotation: Int, val isUsingFrontCamera: Boolean,
-                     val isThirdPartyIntent: Boolean) :
+class PhotoProcessor(
+    val activity: MainActivity,
+    val saveUri: Uri?,
+    val deviceOrientation: Int,
+    val previewRotation: Int,
+    val isUsingFrontCamera: Boolean,
+    val isThirdPartyIntent: Boolean
+) :
         AsyncTask<ByteArray, Void, String>() {
 
     override fun doInBackground(vararg params: ByteArray): String {
