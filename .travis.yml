@@ -20,4 +20,7 @@ jobs:
     - stage: tests
       language: android
       before_script: chmod +x gradlew
-      script: ./gradlew test
+      script: ./gradlew runUnitTests
+
+before_script:
+      - cp signing.properties_sample signing.properties
