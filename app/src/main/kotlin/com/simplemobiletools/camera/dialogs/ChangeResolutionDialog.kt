@@ -12,8 +12,14 @@ import com.simplemobiletools.commons.extensions.setupDialogStuff
 import com.simplemobiletools.commons.models.RadioItem
 import kotlinx.android.synthetic.main.dialog_change_resolution.view.*
 
-class ChangeResolutionDialog(val activity: SimpleActivity, val isFrontCamera: Boolean, val photoResolutions: ArrayList<MySize>,
-                             val videoResolutions: ArrayList<MySize>, val openVideoResolutions: Boolean, val callback: () -> Unit) {
+class ChangeResolutionDialog(
+    val activity: SimpleActivity,
+    val isFrontCamera: Boolean,
+    val photoResolutions: ArrayList<MySize>,
+    val videoResolutions: ArrayList<MySize>,
+    val openVideoResolutions: Boolean,
+    val callback: () -> Unit
+) {
     private var dialog: AlertDialog
     private val config = activity.config
 
