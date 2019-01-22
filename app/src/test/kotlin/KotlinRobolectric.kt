@@ -1,17 +1,15 @@
 package test.kotlin
 
-import org.junit.*
+import org.junit.* // ktlint-disable no-wildcard-imports
 import org.junit.Assert
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-
 
 @RunWith(RobolectricTestRunner::class)
 public class KotlinRobolectric {
 
     @Before
-    fun beforeTest()
-    {
+    fun beforeTest() {
         System.out.println("In the \"Before method \"")
     }
 
@@ -21,9 +19,7 @@ public class KotlinRobolectric {
     }
 
     @After
-    fun AfterTest()
-    {
+    fun afterTest() {
         System.out.println("In the \"After method \"")
     }
-
 }

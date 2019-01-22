@@ -57,6 +57,9 @@ dependencies {
     testImplementation "com.nhaarman:mockito-kotlin:1.1.0"
     testImplementation 'org.amshove.kluent:kluent:1.14'
     testImplementation 'org.robolectric:robolectric:4.1'
+    testImplementation 'com.android.support.test:rules:1.0.2'
+    testImplementation 'com.android.support.test:runner:1.0.2'
+    testImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
 
 afterEvaluate {
