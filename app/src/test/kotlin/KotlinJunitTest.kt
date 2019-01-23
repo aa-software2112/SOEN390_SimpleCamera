@@ -36,4 +36,19 @@ class KotlinJunitTest {
         verify(mockedList).add(1)
         verify(mockedList).clear()
     }
+
+
+    @Test
+    fun mySize_ratio_modelsTest() {
+        println("Testing method MySize.ratio")
+        val mMySize = MySize(10, 5)
+        Assert.assertEquals(2.toFloat(), mMySize.ratio)
+    }
+
+    @Test
+    fun mySize_isSixteenToNine_modelsTest() {
+        println("Testing method MySize.isSixteenToNine")
+        val mMySize = MySize(16, 9)
+        Assert.assertTrue(mMySize.isSixteenToNine())
+    }
 }
