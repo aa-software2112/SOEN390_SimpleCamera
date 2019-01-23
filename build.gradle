@@ -30,7 +30,8 @@ task clean(type: Delete) {
 }
 
 task testDebugUnitTestExtended(dependsOn: [':app:testDebugUnitTest']) {
-    description 'Run all unit tests'
+    description 'Run unit tests on debug build and extra work'
+    //add the extra work to be done here
 }
 
 task runAcceptanceTests(dependsOn: [':app:connectedAndroidTest']) {
