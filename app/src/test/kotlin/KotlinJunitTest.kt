@@ -37,7 +37,6 @@ class KotlinJunitTest {
         verify(mockedList).clear()
     }
 
-
     @Test
     fun mySize_ratio_modelsTest() {
         println("Testing method MySize.ratio")
