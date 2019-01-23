@@ -7,15 +7,10 @@ android:
 
 jobs:
   include:
-    - stage: checkLint
-      language: android
-      before_script: chmod +x gradlew
-      script: ./gradlew ktlint
-
     - stage: compile
       language: android
       before_script: chmod +x gradlew
-      script: ./gradlew clean assembleDebug assembleRelease
+      script: ./gradlew ktlint assembleDebug
 
     - stage: tests
       language: android
