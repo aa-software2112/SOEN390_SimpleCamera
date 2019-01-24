@@ -16,6 +16,3 @@ jobs:
       language: android
       before_script: chmod +x gradlew
       script: ./gradlew testDebugUnitTestExtended
-
-before_script:
-      - cp signing.properties_sample signing.properties
