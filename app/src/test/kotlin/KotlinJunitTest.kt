@@ -1,5 +1,6 @@
 package test.kotlin
 
+import android.graphics.Matrix
 import android.graphics.Rect
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
@@ -27,14 +28,22 @@ class KotlinJunitTest {
     }
 
     @Test
-    fun mock_test() {
-        println("Testing Mockito")
+    fun mock_test1() {
+        println("Testing Mockito 1")
         val mockedList: MutableList<Int> = mock()
         mockedList.add(1)
         mockedList.clear()
 
         verify(mockedList).add(1)
         verify(mockedList).clear()
+    }
+
+    @Test
+    fun mock_test2() {
+        println("Testing Mockito 2")
+        val mockedMatrix: Matrix = mock()
+        mockedMatrix.setRotate(60.toFloat())
+        verify(mockedMatrix).setRotate(60.toFloat())
     }
 
     @Test
