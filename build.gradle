@@ -29,8 +29,9 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-task runUnitTests(dependsOn: [':app:testDebugUnitTest']) {
-    description 'Run all unit tests'
+task testDebugUnitTestExtended(dependsOn: [':app:testDebugUnitTest']) {
+    description 'Run unit tests on debug build and extra work'
+    //add the extra work to be done here
 }
 
 task runAcceptanceTests(dependsOn: [':app:connectedAndroidTest']) {
