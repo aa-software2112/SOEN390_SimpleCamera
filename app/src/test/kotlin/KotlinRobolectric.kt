@@ -6,23 +6,16 @@ import android.os.Environment
 import android.view.View
 import android.widget.ImageView
 import com.simplemobiletools.camera.activities.MainActivity
-import kotlinx.android.synthetic.main.activity_main.view.*
 import org.junit.* // ktlint-disable no-wildcard-imports
 import org.junit.Assert
 import org.junit.runner.RunWith
-import org.mockito.internal.matchers.Null
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.shadows.ShadowEnvironment
 import org.junit.contrib.java.lang.system.EnvironmentVariables
-import org.robolectric.shadows.ShadowLooper
-import org.robolectric.shadows.ShadowToast
-import java.util.concurrent.TimeUnit
-import kotlin.test.assertNotNull
 import org.junit.Rule
 import org.robolectric.Shadows
 import org.robolectric.shadows.ShadowApplication
-
 
 /** This class should be renamed and inherited by future tests classes, so that the application
  * will always be initialized correctly before testing. This is only necessary for application-level
@@ -73,7 +66,6 @@ class KotlinRobolectric {
 
         /** Create, resume, and make visible the MainActivity */
         mMainActivity = activityController.create().resume().visible().get()
-
     }
 
     @Test
