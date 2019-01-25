@@ -60,6 +60,7 @@ dependencies {
     testImplementation 'com.android.support.test:rules:1.0.2'
     testImplementation 'com.android.support.test:runner:1.0.2'
     testImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    testImplementation 'com.github.stefanbirkner:system-rules:1.19.0'
 }
 
 afterEvaluate {
@@ -72,6 +73,7 @@ afterEvaluate {
 
 allprojects {
     apply from: "$rootDir/ktlint.gradle"
+
 }
 
 Properties props = new Properties()
@@ -92,3 +94,4 @@ if (propFile.canRead()) {
     println 'signing.properties not found'
     android.buildTypes.release.signingConfig = null
 }
+
