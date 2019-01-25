@@ -37,8 +37,8 @@ class KotlinRobolectric {
     /** A shadow application must be made in order to toggle the camera AND write persmission */
     var application: ShadowApplication? = null
 
-    /** It is CRUCIAL to have this line of code, and the set environment below - otherwise
-     * the application will assume the evnironment is as in the real implementation, and fail to run
+    /** It is CRUCIAL to have this line of code to set the environment to emulated mode - otherwise
+     * the application will assume the environment is as in the real implementation, and fail to run
      */
     @get:Rule
     public final var env = EnvironmentVariables()
