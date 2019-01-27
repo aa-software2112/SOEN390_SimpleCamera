@@ -15,10 +15,7 @@ import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Handler
 import android.os.HandlerThread
-import android.util.DisplayMetrics
-import android.util.Range
-import android.util.Size
-import android.util.SparseIntArray
+import android.util.*
 import android.view.MotionEvent
 import android.view.Surface
 import android.view.TextureView
@@ -105,6 +102,13 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
     private val mCameraOpenCloseLock = Semaphore(1)
     private val mMediaActionSound = MediaActionSound()
     private var mZoomRect: Rect? = null
+
+    private val mTimer = Timer()
+    private var mCaptureTimeDelayTask: TimerTask? = null
+    private val CAPTURE_TIME_DELAY_TASK_INTERVAL = 1000L // in milliseconds
+    private var mCountdown = 0
+    private var mCountdownMode = false
+
 
     constructor(context: Context) : super(context)
 
@@ -602,6 +606,44 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
             mActivity.showErrorToast("Capture picture $e")
         }
     }
+
+
+    private fun initCaptureTimeDelayTask () {
+
+        mCaptureTimeDelayTask = object: TimerTask() {
+            override fun run(){
+                if (mCountdown != 0){
+                    // TODO: update remaining seconds in UI
+                    Log.d("CameraPreview", "$mCountdown seconds remaining before capture")
+                    // decrement the countdown
+                    mCountdown--
+                } else {
+                    mCountdownMode = false
+                    tryTakePicture()
+                    cancel() //canceling the task so that it does not perform another execution
+                }
+            }
+        }
+    }
+
+
+    // starts the countdown to take a picture with the new set countdown
+    // TODO: link frontend with this
+    private fun startCountdown(countdown : Int) {
+        mCountdownMode = true
+
+        mCountdown = countdown
+
+
+        /* init the task that will update the ui at every second
+           and that will take the picture when countdown reaches 0 */
+        initCaptureTimeDelayTask()
+
+        /* schedule the task to be ran at every interval */
+        mTimer.schedule(mCaptureTimeDelayTask, CAPTURE_TIME_DELAY_TASK_INTERVAL)
+
+    }
+
 
     // inspired by https://gist.github.com/royshil/8c760c2485257c85a11cafd958548482
     private fun focusArea(x: Float, y: Float, drawCircle: Boolean) {
