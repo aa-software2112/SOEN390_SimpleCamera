@@ -61,7 +61,6 @@ dependencies {
     testImplementation 'com.android.support.test:runner:1.0.2'
     testImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     testImplementation 'com.github.stefanbirkner:system-rules:1.19.0'
-    testImplementation 'org.robolectric:robolectric:4.1'
 }
 
 afterEvaluate {
