@@ -6,7 +6,6 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
-import androidx.test.espresso.intent.rule.IntentsTestRule
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.rule.ActivityTestRule
 import org.junit.After
@@ -15,7 +14,6 @@ import com.simplemobiletools.camera.R
 
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.runner.AndroidJUnit4
-import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -34,8 +32,6 @@ class MainActivityTest {
 
     @Before
     fun setUp() {
-
-
     }
 
     @Test
@@ -59,7 +55,5 @@ class MainActivityTest {
 
     @After
     fun tearDown() {
-
-
     }
 }
