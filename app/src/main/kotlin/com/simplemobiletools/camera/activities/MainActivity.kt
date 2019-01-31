@@ -221,7 +221,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         shutter.setOnClickListener { shutterPressed() }
         settings.setOnClickListener { launchSettings() }
         toggle_photo_video.setOnClickListener { handleTogglePhotoVideo() }
-        // change_resolution.setOnClickListener { mPreview?.showChangeResolutionDialog() }
+        change_resolution.setOnClickListener { mPreview?.showChangeResolutionDialog() }
     }
 
     private fun toggleCamera() {
@@ -395,7 +395,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         fadeAnim(settings, .5f)
         fadeAnim(toggle_flash, .5f)
         // fadeAnim(toggle_photo_video, .0f)
-        // fadeAnim(change_resolution, .0f)
+        fadeAnim(change_resolution, .5f)
         // fadeAnim(last_photo_video_preview, .0f)
     }
 
@@ -403,7 +403,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         fadeAnim(settings, 1f)
         fadeAnim(toggle_flash, 1f)
         // fadeAnim(toggle_photo_video, 1f)
-        // fadeAnim(change_resolution, 1f)
+        fadeAnim(change_resolution, 1f)
         // fadeAnim(last_photo_video_preview, 1f)
         scheduleFadeOut()
     }
