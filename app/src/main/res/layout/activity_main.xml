@@ -7,35 +7,18 @@
     android:background="@android:color/black">
 
     <com.simplemobiletools.camera.views.AutoFitTextureView
-        android:id="@+id/camera_texture_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+            android:id="@+id/camera_texture_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
-    <ImageView
-        android:id="@+id/settings"
-        android:layout_width="@dimen/icon_size"
-        android:layout_height="@dimen/icon_size"
-        android:layout_alignParentRight="true"
-        android:padding="@dimen/normal_margin"
-        android:src="@drawable/ic_settings_cog"/>
-
-    <ImageView
-        android:id="@+id/toggle_photo_video"
-        android:layout_width="@dimen/icon_size"
-        android:layout_height="@dimen/icon_size"
-        android:layout_below="@+id/settings"
-        android:layout_alignParentRight="true"
-        android:padding="@dimen/normal_margin"
-        android:src="@drawable/ic_video"/>
-
-    <ImageView
+    <!--<ImageView
         android:id="@+id/change_resolution"
         android:layout_width="@dimen/icon_size"
         android:layout_height="@dimen/icon_size"
         android:layout_below="@+id/toggle_photo_video"
         android:layout_alignParentRight="true"
         android:padding="@dimen/normal_margin"
-        android:src="@drawable/ic_resolution"/>
+        android:src="@drawable/ic_resolution"/
 
     <ImageView
         android:id="@+id/last_photo_video_preview"
@@ -43,7 +26,33 @@
         android:layout_height="@dimen/icon_size"
         android:layout_below="@+id/change_resolution"
         android:layout_alignParentRight="true"
-        android:padding="@dimen/medium_margin"/>
+        android:padding="@dimen/medium_margin"/> -->
+
+    <LinearLayout
+            android:id="@+id/btn_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:gravity="center_horizontal|top"
+            android:layout_alignParentEnd="true">
+
+        <ImageView
+                android:id="@+id/toggle_flash"
+                android:layout_width="@dimen/icon_size"
+                android:layout_height="@dimen/icon_size"
+                android:layout_weight="1"
+                android:padding="@dimen/normal_margin"
+                android:src="@drawable/ic_flash_off"/>
+
+        <ImageView
+                android:id="@+id/settings"
+                android:layout_width="@dimen/icon_size"
+                android:layout_height="@dimen/icon_size"
+                android:layout_alignParentRight="true"
+                android:layout_weight="1"
+                android:padding="@dimen/normal_margin"
+                android:src="@drawable/ic_settings_cog"/>
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/btn_holder"
@@ -61,20 +70,19 @@
             android:src="@drawable/ic_camera_front"/>
 
         <ImageView
-            android:id="@+id/shutter"
-            android:layout_width="@dimen/icon_size"
-            android:layout_height="@dimen/icon_size"
-            android:layout_weight="1"
-            android:src="@drawable/ic_shutter"/>
+                android:id="@+id/shutter"
+                android:layout_width="@dimen/icon_size"
+                android:layout_height="@dimen/icon_size"
+                android:layout_weight="1"
+                android:src="@drawable/ic_shutter"/>
 
         <ImageView
-            android:id="@+id/toggle_flash"
-            android:layout_width="@dimen/icon_size"
-            android:layout_height="@dimen/icon_size"
-            android:layout_weight="1"
-            android:padding="@dimen/normal_margin"
-            android:src="@drawable/ic_flash_off"/>
-
+                android:id="@+id/toggle_photo_video"
+                android:layout_width="@dimen/icon_size"
+                android:layout_height="@dimen/icon_size"
+                android:layout_weight="1"
+                android:padding="@dimen/normal_margin"
+                android:src="@drawable/ic_video"/>
     </LinearLayout>
 
     <TextView
