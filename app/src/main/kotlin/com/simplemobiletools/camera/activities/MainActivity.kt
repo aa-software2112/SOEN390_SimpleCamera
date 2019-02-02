@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.provider.MediaStore
+import android.util.Log
 import android.view.* // ktlint-disable no-wildcard-imports
 import android.widget.RelativeLayout
 import com.bumptech.glide.Glide
@@ -26,6 +27,7 @@ import com.simplemobiletools.commons.extensions.* // ktlint-disable no-wildcard-
 import com.simplemobiletools.commons.helpers.* // ktlint-disable no-wildcard-imports
 import com.simplemobiletools.commons.models.Release
 import kotlinx.android.synthetic.main.activity_main.* // ktlint-disable no-wildcard-imports
+import java.util.* // ktlint-disable no-wildcard-imports
 
 class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     private val FADE_DELAY = 5000L
@@ -44,6 +46,12 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     private var mIsHardwareShutterHandled = false
     private var mCurrVideoRecTimer = 0
     var mLastHandledOrientation = 0
+    // Added for Countdown Timer Feature (delete this comment later)
+    private var mIsInCountdownMode = false
+    private val CAPTURE_TIME_DELAY_TASK_INTERVAL = 1000L // in milliseconds
+    private val mCountdownTime = 0
+    private val mTimer = Timer()
+    private var mCaptureTimeDelayTask: TimerTask? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or
@@ -433,6 +441,39 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                 mTimerHandler.postDelayed(this, 1000L)
             }
         })
+    }
+
+    private fun initCaptureTimeDelayTask() {
+
+        mCaptureTimeDelayTask = object : TimerTask() {
+            override fun run() {
+                if (mCountdown != 0) {
+                    // TODO: update remaining seconds in UI
+                    Log.d("CameraPreview", "$mCountdown seconds remaining before capture")
+                    // decrement the countdown
+                    mCountdown--
+                } else {
+                    mCountdownMode = false
+                    tryTakePicture()
+                    cancel() // canceling the task so that it does not perform another execution
+                }
+            }
+        }
+    }
+
+    // starts the countdown to take a picture with the new set countdown
+    // TODO: link frontend with this
+    private fun startCountdown(countdown: Int) {
+        mCountdownMode = true
+
+        mCountdown = countdown
+
+        /* init the task that will update the ui at every second
+           and that will take the picture when countdown reaches 0 */
+        initCaptureTimeDelayTask()
+
+        /* schedule the task to be ran at every interval */
+        mTimer.schedule(mCaptureTimeDelayTask, CAPTURE_TIME_DELAY_TASK_INTERVAL)
     }
 
     private fun resumeCameraItems() {
