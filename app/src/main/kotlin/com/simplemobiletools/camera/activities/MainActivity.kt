@@ -278,7 +278,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         }
         else if (mIsInPhotoMode && mIsInCountdownMode) {
             toggleBottomButtons(true)
-            initCaptureTimeDelayTask()
+            startCountdown(mCountdownTime)
             mPreview?.tryTakePicture()
             
         } else {
