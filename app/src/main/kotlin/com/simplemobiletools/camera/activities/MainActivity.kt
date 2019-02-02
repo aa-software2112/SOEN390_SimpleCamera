@@ -272,9 +272,15 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     }
 
     private fun handleShutter() {
-        if (mIsInPhotoMode) {
+        if (mIsInPhotoMode && !mIsInCountdownMode) {
             toggleBottomButtons(true)
             mPreview?.tryTakePicture()
+        }
+        else if (mIsInPhotoMode && mIsInCountdownMode) {
+            toggleBottomButtons(true)
+            initCaptureTimeDelayTask()
+            mPreview?.tryTakePicture()
+            
         } else {
             mPreview?.toggleRecording()
         }
@@ -454,7 +460,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                     mCountdown--
                 } else {
                     mCountdownMode = false
-                    tryTakePicture()
                     cancel() // canceling the task so that it does not perform another execution
                 }
             }
