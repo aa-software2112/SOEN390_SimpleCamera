@@ -82,10 +82,12 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
     private var mIsInVideoMode = false
     private var mIsRecording = false
     private var mUseFrontCamera = false
+    private var mUseCaptureDelay = false
     private var mCameraId = ""
     private var mLastVideoPath = ""
     private var mCameraState = STATE_INIT
     private var mFlashlightState = FLASH_OFF
+    private var mCaptureDelayState = DELAY_OFF
 
     private var mBackgroundThread: HandlerThread? = null
     private var mBackgroundHandler: Handler? = null
@@ -121,7 +123,7 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
         mIsInVideoMode = !initPhotoMode
         loadSounds()
 
-        mTextureView.setOnTouchListener { view, event ->
+        mTextureView.setOnTouchListener { 'view, event ->
             if (event.action == MotionEvent.ACTION_DOWN) {
                 mDownEventAtMS = System.currentTimeMillis()
                 mDownEventAtX = event.x
@@ -888,6 +890,12 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
         checkFlashlight()
     }
 
+    override fun setCaptureDelayState(state: Int) {
+        mCaptureDelayState = state
+        mActivity.updateCaptureDelayState(mCaptureDelayState)
+        // checkCaptureDelay()
+    }
+
     override fun getCameraState() = mCameraState
 
     override fun showChangeResolutionDialog() {
@@ -914,6 +922,13 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
         mUseFrontCamera = !mUseFrontCamera
         closeCamera()
         openCamera(mTextureView.width, mTextureView.height)
+    }
+
+    override fun toggleCaptureDelay() {
+        //mUseCaptureDelay = !mUseCaptureDelay
+        // 0, 5, 10, 15, 30
+        val newState = (mCaptureDelayState + 5) % 30
+        setCaptureDelayState(newState)
     }
 
     override fun toggleFlashlight() {

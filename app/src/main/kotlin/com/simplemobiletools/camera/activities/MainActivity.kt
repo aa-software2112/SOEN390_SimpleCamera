@@ -49,7 +49,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     // Added for Countdown Timer Feature (delete this comment later)
     private var mIsInCountdownMode = false
     private val CAPTURE_TIME_DELAY_TASK_INTERVAL = 1000L // in milliseconds
-    private val mCountdownTime = 0
+    private var mCountdownTime = 0
     private val mTimer = Timer()
     private var mCaptureTimeDelayTask: TimerTask? = null
 
@@ -218,13 +218,17 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         setupPreviewImage(true)
 
         val initialFlashlightState = if (config.turnFlashOffAtStartup) FLASH_OFF else config.flashlightState
+        val initialCaptureDelayState = 0 // CAPTURE_OFF (currently 0 for testing)
         mPreview!!.setFlashlightState(initialFlashlightState)
+        mPreview!!.setCaptureDelayState(initialCaptureDelayState)
         updateFlashlightState(initialFlashlightState)
+        updateCaptureDelayState(initialCaptureDelayState)
     }
 
     private fun initButtons() {
         toggle_camera.setOnClickListener { toggleCamera() }
         last_photo_video_preview.setOnClickListener { showLastMediaPreview() }
+        capture_delay.setOnClickListener { toggleCaptureDelay() }
         toggle_flash.setOnClickListener { toggleFlash() }
         shutter.setOnClickListener { shutterPressed() }
         settings.setOnClickListener { launchSettings() }
@@ -235,6 +239,12 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     private fun toggleCamera() {
         if (checkCameraAvailable()) {
             mPreview!!.toggleFrontBackCamera()
+        }
+    }
+
+    private fun toggleCaptureDelay() {
+        if (checkCameraAvailable()) {
+            mPreview!!.toggleCaptureDelay()
         }
     }
 
@@ -261,6 +271,18 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         toggle_flash.setImageResource(flashDrawable)
     }
 
+    fun updateCaptureDelayState(state: Int) {
+        val captureDrawable = when (state) {
+            DELAY_OFF -> R.drawable.ic_delete
+            DELAY_5 -> R.drawable.ic_clock
+            DELAY_10 -> R.drawable.ic_clock
+            DELAY_15 -> R.drawable.ic_clock
+            DELAY_30 -> R.drawable.ic_clock
+            else -> R.drawable.ic_clock
+        }
+        capture_delay.setImageResource(captureDrawable)
+    }
+
     fun updateCameraIcon(isUsingFrontCamera: Boolean) {
         toggle_camera.setImageResource(if (isUsingFrontCamera) R.drawable.ic_camera_rear else R.drawable.ic_camera_front)
     }
@@ -275,12 +297,10 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         if (mIsInPhotoMode && !mIsInCountdownMode) {
             toggleBottomButtons(true)
             mPreview?.tryTakePicture()
-        }
-        else if (mIsInPhotoMode && mIsInCountdownMode) {
+        } else if (mIsInPhotoMode && mIsInCountdownMode) {
             toggleBottomButtons(true)
             startCountdown(mCountdownTime)
             mPreview?.tryTakePicture()
-            
         } else {
             mPreview?.toggleRecording()
         }
@@ -292,10 +312,12 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             shutter.animate().alpha(alpha).start()
             toggle_camera.animate().alpha(alpha).start()
             toggle_flash.animate().alpha(alpha).start()
+            capture_delay.animate().alpha(alpha).start()
 
             shutter.isClickable = !hide
             toggle_camera.isClickable = !hide
             toggle_flash.isClickable = !hide
+            capture_delay.isClickable = !hide
         }
     }
 
@@ -453,13 +475,13 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
         mCaptureTimeDelayTask = object : TimerTask() {
             override fun run() {
-                if (mCountdown != 0) {
+                if (mCountdownTime != 0) {
                     // TODO: update remaining seconds in UI
-                    Log.d("CameraPreview", "$mCountdown seconds remaining before capture")
+                    Log.d("CameraPreview", "$mCountdownTime seconds remaining before capture")
                     // decrement the countdown
-                    mCountdown--
+                    mCountdownTime--
                 } else {
-                    mCountdownMode = false
+                    mIsInCountdownMode = false
                     cancel() // canceling the task so that it does not perform another execution
                 }
             }
@@ -469,9 +491,9 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     // starts the countdown to take a picture with the new set countdown
     // TODO: link frontend with this
     private fun startCountdown(countdown: Int) {
-        mCountdownMode = true
+        mIsInCountdownMode = true
 
-        mCountdown = countdown
+        mCountdownTime = countdown
 
         /* init the task that will update the ui at every second
            and that will take the picture when countdown reaches 0 */
@@ -547,6 +569,15 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             toggle_flash.beInvisible()
             toggle_flash.setImageResource(R.drawable.ic_flash_off)
             mPreview?.setFlashlightState(FLASH_OFF)
+        }
+    }
+
+    fun setCaptureDelayAvailable(available: Boolean) {
+        if (available) {
+            capture_delay.beVisible()
+        } else {
+            capture_delay.beInvisible()
+            mPreview?.setCaptureDelayState(DELAY_OFF)
         }
     }
 
