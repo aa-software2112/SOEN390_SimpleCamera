@@ -29,7 +29,7 @@ import kotlinx.android.synthetic.main.activity_main.* // ktlint-disable no-wildc
 import android.os.CountDownTimer
 
 class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
-    private val FADE_DELAY = 5000L // in milliseconds
+    private val FADE_DELAY = 6000L // in milliseconds
     private val COUNTDOWN_INTERVAL = 1000L
 
     lateinit var mTimerHandler: Handler
@@ -234,11 +234,10 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         // - Right now this is somewhat hard-coded
         // - May want to look into using Android Spinner instead (similar to dropdowns)
         // - The 3 lines below should be 1 that takes the value from front end to set the delay
-        // - May also want to use the constants I defined in Constants.kt
         // - https://developer.android.com/guide/topics/ui/controls/spinner
-        btn_5sec.setOnClickListener { setCountdownMode(5) }
-        btn_10sec.setOnClickListener { setCountdownMode(10) }
-        btn_15sec.setOnClickListener { setCountdownMode(15) }
+        btn_5sec.setOnClickListener { setCountdownMode(TIMER_LOW) }
+        btn_10sec.setOnClickListener { setCountdownMode(TIMER_MED) }
+        btn_15sec.setOnClickListener { setCountdownMode(TIMER_HIGH) }
     }
 
     private fun toggleCamera() {
@@ -256,7 +255,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             countdown_time_selected.beVisible()
             countdown_time_selected.text = mCountdownTime.toString()
             toggleCountdownTimerDropdown()
-            // mPreview!!.setCountdownState(true)
         }
     }
 
@@ -271,12 +269,10 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     private fun toggleCountdownTimer() {
 
-        if (countdown_toggle.alpha == .5f) {
-            fadeInButtons()
-        } else if (mIsInCountdownMode) {
-            unsetCountdownMode()
-        } else {
-            toggleCountdownTimerDropdown()
+        when {
+            countdown_toggle.alpha == .5f -> fadeInButtons()
+            mIsInCountdownMode -> unsetCountdownMode()
+            else -> toggleCountdownTimerDropdown()
         }
     }
 
@@ -391,9 +387,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         }
 
         mPreview?.setFlashlightState(FLASH_OFF)
-        countdown_toggle.beInvisible()
-        countdown_times.beInvisible()
-        unsetCountdownMode()
+        unsetCountdownMode() // Disable the countdown when you toggle photo/video mode
         hideTimer()
         mIsInPhotoMode = !mIsInPhotoMode
         config.initPhotoMode = mIsInPhotoMode
@@ -430,6 +424,8 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     private fun initVideoButtons() {
         toggle_photo_video.setImageResource(R.drawable.ic_camera)
+        countdown_toggle.beInvisible()
+        countdown_times.beInvisible()
         showToggleCameraIfNeeded()
         shutter.setImageResource(R.drawable.ic_video_rec)
         setupPreviewImage(false)
@@ -518,7 +514,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     }
 
     // TODO: May want to put this in CameraPreview.kt; next to tryTakePicture()
-    fun tryTakeDelayedPicture() {
+    private fun tryTakeDelayedPicture() {
         object : CountDownTimer(mCountdownTime*COUNTDOWN_INTERVAL, 1000) {
 
             override fun onTick(millisUntilFinished: Long) {
