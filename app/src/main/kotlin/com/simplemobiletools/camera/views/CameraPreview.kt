@@ -564,6 +564,7 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
                 mMediaActionSound.play(MediaActionSound.SHUTTER_CLICK)
             }
 
+
             mCameraState = STATE_PICTURE_TAKEN
             mRotationAtCapture = mActivity.mLastHandledOrientation
             val jpegOrientation = (mSensorOrientation + compensateDeviceRotation(mRotationAtCapture, mUseFrontCamera)) % 360
@@ -932,11 +933,11 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
         setFlashlightState(newState)
     }
 
-
     override fun tryTakePicture() {
         if (mCameraState != STATE_PREVIEW) {
             return
         }
+
 
         if (shouldLockFocus()) {
             lockFocus()

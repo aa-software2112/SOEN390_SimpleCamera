@@ -29,6 +29,9 @@ import com.simplemobiletools.commons.models.Release
 import kotlinx.android.synthetic.main.activity_main.* // ktlint-disable no-wildcard-imports
 import kotlinx.android.synthetic.main.activity_main.view.*
 import java.util.* // ktlint-disable no-wildcard-imports
+import android.os.CountDownTimer
+
+
 
 
 class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
@@ -54,6 +57,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     private var mCountdownTime = 0 // COUNTDOWN_DELAY.5
     private val mTimer = Timer()
     private var mCaptureTimeDelayTask: TimerTask? = null
+    private var mTimerIsRunning = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or
@@ -251,10 +255,11 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         if (checkCameraAvailable()) {
             mCountdownTime = time
             mIsInCountdownMode = true
-            // this logic should be in another function, to toggle/untoggle
+            // TO DO: this logic should be in another function, to toggle/untoggle
             capture_cancel.visibility = View.VISIBLE
             delay_time_selected.visibility = View.VISIBLE
             delay_time_selected.text = time.toString()
+
             toggleDelayDropdown()
 
             mPreview!!.setCaptureDelayState()
@@ -264,20 +269,29 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     private fun unssetCaptureDelay() {
         mCountdownTime = 0
         mIsInCountdownMode = false
-        // this logic should be in another function, to toggle/untoggle
+
+        // TO DO :this logic should be in another function, to toggle/untoggle
         capture_cancel.visibility = View.INVISIBLE
         delay_time_selected.visibility = View.INVISIBLE
         delay_time_selected.text = mCountdownTime.toString()
+
         mPreview!!.unssetCaptureDelayState()
     }
 
     private fun toggleCaptureDelay() {
-        if (mIsInCountdownMode) {
-            unssetCaptureDelay()
+        if (capture_delay.alpha == 1f) {
+            if (mIsInCountdownMode) {
+                unssetCaptureDelay()
+            }
+            else if (checkCameraAvailable()) {
+                toggleDelayDropdown()
+            }
+
+        } else {
+            fadeInButtons()
         }
-        else if (checkCameraAvailable()) {
-            toggleDelayDropdown()
-        }
+
+
     }
 
     private fun showLastMediaPreview() {
@@ -328,8 +342,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             mPreview?.tryTakePicture()
         } else if (mIsInPhotoMode && mIsInCountdownMode) {
             toggleBottomButtons(true)
-            startCountdown(mCountdownTime)
-            mPreview?.tryTakePicture()
+            tryTakeDelayedPicture()
         } else {
             mPreview?.toggleRecording()
         }
@@ -346,7 +359,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             shutter.isClickable = !hide
             toggle_camera.isClickable = !hide
             toggle_flash.isClickable = !hide
-            capture_delay.isClickable = !hide
         }
     }
 
@@ -382,6 +394,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         }
 
         mPreview?.setFlashlightState(FLASH_OFF)
+        capture_delay.beInvisible()
         hideTimer()
         mIsInPhotoMode = !mIsInPhotoMode
         config.initPhotoMode = mIsInPhotoMode
@@ -401,6 +414,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     private fun initPhotoMode() {
         toggle_photo_video.setImageResource(R.drawable.ic_video)
         shutter.setImageResource(R.drawable.ic_shutter)
+        capture_delay.beVisible()
         mPreview?.initPhotoMode()
         setupPreviewImage(true)
     }
@@ -457,9 +471,10 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     private fun fadeOutButtons() {
         fadeAnim(settings, .5f)
-        fadeAnim(toggle_photo_video, .0f)
+        fadeAnim(toggle_photo_video, .5f)
         fadeAnim(change_resolution, .0f)
         fadeAnim(last_photo_video_preview, .0f)
+        fadeAnim(capture_delay, .5f)
     }
 
     private fun fadeInButtons() {
@@ -467,6 +482,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         fadeAnim(toggle_photo_video, 1f)
         fadeAnim(change_resolution, 1f)
         fadeAnim(last_photo_video_preview, 1f)
+        fadeAnim(capture_delay, .0f)
         scheduleFadeOut()
     }
 
@@ -500,40 +516,22 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         })
     }
 
-    private fun initCaptureTimeDelayTask() {
 
-        mCaptureTimeDelayTask = object : TimerTask() {
-            override fun run() {
-                if (mCountdownTime != 0) {
-                    // TODO: update remaining seconds in UI
-                    Log.d("CameraPreview", "$mCountdownTime seconds remaining before capture")
-                    // decrement the countdown
-                    mCountdownTime--
-                } else {
-                    mIsInCountdownMode = false
-                    cancel() // canceling the task so that it does not perform another execution
-                }
+    fun tryTakeDelayedPicture() {
+        object : CountDownTimer(mCountdownTime*CAPTURE_TIME_DELAY_TASK_INTERVAL, 1000) {
+
+            override fun onTick(millisUntilFinished: Long) {
+                delay_time_selected.setText((millisUntilFinished / 1000).toString())
             }
-        }
+
+            override fun onFinish() {
+                mPreview?.tryTakePicture()
+                unssetCaptureDelay()
+            }
+        }.start()
     }
 
-    // starts the countdown to take a picture with the new set countdown
-    // TODO: link frontend with this
-    private fun startCountdown(countdown: Int) {
-        // should set this to true when you press the button
-        // mIsInCountdownMode = true
-
-        mCountdownTime = countdown
-
-        /* init the task that will update the ui at every second
-           and that will take the picture when countdown reaches 0 */
-        initCaptureTimeDelayTask()
-
-        /* schedule the task to be ran at every interval */
-        mTimer.schedule(mCaptureTimeDelayTask, CAPTURE_TIME_DELAY_TASK_INTERVAL)
-    }
-
-    private fun resumeCameraItems() {
+    fun resumeCameraItems() {
         showToggleCameraIfNeeded()
         hideNavigationBarIcons()
 
