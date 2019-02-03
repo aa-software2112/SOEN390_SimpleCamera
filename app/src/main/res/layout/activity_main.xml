@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/view_holder"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -55,7 +54,7 @@
         android:visibility="visible" />
 
     <ImageView
-        android:id="@+id/capture_delay"
+        android:id="@+id/countdown_toggle"
         android:layout_width="@dimen/icon_size"
         android:layout_height="@dimen/icon_size"
         android:layout_weight="1"
@@ -64,19 +63,19 @@
         android:visibility="visible" />
 
     <ImageView
-        android:id="@+id/capture_cancel"
+        android:id="@+id/countdown_cancel"
         android:layout_width="18dp"
         android:layout_height="18dp"
-        android:layout_alignEnd="@+id/capture_delay"
+        android:layout_alignEnd="@+id/countdown_toggle"
         android:layout_alignParentTop="true"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="7dp"
+        android:layout_marginEnd="8dp"
         android:background="@drawable/circle_background"
         android:contentDescription="TODO" android:visibility="invisible"
         app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
     <LinearLayout
-        android:id="@+id/delay_times"
+        android:id="@+id/countdown_times"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -89,7 +88,7 @@
             android:id="@+id/btn_5sec"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/delay_times"
+            android:layout_alignTop="@+id/countdown_times"
             android:text="5 sec" />
 
         <Button
@@ -156,7 +155,7 @@
         android:visibility="gone" />
 
     <TextView
-        android:id="@+id/delay_time_selected"
+        android:id="@+id/countdown_time_selected"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -168,7 +167,7 @@
 
 
     <TextView
-        android:id="@+id/count_down"
+        android:id="@+id/countdown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

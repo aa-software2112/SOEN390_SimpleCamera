@@ -30,8 +30,6 @@ import com.simplemobiletools.camera.models.FocusArea
 import com.simplemobiletools.camera.models.MySize
 import com.simplemobiletools.commons.extensions.* // ktlint-disable no-wildcard-imports
 import com.simplemobiletools.commons.models.FileDirItem
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.view.*
 import java.io.File
 import java.util.* // ktlint-disable no-wildcard-imports
 import java.util.concurrent.Semaphore

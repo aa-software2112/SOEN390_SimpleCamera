@@ -46,7 +46,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     private var mIsHardwareShutterHandled = false
     private var mCurrVideoRecTimer = 0
     var mLastHandledOrientation = 0
-    // Added for Countdown Timer Feature (delete once feature complete) 
     private var mIsInCountdownMode = false
     private var mCountdownTime = 0
 
@@ -229,12 +228,13 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         settings.setOnClickListener { launchSettings() }
         toggle_photo_video.setOnClickListener { handleTogglePhotoVideo() }
         change_resolution.setOnClickListener { mPreview?.showChangeResolutionDialog() }
-        capture_delay.setOnClickListener { toggleCountdownTimer() }
+        countdown_toggle.setOnClickListener { toggleCountdownTimer() }
 
         // TODO
         // - Right now this is somewhat hard-coded
-        // - Should implement this using Android Spinners/Dropdown
+        // - May want to look into using Android Spinner instead (similar to dropdowns)
         // - The 3 lines below should be 1 that takes the value from front end to set the delay
+        // - May also want to use the constants I defined in Constants.kt
         // - https://developer.android.com/guide/topics/ui/controls/spinner
         btn_5sec.setOnClickListener { setCountdownMode(5) }
         btn_10sec.setOnClickListener { setCountdownMode(10) }
@@ -251,10 +251,10 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         if (checkCameraAvailable()) {
             mCountdownTime = time
             mIsInCountdownMode = true
-            // TODO The logic below could be put in another function
-            capture_cancel.beVisible()
-            delay_time_selected.beVisible()
-            delay_time_selected.text = mCountdownTime.toString()
+            // TODO The logic below could be put in another function, e.g. toggleCountdownModeIcon(time: Int)
+            countdown_cancel.beVisible()
+            countdown_time_selected.beVisible()
+            countdown_time_selected.text = mCountdownTime.toString()
             toggleCountdownTimerDropdown()
             // mPreview!!.setCountdownState(true)
         }
@@ -263,15 +263,15 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     private fun unsetCountdownMode() {
         mCountdownTime = 0
         mIsInCountdownMode = false
-        // TODO The logic below could be put in another function
-        capture_cancel.beInvisible()
-        delay_time_selected.beInvisible()
-        delay_time_selected.text = mCountdownTime.toString()
+        // TODO The logic below could be put in another function, e.g. toggleCountdownModeIcon(time: Int)
+        countdown_cancel.beInvisible()
+        countdown_time_selected.beInvisible()
+        countdown_time_selected.text = mCountdownTime.toString()
     }
 
     private fun toggleCountdownTimer() {
 
-        if (capture_delay.alpha == .5f) {
+        if (countdown_toggle.alpha == .5f) {
             fadeInButtons()
         } else if (mIsInCountdownMode) {
             unsetCountdownMode()
@@ -294,7 +294,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     }
 
     private fun toggleCountdownTimerDropdown() {
-        var countdownButton = delay_times
+        var countdownButton = countdown_times
         if (countdownButton.visibility == View.INVISIBLE) countdownButton.beVisible() else countdownButton.beInvisible()
     }
 
@@ -391,7 +391,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         }
 
         mPreview?.setFlashlightState(FLASH_OFF)
-        capture_delay.beInvisible()
+        countdown_toggle.beInvisible()
         hideTimer()
         mIsInPhotoMode = !mIsInPhotoMode
         config.initPhotoMode = mIsInPhotoMode
@@ -411,7 +411,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     private fun initPhotoMode() {
         toggle_photo_video.setImageResource(R.drawable.ic_video)
         shutter.setImageResource(R.drawable.ic_shutter)
-        capture_delay.beVisible()
+        countdown_toggle.beVisible()
         mPreview?.initPhotoMode()
         setupPreviewImage(true)
     }
@@ -471,8 +471,8 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         fadeAnim(toggle_photo_video, .0f)
         fadeAnim(change_resolution, .0f)
         fadeAnim(last_photo_video_preview, .0f)
-        fadeAnim(capture_delay, .5f)
-        fadeAnim(delay_times, .0f)
+        fadeAnim(countdown_toggle, .5f)
+        fadeAnim(countdown_times, .0f)
     }
 
     private fun fadeInButtons() {
@@ -480,8 +480,8 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         fadeAnim(toggle_photo_video, 1f)
         fadeAnim(change_resolution, 1f)
         fadeAnim(last_photo_video_preview, 1f)
-        fadeAnim(capture_delay, 1f)
-        fadeAnim(delay_times, 1f)
+        fadeAnim(countdown_toggle, 1f)
+        fadeAnim(countdown_times, 1f)
         scheduleFadeOut()
     }
 
@@ -525,9 +525,10 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                     toggleRightButtons(false)
                     cancel()
                 }
-                // TODO: UI does not exactly match the mockup, need to change a few things
-                // including the line below which should change count_down
-                delay_time_selected.text = (millisUntilFinished / 1000).toString()
+                // TODO
+                // UI does not exactly match the mockup, need to change a few things
+                // e.g. the line below which should change countdown, not countdown_time_selected
+                countdown_time_selected.text = (millisUntilFinished / 1000).toString()
             }
 
             override fun onFinish() {
