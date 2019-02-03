@@ -21,7 +21,7 @@
         android:layout_width="@dimen/icon_size"
         android:layout_height="@dimen/icon_size"
         android:layout_alignParentRight="true"
-        android:padding="@dimen/normal_margin"
+        android:contentDescription="TODO" android:padding="@dimen/normal_margin"
         android:src="@drawable/ic_settings_cog"
         android:visibility="visible" />
 
@@ -31,7 +31,7 @@
         android:layout_height="@dimen/icon_size"
         android:layout_below="@+id/settings"
         android:layout_alignParentRight="true"
-        android:padding="@dimen/normal_margin"
+        android:contentDescription="TODO" android:padding="@dimen/normal_margin"
         android:src="@drawable/ic_video"
         android:visibility="visible" />
 
@@ -41,7 +41,7 @@
         android:layout_height="@dimen/icon_size"
         android:layout_below="@+id/toggle_photo_video"
         android:layout_alignParentRight="true"
-        android:padding="@dimen/normal_margin"
+        android:contentDescription="TODO" android:padding="@dimen/normal_margin"
         android:src="@drawable/ic_resolution"
         android:visibility="visible" />
 
@@ -51,7 +51,7 @@
         android:layout_height="@dimen/icon_size"
         android:layout_below="@+id/change_resolution"
         android:layout_alignParentRight="true"
-        android:padding="@dimen/medium_margin"
+        android:contentDescription="TODO" android:padding="@dimen/medium_margin"
         android:visibility="visible" />
 
     <ImageView
@@ -59,8 +59,9 @@
         android:layout_width="@dimen/icon_size"
         android:layout_height="@dimen/icon_size"
         android:layout_weight="1"
-        android:padding="@dimen/normal_margin"
-        app:srcCompat="@drawable/ic_clock" />
+        android:contentDescription="TODO" android:padding="@dimen/normal_margin"
+        app:srcCompat="@drawable/ic_clock"
+        android:visibility="visible" />
 
     <ImageView
         android:id="@+id/capture_cancel"
@@ -71,7 +72,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="7dp"
         android:background="@drawable/circle_background"
-        android:visibility="invisible"
+        android:contentDescription="TODO" android:visibility="invisible"
         app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
     <LinearLayout
@@ -124,7 +125,7 @@
             android:layout_width="@dimen/icon_size"
             android:layout_height="@dimen/icon_size"
             android:layout_weight="1"
-            android:padding="@dimen/normal_margin"
+            android:contentDescription="TODO" android:padding="@dimen/normal_margin"
             android:src="@drawable/ic_camera_front" />
 
         <ImageView
@@ -132,14 +133,14 @@
             android:layout_width="@dimen/icon_size"
             android:layout_height="@dimen/icon_size"
             android:layout_weight="1"
-            android:src="@drawable/ic_shutter" />
+            android:contentDescription="TODO" android:src="@drawable/ic_shutter" />
 
         <ImageView
             android:id="@+id/toggle_flash"
             android:layout_width="@dimen/icon_size"
             android:layout_height="@dimen/icon_size"
             android:layout_weight="1"
-            android:padding="@dimen/normal_margin"
+            android:contentDescription="TODO" android:padding="@dimen/normal_margin"
             android:src="@drawable/ic_flash_off" />
 
     </LinearLayout>

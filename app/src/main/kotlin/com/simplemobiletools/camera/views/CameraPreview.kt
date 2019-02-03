@@ -16,7 +16,7 @@ import android.net.Uri
 import android.os.Handler
 import android.os.HandlerThread
 import android.util.* // ktlint-disable no-wildcard-imports
-import android.view.*
+import android.view.* // ktlint-disable no-wildcard-imports
 import android.widget.Toast
 import com.simplemobiletools.camera.R
 import com.simplemobiletools.camera.activities.MainActivity
@@ -81,12 +81,10 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
     private var mIsInVideoMode = false
     private var mIsRecording = false
     private var mUseFrontCamera = false
-    private var mUseCaptureDelay = false
     private var mCameraId = ""
     private var mLastVideoPath = ""
     private var mCameraState = STATE_INIT
     private var mFlashlightState = FLASH_OFF
-    private var mCaptureDelayState = false
 
     private var mBackgroundThread: HandlerThread? = null
     private var mBackgroundHandler: Handler? = null
@@ -564,7 +562,6 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
                 mMediaActionSound.play(MediaActionSound.SHUTTER_CLICK)
             }
 
-
             mCameraState = STATE_PICTURE_TAKEN
             mRotationAtCapture = mActivity.mLastHandledOrientation
             val jpegOrientation = (mSensorOrientation + compensateDeviceRotation(mRotationAtCapture, mUseFrontCamera)) % 360
@@ -584,11 +581,13 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
                 override fun onCaptureCompleted(session: CameraCaptureSession, request: CaptureRequest, result: TotalCaptureResult) {
                     unlockFocus()
                     mActivity.toggleBottomButtons(false)
+                    mActivity.toggleRightButtons(false)
                 }
 
                 override fun onCaptureFailed(session: CameraCaptureSession?, request: CaptureRequest?, failure: CaptureFailure?) {
                     super.onCaptureFailed(session, request, failure)
                     mActivity.toggleBottomButtons(false)
+                    mActivity.toggleRightButtons(false)
                 }
             }
 
@@ -890,15 +889,6 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
         checkFlashlight()
     }
 
-    override fun setCaptureDelayState() {
-        mCaptureDelayState = true
-    }
-
-    override fun unssetCaptureDelayState() {
-        mCaptureDelayState = false
-    }
-
-
     override fun getCameraState() = mCameraState
 
     override fun showChangeResolutionDialog() {
@@ -927,7 +917,6 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
         openCamera(mTextureView.width, mTextureView.height)
     }
 
-
     override fun toggleFlashlight() {
         val newState = ++mFlashlightState % if (mIsInVideoMode) 2 else 3
         setFlashlightState(newState)
@@ -937,7 +926,6 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
         if (mCameraState != STATE_PREVIEW) {
             return
         }
-
 
         if (shouldLockFocus()) {
             lockFocus()
