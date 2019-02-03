@@ -290,8 +290,8 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     }
 
     private fun toggleCountdownTimerDropdown() {
-        var countdownButton = countdown_times
-        if (countdownButton.visibility == View.INVISIBLE) countdownButton.beVisible() else countdownButton.beInvisible()
+        var countdownDropdown = countdown_times
+        if (countdownDropdown.visibility == View.INVISIBLE) countdownDropdown.beVisible() else countdownDropdown.beInvisible()
     }
 
     fun updateFlashlightState(state: Int) {
@@ -466,11 +466,14 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     private fun fadeOutButtons() {
         fadeAnim(settings, .5f)
+        fadeAnim(countdown_toggle, .5f)
         fadeAnim(toggle_photo_video, .0f)
         fadeAnim(change_resolution, .0f)
         fadeAnim(last_photo_video_preview, .0f)
-        fadeAnim(countdown_toggle, .5f)
         fadeAnim(countdown_times, .0f)
+        fadeAnim(btn_5sec, .0f)
+        fadeAnim(btn_10sec, .0f)
+        fadeAnim(btn_15sec, .0f)
     }
 
     private fun fadeInButtons() {
@@ -480,6 +483,9 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         fadeAnim(last_photo_video_preview, 1f)
         fadeAnim(countdown_toggle, 1f)
         fadeAnim(countdown_times, 1f)
+        fadeAnim(btn_5sec, 1f)
+        fadeAnim(btn_10sec, 1f)
+        fadeAnim(btn_15sec, 1f)
         scheduleFadeOut()
     }
 
