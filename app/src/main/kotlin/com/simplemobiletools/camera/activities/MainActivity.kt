@@ -250,21 +250,15 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         if (checkCameraAvailable()) {
             mCountdownTime = time
             mIsInCountdownMode = true
-            // TODO The logic below could be put in another function, e.g. toggleCountdownModeIcon(time: Int)
-            countdown_cancel.beVisible()
-            countdown_time_selected.beVisible()
-            countdown_time_selected.text = mCountdownTime.toString()
-            toggleCountdownTimerDropdown()
+            toggleCountdownModeIcon(mCountdownTime)
         }
     }
 
     private fun unsetCountdownMode() {
         mCountdownTime = 0
         mIsInCountdownMode = false
-        // TODO The logic below could be put in another function, e.g. toggleCountdownModeIcon(time: Int)
-        countdown_cancel.beInvisible()
-        countdown_time_selected.beInvisible()
-        countdown_time_selected.text = mCountdownTime.toString()
+        toggleCountdownModeIcon(mCountdownTime)
+
     }
 
     private fun toggleCountdownTimer() {
@@ -273,6 +267,19 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             countdown_toggle.alpha == .5f -> fadeInButtons()
             mIsInCountdownMode -> unsetCountdownMode()
             else -> toggleCountdownTimerDropdown()
+        }
+    }
+
+    private fun toggleCountdownModeIcon(time: Int){
+        if (mIsInCountdownMode) {
+            countdown_cancel.beVisible()
+            countdown_time_selected.beVisible()
+            countdown_time_selected.text = time.toString()
+            toggleCountdownTimerDropdown()
+        } else {
+            countdown_cancel.beInvisible()
+            countdown_time_selected.beInvisible()
+            countdown_time_selected.text = time.toString()
         }
     }
 
