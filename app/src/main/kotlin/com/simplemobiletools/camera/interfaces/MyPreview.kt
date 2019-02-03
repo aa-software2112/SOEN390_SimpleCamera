@@ -13,15 +13,15 @@ interface MyPreview {
 
     fun setFlashlightState(state: Int)
 
-    fun setCaptureDelayState(state: Int)
+    fun setCaptureDelayState()
+
+    fun unssetCaptureDelayState()
 
     fun getCameraState(): Int
 
     fun showChangeResolutionDialog()
 
     fun toggleFrontBackCamera()
-
-    fun toggleCaptureDelay()
 
     fun toggleFlashlight()
 

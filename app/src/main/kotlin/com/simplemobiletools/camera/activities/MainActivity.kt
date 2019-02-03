@@ -27,7 +27,9 @@ import com.simplemobiletools.commons.extensions.* // ktlint-disable no-wildcard-
 import com.simplemobiletools.commons.helpers.* // ktlint-disable no-wildcard-imports
 import com.simplemobiletools.commons.models.Release
 import kotlinx.android.synthetic.main.activity_main.* // ktlint-disable no-wildcard-imports
+import kotlinx.android.synthetic.main.activity_main.view.*
 import java.util.* // ktlint-disable no-wildcard-imports
+
 
 class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     private val FADE_DELAY = 5000L
@@ -49,7 +51,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     // Added for Countdown Timer Feature (delete this comment later)
     private var mIsInCountdownMode = false
     private val CAPTURE_TIME_DELAY_TASK_INTERVAL = 1000L // in milliseconds
-    private var mCountdownTime = 0
+    private var mCountdownTime = 0 // COUNTDOWN_DELAY.5
     private val mTimer = Timer()
     private var mCaptureTimeDelayTask: TimerTask? = null
 
@@ -218,22 +220,25 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         setupPreviewImage(true)
 
         val initialFlashlightState = if (config.turnFlashOffAtStartup) FLASH_OFF else config.flashlightState
-        val initialCaptureDelayState = 0 // CAPTURE_OFF (currently 0 for testing)
         mPreview!!.setFlashlightState(initialFlashlightState)
-        mPreview!!.setCaptureDelayState(initialCaptureDelayState)
         updateFlashlightState(initialFlashlightState)
-        updateCaptureDelayState(initialCaptureDelayState)
     }
 
     private fun initButtons() {
         toggle_camera.setOnClickListener { toggleCamera() }
         last_photo_video_preview.setOnClickListener { showLastMediaPreview() }
-        capture_delay.setOnClickListener { toggleCaptureDelay() }
         toggle_flash.setOnClickListener { toggleFlash() }
         shutter.setOnClickListener { shutterPressed() }
         settings.setOnClickListener { launchSettings() }
         toggle_photo_video.setOnClickListener { handleTogglePhotoVideo() }
         change_resolution.setOnClickListener { mPreview?.showChangeResolutionDialog() }
+
+        capture_delay.setOnClickListener { toggleCaptureDelay() }
+        // Right now this is hardcoded, should implement this better using Android Spinners (Front end)
+        // https://developer.android.com/guide/topics/ui/controls/spinner
+        btn_5sec.setOnClickListener { setCaptureDelay(5)}
+        btn_10sec.setOnClickListener { setCaptureDelay(10)}
+        btn_15sec.setOnClickListener { setCaptureDelay(15)}
     }
 
     private fun toggleCamera() {
@@ -242,9 +247,36 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         }
     }
 
-    private fun toggleCaptureDelay() {
+    private fun setCaptureDelay(time: Int) {
         if (checkCameraAvailable()) {
-            mPreview!!.toggleCaptureDelay()
+            mCountdownTime = time
+            mIsInCountdownMode = true
+            // this logic should be in another function, to toggle/untoggle
+            capture_cancel.visibility = View.VISIBLE
+            delay_time_selected.visibility = View.VISIBLE
+            delay_time_selected.text = time.toString()
+            toggleDelayDropdown()
+
+            mPreview!!.setCaptureDelayState()
+        }
+    }
+
+    private fun unssetCaptureDelay() {
+        mCountdownTime = 0
+        mIsInCountdownMode = false
+        // this logic should be in another function, to toggle/untoggle
+        capture_cancel.visibility = View.INVISIBLE
+        delay_time_selected.visibility = View.INVISIBLE
+        delay_time_selected.text = mCountdownTime.toString()
+        mPreview!!.unssetCaptureDelayState()
+    }
+
+    private fun toggleCaptureDelay() {
+        if (mIsInCountdownMode) {
+            unssetCaptureDelay()
+        }
+        else if (checkCameraAvailable()) {
+            toggleDelayDropdown()
         }
     }
 
@@ -261,6 +293,15 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         }
     }
 
+    fun toggleDelayDropdown() {
+        var view = delay_times
+        view.visibility = if (view.visibility == View.VISIBLE) {
+            View.INVISIBLE
+        } else {
+            View.VISIBLE
+        }
+    }
+
     fun updateFlashlightState(state: Int) {
         config.flashlightState = state
         val flashDrawable = when (state) {
@@ -269,18 +310,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             else -> R.drawable.ic_flash_auto
         }
         toggle_flash.setImageResource(flashDrawable)
-    }
-
-    fun updateCaptureDelayState(state: Int) {
-        val captureDrawable = when (state) {
-            DELAY_OFF -> R.drawable.ic_delete
-            DELAY_5 -> R.drawable.ic_clock
-            DELAY_10 -> R.drawable.ic_clock
-            DELAY_15 -> R.drawable.ic_clock
-            DELAY_30 -> R.drawable.ic_clock
-            else -> R.drawable.ic_clock
-        }
-        capture_delay.setImageResource(captureDrawable)
     }
 
     fun updateCameraIcon(isUsingFrontCamera: Boolean) {
@@ -491,7 +520,8 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     // starts the countdown to take a picture with the new set countdown
     // TODO: link frontend with this
     private fun startCountdown(countdown: Int) {
-        mIsInCountdownMode = true
+        // should set this to true when you press the button
+        // mIsInCountdownMode = true
 
         mCountdownTime = countdown
 
@@ -569,15 +599,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             toggle_flash.beInvisible()
             toggle_flash.setImageResource(R.drawable.ic_flash_off)
             mPreview?.setFlashlightState(FLASH_OFF)
-        }
-    }
-
-    fun setCaptureDelayAvailable(available: Boolean) {
-        if (available) {
-            capture_delay.beVisible()
-        } else {
-            capture_delay.beInvisible()
-            mPreview?.setCaptureDelayState(DELAY_OFF)
         }
     }
 

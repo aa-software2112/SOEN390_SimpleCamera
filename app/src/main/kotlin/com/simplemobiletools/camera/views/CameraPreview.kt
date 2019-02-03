@@ -16,10 +16,7 @@ import android.net.Uri
 import android.os.Handler
 import android.os.HandlerThread
 import android.util.* // ktlint-disable no-wildcard-imports
-import android.view.MotionEvent
-import android.view.Surface
-import android.view.TextureView
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import com.simplemobiletools.camera.R
 import com.simplemobiletools.camera.activities.MainActivity
@@ -33,6 +30,8 @@ import com.simplemobiletools.camera.models.FocusArea
 import com.simplemobiletools.camera.models.MySize
 import com.simplemobiletools.commons.extensions.* // ktlint-disable no-wildcard-imports
 import com.simplemobiletools.commons.models.FileDirItem
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.view.*
 import java.io.File
 import java.util.* // ktlint-disable no-wildcard-imports
 import java.util.concurrent.Semaphore
@@ -87,7 +86,7 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
     private var mLastVideoPath = ""
     private var mCameraState = STATE_INIT
     private var mFlashlightState = FLASH_OFF
-    private var mCaptureDelayState = DELAY_OFF
+    private var mCaptureDelayState = false
 
     private var mBackgroundThread: HandlerThread? = null
     private var mBackgroundHandler: Handler? = null
@@ -123,7 +122,7 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
         mIsInVideoMode = !initPhotoMode
         loadSounds()
 
-        mTextureView.setOnTouchListener { 'view, event ->
+        mTextureView.setOnTouchListener { view, event ->
             if (event.action == MotionEvent.ACTION_DOWN) {
                 mDownEventAtMS = System.currentTimeMillis()
                 mDownEventAtX = event.x
@@ -890,11 +889,14 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
         checkFlashlight()
     }
 
-    override fun setCaptureDelayState(state: Int) {
-        mCaptureDelayState = state
-        mActivity.updateCaptureDelayState(mCaptureDelayState)
-        // checkCaptureDelay()
+    override fun setCaptureDelayState() {
+        mCaptureDelayState = true
     }
+
+    override fun unssetCaptureDelayState() {
+        mCaptureDelayState = false
+    }
+
 
     override fun getCameraState() = mCameraState
 
@@ -924,17 +926,12 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
         openCamera(mTextureView.width, mTextureView.height)
     }
 
-    override fun toggleCaptureDelay() {
-        //mUseCaptureDelay = !mUseCaptureDelay
-        // 0, 5, 10, 15, 30
-        val newState = (mCaptureDelayState + 5) % 30
-        setCaptureDelayState(newState)
-    }
 
     override fun toggleFlashlight() {
         val newState = ++mFlashlightState % if (mIsInVideoMode) 2 else 3
         setFlashlightState(newState)
     }
+
 
     override fun tryTakePicture() {
         if (mCameraState != STATE_PREVIEW) {
