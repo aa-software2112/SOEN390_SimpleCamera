@@ -392,6 +392,8 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
         mPreview?.setFlashlightState(FLASH_OFF)
         countdown_toggle.beInvisible()
+        countdown_times.beInvisible()
+        unsetCountdownMode()
         hideTimer()
         mIsInPhotoMode = !mIsInPhotoMode
         config.initPhotoMode = mIsInPhotoMode
