@@ -264,8 +264,9 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     private fun toggleCountdownTimer() {
 
         when {
-            countdown_toggle.alpha == .5f -> fadeInButtons()
+            // Line 268 and 269 can be swapped depending on desired behavior
             mIsInCountdownMode -> unsetCountdownMode()
+            countdown_toggle.alpha == .5f -> fadeInButtons()
             else -> toggleCountdownTimerDropdown()
         }
     }
