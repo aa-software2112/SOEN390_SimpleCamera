@@ -594,7 +594,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     }
 
     private fun animateViews(degrees: Int) {
-        val views = arrayOf<View>(toggle_camera, toggle_flash, toggle_photo_video, change_resolution, shutter, settings, last_photo_video_preview)
+        val views = arrayOf<View>(toggle_camera, toggle_flash, toggle_photo_video, change_resolution, shutter, settings, last_photo_video_preview, countdown_toggle, countdown_time_selected, countdown_times)
         for (view in views) {
             rotate(view, degrees)
         }
