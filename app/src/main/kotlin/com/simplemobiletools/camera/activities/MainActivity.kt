@@ -258,7 +258,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         mCountdownTime = 0
         mIsInCountdownMode = false
         toggleCountdownModeIcon(mCountdownTime)
-
     }
 
     private fun toggleCountdownTimer() {
@@ -271,7 +270,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         }
     }
 
-    private fun toggleCountdownModeIcon(time: Int){
+    private fun toggleCountdownModeIcon(time: Int) {
         if (mIsInCountdownMode) {
             countdown_cancel.beVisible()
             countdown_time_selected.beVisible()
