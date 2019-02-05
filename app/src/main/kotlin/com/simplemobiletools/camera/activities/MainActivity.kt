@@ -235,9 +235,9 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         // - May want to look into using Android Spinner instead (similar to dropdowns)
         // - The 3 lines below should be 1 that takes the value from front end to set the delay
         // - https://developer.android.com/guide/topics/ui/controls/spinner
-        btn_5sec.setOnClickListener { setCountdownMode(TIMER_LOW) }
-        btn_10sec.setOnClickListener { setCountdownMode(TIMER_MED) }
-        btn_15sec.setOnClickListener { setCountdownMode(TIMER_HIGH) }
+        btn_short_timer.setOnClickListener { setCountdownMode(TIMER_SHORT) }
+        btn_medium_timer.setOnClickListener { setCountdownMode(TIMER_MEDIUM) }
+        btn_long_timer.setOnClickListener { setCountdownMode(TIMER_LONG) }
     }
 
     private fun toggleCamera() {
@@ -261,10 +261,10 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     }
 
     private fun toggleCountdownTimer() {
-
         when {
-            countdown_toggle.alpha == .5f -> fadeInButtons()
+            // Line 268 and 269 can be swapped depending on desired behavior
             mIsInCountdownMode -> unsetCountdownMode()
+            countdown_toggle.alpha == .5f -> fadeInButtons()
             else -> toggleCountdownTimerDropdown()
         }
     }
@@ -358,6 +358,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             toggle_photo_video.isClickable = !hide
             change_resolution.isClickable = !hide
             last_photo_video_preview.isClickable = !hide
+            if (hide) settings.beInvisible() else settings.beVisible() // Quick fix might look into slightly change this function later
         }
     }
 
@@ -477,9 +478,9 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         fadeAnim(change_resolution, .0f)
         fadeAnim(last_photo_video_preview, .0f)
         fadeAnim(countdown_times, .0f)
-        fadeAnim(btn_5sec, .0f)
-        fadeAnim(btn_10sec, .0f)
-        fadeAnim(btn_15sec, .0f)
+        fadeAnim(btn_short_timer, .0f)
+        fadeAnim(btn_medium_timer, .0f)
+        fadeAnim(btn_long_timer, .0f)
     }
 
     private fun fadeInButtons() {
@@ -489,9 +490,9 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         fadeAnim(last_photo_video_preview, 1f)
         fadeAnim(countdown_toggle, 1f)
         fadeAnim(countdown_times, 1f)
-        fadeAnim(btn_5sec, 1f)
-        fadeAnim(btn_10sec, 1f)
-        fadeAnim(btn_15sec, 1f)
+        fadeAnim(btn_short_timer, 1f)
+        fadeAnim(btn_medium_timer, 1f)
+        fadeAnim(btn_long_timer, 1f)
         scheduleFadeOut()
     }
 
@@ -548,7 +549,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         }.start()
     }
 
-    fun resumeCameraItems() {
+    private fun resumeCameraItems() {
         showToggleCameraIfNeeded()
         hideNavigationBarIcons()
 
@@ -592,7 +593,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     }
 
     private fun animateViews(degrees: Int) {
-        val views = arrayOf<View>(toggle_camera, toggle_flash, toggle_photo_video, change_resolution, shutter, settings, last_photo_video_preview)
+        val views = arrayOf<View>(toggle_camera, toggle_flash, toggle_photo_video, change_resolution, shutter, settings, last_photo_video_preview, countdown_toggle, countdown_time_selected, countdown_times)
         for (view in views) {
             rotate(view, degrees)
         }
