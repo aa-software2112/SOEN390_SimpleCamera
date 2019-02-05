@@ -164,7 +164,7 @@
         android:text=""
         android:textColor="@color/default_text_color"
         android:textSize="40dp"
-        android:visibility="visible" />
+        android:visibility="invisible" />
 
 
     <TextView
@@ -180,6 +180,6 @@
         android:text="0"
         android:textColor="@color/default_text_color"
         android:textSize="40dp"
-        android:visibility="visible" />
+        android:visibility="invisible" />
 
 </RelativeLayout>
