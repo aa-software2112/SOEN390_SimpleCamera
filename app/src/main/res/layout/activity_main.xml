@@ -85,20 +85,20 @@
         android:visibility="invisible">
 
         <Button
-            android:id="@+id/btn_5sec"
+            android:id="@+id/btn_short_timer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/countdown_times"
             android:text="5 sec" />
 
         <Button
-            android:id="@+id/btn_10sec"
+            android:id="@+id/btn_medium_timer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="10 sec" />
 
         <Button
-            android:id="@+id/btn_15sec"
+            android:id="@+id/btn_long_timer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="15 sec" />
