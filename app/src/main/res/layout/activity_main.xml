@@ -180,6 +180,6 @@
         android:text="0"
         android:textColor="@color/default_text_color"
         android:textSize="40dp"
-        android:visibility="invisible" />
+        android:visibility="visible" />
 
 </RelativeLayout>
