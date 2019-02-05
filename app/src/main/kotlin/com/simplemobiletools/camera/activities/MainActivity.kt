@@ -549,7 +549,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         }.start()
     }
 
-    fun resumeCameraItems() {
+    private fun resumeCameraItems() {
         showToggleCameraIfNeeded()
         hideNavigationBarIcons()
 
