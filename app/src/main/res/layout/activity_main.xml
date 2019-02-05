@@ -158,12 +158,13 @@
         android:id="@+id/countdown_time_selected"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="120dp"
-        android:text="0"
+        android:layout_marginBottom="130dp"
+        android:text=""
+        android:textColor="@color/default_text_color"
         android:textSize="40dp"
-        android:textColor="@android:color/white"
-        android:visibility="invisible" />
+        android:visibility="visible" />
 
 
     <TextView
