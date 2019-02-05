@@ -10,12 +10,11 @@ jobs:
     - stage: compile
       language: android
       before_script: chmod +x gradlew
-      script: ./gradlew ktlint assembleDebug
+      script:
+        - ./gradlew ktlint
+        - ./gradlew assembleDebug
 
     - stage: tests
       language: android
       before_script: chmod +x gradlew
       script: ./gradlew testDebugUnitTestExtended
-
-before_script:
-      - cp signing.properties_sample signing.properties
