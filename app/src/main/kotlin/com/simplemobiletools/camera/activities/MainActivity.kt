@@ -359,6 +359,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             toggle_photo_video.isClickable = !hide
             change_resolution.isClickable = !hide
             last_photo_video_preview.isClickable = !hide
+            if (hide) settings.beInvisible() else settings.beVisible() // Quick fix might look into slightly change this function later
         }
     }
 
