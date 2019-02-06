@@ -15,6 +15,30 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp" />
 
+    <View
+        android:layout_width="1dp"
+        android:layout_height="675dp"
+        android:layout_marginLeft="135dp"
+        android:background="@color/md_grey_600" />
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="675dp"
+        android:background="@color/md_grey_600"
+        android:layout_marginLeft="280dp" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="230dp"
+        android:background="@color/md_grey_600" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="460dp"
+        android:background="@color/md_grey_600" />
+
     <ImageView
         android:id="@+id/settings"
         android:layout_width="@dimen/icon_size"
