@@ -27,6 +27,10 @@ const val FLASH_OFF = 0
 const val FLASH_ON = 1
 const val FLASH_AUTO = 2
 
+const val TIMER_SHORT = 5
+const val TIMER_MEDIUM = 10
+const val TIMER_LONG = 15
+
 // camera states
 const val STATE_INIT = 0
 const val STATE_PREVIEW = 1
