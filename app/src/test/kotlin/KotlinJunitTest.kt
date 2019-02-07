@@ -58,5 +58,15 @@ class KotlinJunitTest {
         println("Testing method MySize.isSixteenToNine")
         val mMySize = MySize(16, 9)
         Assert.assertTrue(mMySize.isSixteenToNine())
+
+        @Test
+        fun firstTest() {
+            Assert.assertTrue(1 == 1)
+        }
+
+        @Test
+        fun secondTest() {
+            Assert.assertTrue(1 == 1)
+        }
     }
 }

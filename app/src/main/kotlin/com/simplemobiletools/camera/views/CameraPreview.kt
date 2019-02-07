@@ -15,14 +15,8 @@ import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Handler
 import android.os.HandlerThread
-import android.util.DisplayMetrics
-import android.util.Range
-import android.util.Size
-import android.util.SparseIntArray
-import android.view.MotionEvent
-import android.view.Surface
-import android.view.TextureView
-import android.view.ViewGroup
+import android.util.* // ktlint-disable no-wildcard-imports
+import android.view.* // ktlint-disable no-wildcard-imports
 import android.widget.Toast
 import com.simplemobiletools.camera.R
 import com.simplemobiletools.camera.activities.MainActivity
@@ -585,11 +579,13 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
                 override fun onCaptureCompleted(session: CameraCaptureSession, request: CaptureRequest, result: TotalCaptureResult) {
                     unlockFocus()
                     mActivity.toggleBottomButtons(false)
+                    mActivity.toggleRightButtons(false)
                 }
 
                 override fun onCaptureFailed(session: CameraCaptureSession?, request: CaptureRequest?, failure: CaptureFailure?) {
                     super.onCaptureFailed(session, request, failure)
                     mActivity.toggleBottomButtons(false)
+                    mActivity.toggleRightButtons(false)
                 }
             }
 
