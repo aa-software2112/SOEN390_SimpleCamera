@@ -1,31 +1,79 @@
 package test.kotlin
 
-/**
 import android.Manifest
-import com.simplemobiletools.camera.R
 import android.os.Environment
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
+import com.simplemobiletools.camera.R
 import com.simplemobiletools.camera.activities.MainActivity
-import org.junit.Assert
+import org.junit.* // ktlint-disable no-wildcard-imports
+import org.junit.contrib.java.lang.system.EnvironmentVariables
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.shadows.ShadowEnvironment
-import org.junit.contrib.java.lang.system.EnvironmentVariables
-import org.junit.Rule
 import org.robolectric.Shadows
 import org.robolectric.shadows.ShadowApplication
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
-import android.os.CountDownTimer
- */
+import org.robolectric.shadows.ShadowEnvironment
 
-import org.junit.* // ktlint-disable no-wildcard-imports
-
+@RunWith(RobolectricTestRunner::class)
 class CountdownTimerJUnitTest {
 
-    /**JUnit tests in MainActivity.kt associated to the CountdownTimer Feature*/
+    /**
+    ----------------------------------------------------------------------------------------------------
+    NEED TO REMOVE THE BEGINNING PART & beforeTest() AND INHERIT FROM KotlinRoboelectic.kt INSTEAD
+    ----------------------------------------------------------------------------------------------------
+    */
+
+    /** Create a class variable for storing an activity (a layout from the application) */
+    private var mMainActivity: MainActivity? = null /** MainActivity is a class created by the developer */
+
+    /** A shadow application must be made in order to toggle the camera AND write persmission */
+    var application: ShadowApplication? = null
+
+    /** It is CRUCIAL to have this line of code to set the environment to emulated mode - otherwise
+     * the application will assume the environment is as in the real implementation, and fail to run
+     */
+    @get:Rule
+    public final var env = EnvironmentVariables()
+            .set("EMULATED_STORAGE_TARGET", "SOME_VALUE")
+
+    @Before
+    fun beforeTest() {
+
+        /** Set the environment to correspond to the testing environment */
+        ShadowEnvironment.setExternalStorageState(Environment.MEDIA_MOUNTED)
+
+        /** Displays the environment variable necessary for emulated storage (to run
+         * the application using Robolectric w/o crashing
+         */
+        System.out.println(System.getenv("EMULATED_STORAGE_TARGET"))
+
+        /** Displays the current external storage directory */
+        System.out.println(Environment.getExternalStorageDirectory())
+
+        /**  Gets activity controller attached to the MainActivity */
+        var activityController = Robolectric.buildActivity(MainActivity::class.java)
+
+        /** Extracts the activity */
+        mMainActivity = activityController.get()
+
+        /** Creates a shadow of the application so that permissions can be tacked-onto it */
+        application = Shadows.shadowOf(mMainActivity?.getApplication())
+
+        /** Grants the CAMERA and WRITE_EXTERNAL_STORAGE permissions */
+        application?.grantPermissions(Manifest.permission.CAMERA)
+        application?.grantPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+        /** Create, resume, and make visible the MainActivity */
+        mMainActivity = activityController.create().resume().visible().get()
+    }
+
+    /**
+    ----------------------------------------------------------------------------------------------------
+    /**Tests in MainActivity.kt associated to the CountdownTimer Feature*/
+    ----------------------------------------------------------------------------------------------------
+    */
 
     @Test
     fun onCreate_initVariables_mIsInCountdownModeTest() {
@@ -79,12 +127,18 @@ class CountdownTimerJUnitTest {
 
     @Test
     fun toggleCountdownModeIcon_countdown_cancelTest() {
-        println("Testing if mIsInCountdownMode is true, then countdown_cancel is visible")
+        println("Testing if mIsInCountdownMode is false, then countdown_cancel is INvisible")
+        var countdownCancelImageView = mMainActivity?.findViewById<ImageView>(R.id.countdown_cancel)
+        Assert.assertNotNull(countdownCancelImageView)
+        Assert.assertTrue(countdownCancelImageView?.visibility == View.INVISIBLE)
     }
 
     @Test
     fun toggleCountdownModeIcon_countdown_time_selectedTest() {
         println("Testing if mIsInCountdownMode is false, then countdown_time_selected is INvisible")
+        var countdownTimeSelectedTextView = mMainActivity?.findViewById<TextView>(R.id.countdown_time_selected)
+        Assert.assertNotNull(countdownTimeSelectedTextView)
+        Assert.assertTrue(countdownTimeSelectedTextView?.visibility == View.INVISIBLE)
     }
 
     @Test
