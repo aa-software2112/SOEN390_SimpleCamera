@@ -46,8 +46,8 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     private var mIsHardwareShutterHandled = false
     private var mCurrVideoRecTimer = 0
     var mLastHandledOrientation = 0
-    private var mIsInCountdownMode = false
-    private var mCountdownTime = 0
+    internal var mIsInCountdownMode = false
+    internal var mCountdownTime = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or
@@ -269,7 +269,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         }
     }
 
-    private fun toggleCountdownModeIcon(time: Int) {
+    internal fun toggleCountdownModeIcon(time: Int) {
         if (mIsInCountdownMode) {
             countdown_cancel.beVisible()
             countdown_time_selected.beVisible()
@@ -295,7 +295,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         }
     }
 
-    private fun toggleCountdownTimerDropdown() {
+    internal fun toggleCountdownTimerDropdown() {
         var countdownDropdown = countdown_times
         if (countdownDropdown.visibility == View.INVISIBLE) countdownDropdown.beVisible() else countdownDropdown.beInvisible()
     }

@@ -2,6 +2,7 @@ package test.kotlin
 
 import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.simplemobiletools.camera.R
 import org.junit.* // ktlint-disable no-wildcard-imports
@@ -20,6 +21,7 @@ class CountdownTimerJUnitTest : KotlinRobolectric() {
     @Test
     fun onCreate_initVariables_mIsInCountdownModeTest() {
         println("Testing if mIsInCountdownMode is initialized as false")
+        Assert.assertTrue(mMainActivity!!.mIsInCountdownMode)
     }
 
     @Test
@@ -72,7 +74,11 @@ class CountdownTimerJUnitTest : KotlinRobolectric() {
         println("Testing if mIsInCountdownMode is false, then countdown_cancel is INvisible")
         var countdownCancelImageView = mMainActivity?.findViewById<ImageView>(R.id.countdown_cancel)
         Assert.assertNotNull(countdownCancelImageView)
-        Assert.assertTrue(countdownCancelImageView?.visibility == View.INVISIBLE)
+
+        //  Verify if countdownCancelImageView is INVISIBLE
+        if (mMainActivity?.mIsInCountdownMode == false) {
+            Assert.assertTrue(countdownCancelImageView?.visibility == View.INVISIBLE)
+        }
     }
 
     @Test
@@ -80,12 +86,46 @@ class CountdownTimerJUnitTest : KotlinRobolectric() {
         println("Testing if mIsInCountdownMode is false, then countdown_time_selected is INvisible")
         var countdownTimeSelectedTextView = mMainActivity?.findViewById<TextView>(R.id.countdown_time_selected)
         Assert.assertNotNull(countdownTimeSelectedTextView)
-        Assert.assertTrue(countdownTimeSelectedTextView?.visibility == View.INVISIBLE)
+
+        //  Verify if countdownTimeSelectedTextView is INVISIBLE
+        if (mMainActivity?.mIsInCountdownMode == false) {
+            Assert.assertTrue(countdownTimeSelectedTextView?.visibility == View.INVISIBLE)
+        }
     }
 
     @Test
     fun toggleCountdownTimerDropdown_countdownDropdownTest() {
         println("Testing if countdownDropdown is INvisible, then countdownDropdown is changed to visible")
+        var countdownDropdownLinearLayout = mMainActivity?.findViewById<LinearLayout>(R.id.countdown_times)
+        Assert.assertNotNull(countdownDropdownLinearLayout)
+
+        /**  Debugging purpose: in View.java, VISIBLE = 0x00000000 and INVISIBLE = 0x00000004
+
+        if (countdownDropdownLinearLayout?.visibility == 4) {
+        println("invisible")
+        }
+
+            countdownDropdownLinearLayout IS INVISIBLE
+         */
+
+        //  countdownDropdownLinearLayout is INVISIBLE at first
+        if (countdownDropdownLinearLayout?.visibility == View.INVISIBLE) {
+
+            //  Call toggleCountdownTimerDropdown() method to switch countdownDropdownLinearLayout's visibility: from INVISIBLE to VISIBLE
+            mMainActivity?.toggleCountdownTimerDropdown()
+
+            //  Verify if countdownDropdownLinearLayout is now VISIBLE
+            Assert.assertTrue(countdownDropdownLinearLayout?.visibility == View.VISIBLE)
+
+            /**  Debugging purpose: in View.java, VISIBLE = 0x00000000 and INVISIBLE = 0x00000004
+
+            if (countdownDropdownLinearLayout?.visibility == 0) {
+                println("visible")
+            }
+
+                countdownDropdownLinearLayout IS INDEED VISIBLE
+             */
+        }
     }
 
     @Test
