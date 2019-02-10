@@ -81,7 +81,6 @@ class CountdownTimerJUnitTest : KotlinRobolectric() {
 
         //  If mIsInCountdownMode is false, then verify if countdownCancelImageView is INVISIBLE
         Assert.assertTrue(countdownCancelImageView?.visibility == View.INVISIBLE)
-
     }
 
     @Test
@@ -95,7 +94,6 @@ class CountdownTimerJUnitTest : KotlinRobolectric() {
 
         //  If mIsInCountdownMode is false, then verify if countdownTimeSelectedTextView is INVISIBLE
         Assert.assertTrue(countdownTimeSelectedTextView?.visibility == View.INVISIBLE)
-
     }
 
     @Test
@@ -130,7 +128,6 @@ class CountdownTimerJUnitTest : KotlinRobolectric() {
 
             countdownDropdownLinearLayout IS INDEED VISIBLE
          */
-
     }
 
     @Test
