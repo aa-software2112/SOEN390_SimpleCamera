@@ -4,8 +4,10 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.simplemobiletools.camera.R
+import com.simplemobiletools.camera.activities.MainActivity
 import org.junit.* // ktlint-disable no-wildcard-imports
 import org.junit.runner.RunWith
+import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -16,15 +18,17 @@ class CountdownTimerJUnitTest : KotlinRobolectric() {
     /**Tests in MainActivity.kt associated to the CountdownTimer Feature*/
     ----------------------------------------------------------------------------------------------------
     */
-
+    private var activity: MainActivity = Robolectric.setupActivity(MainActivity::class.java)
     @Test
     fun onCreate_initVariables_mIsInCountdownModeTest() {
         println("Testing if mIsInCountdownMode is initialized as false")
+        Assert.assertFalse(activity.mIsInCountdownMode)
     }
 
     @Test
     fun onCreate_initVariables_mCountdownTimeTest() {
         println("Testing if mCountdownTime is initialized as 0")
+        Assert.assertEquals(0, activity.mCountdownTime)
     }
 
     @Test
@@ -36,7 +40,6 @@ class CountdownTimerJUnitTest : KotlinRobolectric() {
     fun initButtons_btn_medium_timerTest() {
         println("Testing if btn_medium_timer is initialized as TIMER_MEDIUM=10")
     }
-
     @Test
     fun initButtons_btn_long_timerTest() {
         println("Testing if btn_long_timer is initialized as TIMER_LONG=15")

@@ -46,8 +46,8 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     private var mIsHardwareShutterHandled = false
     private var mCurrVideoRecTimer = 0
     var mLastHandledOrientation = 0
-    private var mIsInCountdownMode = false
-    private var mCountdownTime = 0
+    internal var mIsInCountdownMode: Boolean = false
+    internal var mCountdownTime = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or
