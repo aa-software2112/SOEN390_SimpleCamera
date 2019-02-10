@@ -227,7 +227,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         shutter.setOnClickListener { shutterPressed() }
         settings.setOnClickListener { launchSettings() }
         toggle_photo_video.setOnClickListener { handleTogglePhotoVideo() }
-        change_resolution.setOnClickListener { mPreview?.showChangeResolutionDialog() }
+//        change_resolution.setOnClickListener { mPreview?.showChangeResolutionDialog() }
         countdown_toggle.setOnClickListener { toggleCountdownTimer() }
 
         // TODO
@@ -352,13 +352,13 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             val alpha = if (hide) 0f else 1f
             settings.animate().alpha(alpha).start()
             toggle_photo_video.animate().alpha(alpha).start()
-            change_resolution.animate().alpha(alpha).start()
-            last_photo_video_preview.animate().alpha(alpha).start()
+//            change_resolution.animate().alpha(alpha).start()
+//            last_photo_video_preview.animate().alpha(alpha).start()
 
             settings.isClickable = !hide
             toggle_photo_video.isClickable = !hide
-            change_resolution.isClickable = !hide
-            last_photo_video_preview.isClickable = !hide
+//            change_resolution.isClickable = !hide
+//            last_photo_video_preview.isClickable = !hide
             if (hide) settings.beInvisible() else settings.beVisible() // Quick fix might look into slightly change this function later
         }
     }
@@ -482,14 +482,14 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         // fadeAnim(last_photo_video_preview, .0f)
         // fadeAnim(toggle_photo_video, .0f)
         fadeAnim(toggle_flash, .5f)
-        fadeAnim(change_resolution, .5f)
+//        fadeAnim(change_resolution, .5f)
     }
 
     private fun fadeInButtons() {
         fadeAnim(settings, 1f)
         fadeAnim(toggle_flash, 1f)
         // fadeAnim(toggle_photo_video, 1f)
-        fadeAnim(change_resolution, 1f)
+//        fadeAnim(change_resolution, 1f)
         fadeAnim(countdown_toggle, 1f)
         fadeAnim(countdown_times, 1f)
         fadeAnim(btn_short_timer, 1f)
@@ -596,7 +596,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     }
 
     private fun animateViews(degrees: Int) {
-        val views = arrayOf<View>(toggle_camera, toggle_flash, toggle_photo_video, change_resolution, shutter, settings, last_photo_video_preview, countdown_toggle, countdown_time_selected, countdown_times)
+        val views = arrayOf<View>(toggle_camera, toggle_flash, toggle_photo_video, /*change_resolution,*/ shutter, settings, /*last_photo_video_preview,*/ countdown_toggle, countdown_time_selected, countdown_times)
         for (view in views) {
             rotate(view, degrees)
         }
