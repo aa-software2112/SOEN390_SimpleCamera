@@ -220,7 +220,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         updateFlashlightState(initialFlashlightState)
     }
 
-    private fun initButtons() {
+    internal fun initButtons() {
         toggle_camera.setOnClickListener { toggleCamera() }
         last_photo_video_preview.setOnClickListener { showLastMediaPreview() }
         toggle_flash.setOnClickListener { toggleFlash() }
@@ -246,7 +246,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         }
     }
 
-    private fun setCountdownMode(time: Int) {
+    internal fun setCountdownMode(time: Int) {
         if (checkCameraAvailable()) {
             mCountdownTime = time
             mIsInCountdownMode = true
@@ -254,7 +254,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         }
     }
 
-    private fun unsetCountdownMode() {
+    internal fun unsetCountdownMode() {
         mCountdownTime = 0
         mIsInCountdownMode = false
         toggleCountdownModeIcon(mCountdownTime)
@@ -601,7 +601,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     private fun rotate(view: View, degrees: Int) = view.animate().rotation(degrees.toFloat()).start()
 
-    private fun checkCameraAvailable(): Boolean {
+    internal fun checkCameraAvailable(): Boolean {
         if (!mIsCameraAvailable) {
             toast(R.string.camera_unavailable)
         }

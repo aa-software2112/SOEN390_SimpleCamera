@@ -1,9 +1,11 @@
 package test.kotlin
 
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.simplemobiletools.camera.helpers.TIMER_SHORT
 import com.simplemobiletools.camera.R
 import org.junit.* // ktlint-disable no-wildcard-imports
 import org.junit.runner.RunWith
@@ -21,12 +23,14 @@ class CountdownTimerJUnitTest : KotlinRobolectric() {
     @Test
     fun onCreate_initVariables_mIsInCountdownModeTest() {
         println("Testing if mIsInCountdownMode is initialized as false")
+        //  verifying that initially, mIsInCountdownMode is false
         Assert.assertFalse(mMainActivity!!.mIsInCountdownMode)
     }
 
     @Test
     fun onCreate_initVariables_mCountdownTimeTest() {
         println("Testing if mCountdownTime is initialized as 0")
+        //  verifying that initially, mCountDownTime is 0
         Assert.assertEquals(0, mMainActivity?.mCountdownTime)
     }
 
@@ -48,21 +52,44 @@ class CountdownTimerJUnitTest : KotlinRobolectric() {
     @Test
     fun setCountdownMode_checkCameraAvailableTest() {
         println("Testing if checkCameraAvailable is true")
+        //  Manually "turning on" the camera
+        mMainActivity?.setIsCameraAvailable(true)
+        // Asserting that checkCameraAvailable verifies the camera is on and outputs "true"
+        Assert.assertTrue(mMainActivity!!.checkCameraAvailable())
     }
 
     @Test
     fun setCountdownMode_mCountdownTimeTest() {
         println("Testing if mCountdownTime is equal to the time chosen")
+        //  Manually "turning on" the camera
+        mMainActivity?.setIsCameraAvailable(true)
+        //  Assigning a mock time
+        var mockTime = 5
+        //  Calling setCountdownMode
+        mMainActivity?.setCountdownMode(mockTime)
+        //  Asserting that mCountdownTime adheres to chosen mockTime
+        Assert.assertEquals(mockTime, mMainActivity?.mCountdownTime)
     }
 
     @Test
     fun setCountdownMode_mIsInCountdownModeTest() {
         println("Testing if mIsInCountdownMode is true")
+        //  Manually "turning on" the camera
+        mMainActivity?.setIsCameraAvailable(true)
+        //  Assigning a mock time
+        var mockTime = 5
+        //  Calling setCountdownMode
+        mMainActivity?.setCountdownMode(mockTime)
+        //  Asserting that mIsInCountdownMode has been set to true
+        Assert.assertTrue(mMainActivity!!.mIsInCountdownMode)
     }
 
     @Test
     fun unsetCountdownMode_mCountdownTimeTest() {
         println("Testing if mCountdownTime is initialized as 0")
+        mMainActivity?.unsetCountdownMode()
+        //  Asserting that mCountdownTime has been set to 0
+        Assert.assertEquals(0, mMainActivity?.mCountdownTime)
     }
 
     @Test
