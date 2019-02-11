@@ -22,13 +22,13 @@ import org.robolectric.shadows.ShadowApplication
  * testing; basic unit testing can be done through ordinary and singular JUNIT tests
  */
 @RunWith(RobolectricTestRunner::class)
-class KotlinRobolectric {
+open class KotlinRobolectric {
 
     /** Create a class variable for storing an activity (a layout from the application) */
-    private var mMainActivity: MainActivity? = null /** MainActivity is a class created by the developer */
+    open var mMainActivity: MainActivity? = null /** MainActivity is a class created by the developer */
 
     /** A shadow application must be made in order to toggle the camera AND write persmission */
-    var application: ShadowApplication? = null
+    open var application: ShadowApplication? = null
 
     /** It is CRUCIAL to have this line of code to set the environment to emulated mode - otherwise
      * the application will assume the environment is as in the real implementation, and fail to run
@@ -38,7 +38,7 @@ class KotlinRobolectric {
             .set("EMULATED_STORAGE_TARGET", "SOME_VALUE")
 
     @Before
-    fun beforeTest() {
+    open fun beforeTest() {
 
         /** Set the environment to correspond to the testing environment */
         ShadowEnvironment.setExternalStorageState(Environment.MEDIA_MOUNTED)
