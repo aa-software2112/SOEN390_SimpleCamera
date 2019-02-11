@@ -24,6 +24,8 @@ import android.os.Build.BRAND
 import android.os.Build.MANUFACTURER
 import android.os.Build.FINGERPRINT
 import android.view.View
+import androidx.test.espresso.ViewInteraction
+import androidx.test.espresso.action.ViewActions
 
 
 enum class TestActivities {
@@ -58,6 +60,9 @@ open class BaseUITestSetup(activityUnderTest: TestActivities) {
     @get:Rule var mSettingsActivity: ActivityTestRule<SettingsActivity>? = null;
     @get:Rule var mSplashActivity: ActivityTestRule<SplashActivity>? = null;
 
+    /** The fade value (the value to which fading out reaches) */
+    private var fadeValue = 0.5F;
+
     init {
         /** This initializer uses the activity enum passed to the constructor in order to launch the appropriate activity */
         mMainActivity = ActivityTestRule <MainActivity>(MainActivity::class.java, false, TestActivities.MAIN_ACTIVITY == activityUnderTest);
@@ -78,11 +83,11 @@ open class BaseUITestSetup(activityUnderTest: TestActivities) {
     }
 
     /** Waits for the fade to take place completely; only if in emulator mode (to compensate for slow runtime) */
-    fun waitOnViewFade(someView: View, waitForValue: Float)
+    fun waitOnViewFade(someView: View)
     {
         /** Only wait in emulator mode */
         if (this.isEmulator())
-            while(someView.alpha.compareTo(0.5) != 0);
+            while(someView.alpha.compareTo(fadeValue) != 0);
     }
 
     /** Sleeps the emulator for a given time in milliseconds - if using a device, use Thread.sleep(...)
@@ -94,21 +99,16 @@ open class BaseUITestSetup(activityUnderTest: TestActivities) {
             Thread.sleep(milliseconds)
     }
 
-    /**
-    constructor(activityStartPoint : TestActivities)
+    /** There are times where the emulator will need a double click,
+     * whereas the android device won't
+     */
+    fun performClicks(vi: ViewInteraction)
     {
-        System.out.println("Starting Activity");
-
-
-        when(activityStartPoint)
-        {
-            TestActivities.MAIN_ACTIVITY -> mMainActivity = ActivityTestRule <MainActivity>(MainActivity::class.java, false, true)
-            TestActivities.SETTINGS_ACTIVITY -> mSettingsActivity = ActivityTestRule<SettingsActivity>(SettingsActivity::class.java, false, true)
-
-        }
+        if (this.isEmulator())
+            vi.perform(click(), click())
+        else
+            vi.perform(click())
     }
-    */
-
 
 
 }

@@ -1,21 +1,32 @@
 package com.simplemobiletools.camera.activities
 
+import android.app.Activity
+import android.app.Instrumentation
+import android.content.Intent
+import android.net.Uri
 import android.view.View
 import android.view.ViewGroup
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.Intents.intended
+import androidx.test.espresso.intent.Intents.intending
+import androidx.test.espresso.intent.matcher.IntentMatchers.*
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.runner.AndroidJUnit4
 import com.simplemobiletools.camera.R
+import com.simplemobiletools.commons.helpers.BROADCAST_REFRESH_MEDIA
+import junit.framework.Assert.assertTrue
 import kotlinx.android.synthetic.main.activity_main.view.*
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.*
 import org.hamcrest.TypeSafeMatcher
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -24,8 +35,26 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class CountdownTimerTest: BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
 
+    var view: View? = null;
+    var expectedStrings = Array<String>(3, {""});
+
+    @Before
+    fun setup()
+    {
+        /** Capture the view  */
+        view = this.mMainActivity?.activity?.findViewById<View>(R.id.countdown_toggle)
+
+        /** Initialize expected strings */
+        expectedStrings.set(0, "5 sec")
+        expectedStrings.set(1, "10 sec")
+        expectedStrings.set(2, "15 sec")
+    }
+
+
     /** This is NOT an acceptance test; it verifies that the application is laid out as expected for the
      * countdown timer feature. I.E.: The appropriate countdown buttons are apparent
+     *
+     * Written By: Anthony Andreoli
      */
     @Test
     fun countdownTimerUITest()
@@ -34,22 +63,13 @@ class CountdownTimerTest: BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
         /** Verify that the countdown toggle view is present */
         onView(withId(R.id.countdown_toggle)).check(matches(isDisplayed()))
 
-        /** Capture the view and get the alpha value - wait until it fades out */
-        var view = this.mMainActivity?.activity?.findViewById<View>(R.id.countdown_toggle)
-
         /** Wait until the alpha of the view fades, and perform double click */
-        this.waitOnViewFade(view!!, 0.5F);
+        this.waitOnViewFade(view!!);
 
         /** Now that the button has faded, click on it once to bring it to full opacity,
          * and another time to show the time dropdown
          */
-        onView(withId(R.id.countdown_toggle)).perform(click(), click())
-
-        var expectedStrings = Array<String>(3, {""});
-
-        expectedStrings.set(0, "5 sec")
-        expectedStrings.set(1, "10 sec")
-        expectedStrings.set(2, "15 sec")
+        this.performClicks(onView(withId(R.id.countdown_toggle)))
 
         expectedStrings.forEach {
             onView(allOf(withParent(withId(R.id.countdown_times)), withText(it))).check(matches(allOf(isDisplayed())))
@@ -67,9 +87,9 @@ class CountdownTimerTest: BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
          * 3. Cancel the countdown
          * */
         expectedStrings.forEach {
-            this.waitOnViewFade(view!!, 0.5F);
+            this.waitOnViewFade(view!!);
 
-            onView(withId(R.id.countdown_toggle)).perform(click(), click())
+            this.performClicks(onView(withId(R.id.countdown_toggle)))
 
             this.sleep(500)
 
@@ -87,75 +107,76 @@ class CountdownTimerTest: BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
 
     }
 
-    /** Starts a 5 second countdown and takes a picture */
-    /**
+    /** Acceptance Test 2: Photo taken after selected countdown time: Automatic
+     * Starts a 10 second countdown and takes a picture
+     * 1. Application starts
+     * 2. Countdown is toggled to ON
+     * 3. A countdown of 10 seconds is selected
+     * 4. The shutter is pressed
+     * 5. Assert that a photo was taken
+     *
+     * Written By: Anthony Andreoli & Krishna Patel
+     * */
     @Test
-    fun countdownTimer() {
+    fun photoTakenAfter10Seconds() {
 
-        val appCompatImageView = onView(
-            allOf(withId(R.id.countdown_toggle), withContentDescription("TODO"),
-                childAtPosition(allOf(withId(R.id.view_holder),childAtPosition(withId(android.R.id.content),0)),5),isDisplayed()))
-        appCompatImageView.perform(click())
+        /** Wait for the button to fade out */
+        this.waitOnViewFade(view!!);
 
-        val appCompatButton = onView(
-            allOf(withId(R.id.btn_short_timer), withText("5 sec"), childAtPosition(allOf(withId(R.id.countdown_times),
-                childAtPosition(withId(R.id.view_holder),7)),0), isDisplayed()))
-        appCompatButton.perform(click())
+        /** Select countdown */
+        this.performClicks(onView(withId(R.id.countdown_toggle)))
 
-        val appCompatImageView2 = onView(
-            allOf(withId(R.id.shutter), withContentDescription("TODO"),
-                childAtPosition(allOf(withId(R.id.btn_holder), childAtPosition(withId(R.id.view_holder),8)),1), isDisplayed()))
-        appCompatImageView2.perform(click())
+        /** Select 10 second countdown */
+        onView(withText(expectedStrings[1])).perform(click())
 
-        Thread.sleep(5000)
+        this.sleep(1000)
+
+        /** Press the shutter */
+        onView(withId(R.id.shutter)).perform(click())
+
+        Thread.sleep(((expectedStrings[1].split(" ")[0]).toLong() + 2)*1000)
+
+        assertTrue(this.mMainActivity?.activity?.getPhotoTaken() == true)
+
     }
-    */
-    /** Starts a 5 second countdown and then cancels it during the countdown */
-    /**
+
+    /** Acceptance Test 3: Functional: Photo canceled midway through the countdown: Automatic
+     * Starts a 10 second countdown and cancels photo before countdown reaches 0
+     * 1. Application starts
+     * 2. Countdown is toggled to ON
+     * 3. A countdown of 10 seconds is selected
+     * 4. The shutter is pressed
+     * 5. 1 second in, photo is cancelled
+     * 6. Assert that photo was not taken
+     *
+     * Written By: Anthony Andreoli & Krishna Patel
+     * */
     @Test
     fun countdownTimerCancel() {
-        // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
+        /** Wait for the button to fade out */
+        this.waitOnViewFade(view!!);
 
-        val appCompatImageView = onView(
-            allOf(withId(R.id.countdown_toggle), withContentDescription("TODO"),
-                childAtPosition(allOf(withId(R.id.view_holder),childAtPosition(withId(android.R.id.content),0)),5),isDisplayed()))
-        appCompatImageView.perform(click())
+        /** Select countdown */
+        this.performClicks(onView(withId(R.id.countdown_toggle)))
 
-        val appCompatButton = onView(
-            allOf(withId(R.id.btn_short_timer), withText("5 sec"), childAtPosition(allOf(withId(R.id.countdown_times),
-                childAtPosition(withId(R.id.view_holder),7)),0), isDisplayed()))
-        appCompatButton.perform(click())
+        /** Select 10 second countdown */
+        onView(withText(expectedStrings[1])).perform(click())
 
-        val appCompatImageView2 = onView(
-            allOf(withId(R.id.shutter), withContentDescription("TODO"),
-                childAtPosition(allOf(withId(R.id.btn_holder), childAtPosition(withId(R.id.view_holder),8)),1), isDisplayed()))
-        appCompatImageView2.perform(click())
+        this.sleep(1000)
 
-        // Wait a few seconds to confirm the countdown has started
-        Thread.sleep(2000)
-
-        // Cancel countdown
-        appCompatImageView.perform(click())
+        /** Press the shutter */
+        onView(withId(R.id.shutter)).perform(click())
 
         Thread.sleep(2000)
-    }
-    */
-    /*
-    private fun childAtPosition(parentMatcher: Matcher<View>, position: Int): Matcher<View> {
-        return object : TypeSafeMatcher<View>() {
-            override fun describeTo(description: Description) {
-                description.appendText("Child at position $position in parent ")
-                parentMatcher.describeTo(description)
-            }
 
-            public override fun matchesSafely(view: View): Boolean {
-                val parent = view.parent
-                return parent is ViewGroup && parentMatcher.matches(parent)
-                    && view == parent.getChildAt(position)
-            }
-        }
+        /** Cancel the photo */
+        onView(withId(R.id.countdown_toggle)).perform(click())
+
+        /** Assert that photo was NOT taken */
+        assertTrue(this.mMainActivity?.activity?.getPhotoTaken() == false)
+
+        /** Check that display returned to original state - the countdown timer is no longer visible */
+        onView(withId(R.id.countdown_time_selected)).check(matches(not(isDisplayed())))
     }
-    */
+
 }

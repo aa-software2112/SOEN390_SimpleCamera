@@ -38,6 +38,7 @@ import java.util.concurrent.TimeUnit
 // based on the Android Camera2 photo sample at https://github.com/googlesamples/android-Camera2Basic
 // and video sample at https://github.com/googlesamples/android-Camera2Video
 class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
+
     private val FOCUS_TAG = "focus_tag"
     private val MAX_PREVIEW_WIDTH = 1920
     private val MAX_PREVIEW_HEIGHT = 1080
@@ -99,6 +100,7 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
     private val mCameraOpenCloseLock = Semaphore(1)
     private val mMediaActionSound = MediaActionSound()
     private var mZoomRect: Rect? = null
+    private var mUITestPhotoTaken = false
 
     constructor(context: Context) : super(context)
 
@@ -577,6 +579,7 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
 
             val captureCallback = object : CameraCaptureSession.CaptureCallback() {
                 override fun onCaptureCompleted(session: CameraCaptureSession, request: CaptureRequest, result: TotalCaptureResult) {
+                    mUITestPhotoTaken = true
                     unlockFocus()
                     mActivity.toggleBottomButtons(false)
                     mActivity.toggleRightButtons(false)
@@ -980,4 +983,9 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {}
+
+    override fun getUITestPhotoTaken(): Boolean
+    {
+        return mUITestPhotoTaken
+    }
 }

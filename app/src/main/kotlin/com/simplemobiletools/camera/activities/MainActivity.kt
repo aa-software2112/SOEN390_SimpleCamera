@@ -677,4 +677,8 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             checkWhatsNew(this, BuildConfig.VERSION_CODE)
         }
     }
+
+    fun getPhotoTaken(): Boolean? {
+        return this.mPreview?.getUITestPhotoTaken()
+    }
 }
