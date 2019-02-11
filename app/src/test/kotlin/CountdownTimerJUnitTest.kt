@@ -5,7 +5,6 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.simplemobiletools.camera.helpers.TIMER_SHORT
 import com.simplemobiletools.camera.R
 import org.junit.* // ktlint-disable no-wildcard-imports
 import org.junit.runner.RunWith
@@ -158,27 +157,95 @@ class CountdownTimerJUnitTest : KotlinRobolectric() {
     }
 
     @Test
-    fun handleShutter_mIsInCountdownMode_tryTakePictureTest() {
-        println("Testing if mIsInPhotoMode is true AND mIsInCountdownMode is false, then tryTakePicture() is called")
-    }
+    fun handleShutter_mIsInCountdownMode_toggleBottomButtons() {
+        println("Testing if mIsInPhotoMode is true AND mIsInCountdownMode is false, then toggleBottomButtons() is called which will make the shutter button Clickable")
+        //  Manually "turning on" the camera
+        mMainActivity?.setIsCameraAvailable(true)
 
-    @Test
-    fun handleShutter_mIsInCountdownMode_tryTakeDelayedPictureTest() {
-        println("Testing if mIsInPhotoMode is true AND mIsInCountdownMode is true, then tryTakeDelayedPicture() is called")
+        //  Verify if mIsCameraAvailable is true
+        Assert.assertTrue(mMainActivity!!.mIsCameraAvailable)
+
+        //  Call handleShutter()
+        mMainActivity?.handleShutter()
+
+        //  Verify if camera is IsInPhotoMode and not InCountdownMode
+        Assert.assertTrue(mMainActivity!!.mIsInPhotoMode)
+        Assert.assertFalse(mMainActivity!!.mIsInCountdownMode)
+
+        //  Get the shutter image
+        var shutterImage = mMainActivity?.findViewById<ImageView>(R.id.shutter)
+        Assert.assertNotNull(shutterImage)
+
+        // Call toggleBottomButtons()
+        mMainActivity?.toggleBottomButtons(false)
+
+        // Verify if the shutter is indeed clickable
+        Assert.assertTrue(shutterImage!!.isClickable)
     }
 
     @Test
     fun checkButtons_initPhotoMode_countdown_toggleTest() {
         println("Testing if mIsInPhotoMode is true, then initPhotoMode() is called to verify that countdown_toggle is visible")
+        //  Verify if initialized InPhotoMode
+        Assert.assertTrue(mMainActivity!!.mIsInPhotoMode)
+
+        // Call checkButtons() which will then call initPhotoMode() since
+        mMainActivity?.checkButtons()
+
+        //  Get the shutter image
+        var countdownToggleImageView = mMainActivity?.findViewById<ImageView>(R.id.countdown_toggle)
+        Assert.assertNotNull(countdownToggleImageView)
+
+        //  Verify if countdownToggleImageView is VISIBLE
+        Assert.assertTrue(countdownToggleImageView?.visibility == View.VISIBLE)
     }
 
     @Test
-    fun checkButtons_initVideoButtons_countdown_toggle_countdown_timesTest() {
+    fun checkButtons_tryInitVideoMode_initVideoButtons_countdown_toggleTest() {
         println("Testing if mIsInPhotoMode is false, then tryInitVideoMode() is called, which calls initVideoButtons(), to finally verify if countdown_toggle AND countdown_times are INvisible")
+        var countdownToggleImageView = mMainActivity?.findViewById<ImageView>(R.id.countdown_toggle)
+        Assert.assertNotNull(countdownToggleImageView)
+
+        println(countdownToggleImageView?.visibility)
+
+        //  Manually "turning on" the camera
+        mMainActivity?.setIsCameraAvailable(true)
+
+        //  "Clicking" to open switch into Video mode
+        mMainActivity?.findViewById<ImageView>(R.id.toggle_photo_video)?.performClick()
+
+        // Call tryInitVideoMode() which then calls initVideoButtons()
+        mMainActivity?.tryInitVideoMode()
+
+        //  Verify if countdownToggleImageView is now INVISIBLE
+        Assert.assertTrue(countdownToggleImageView?.visibility == View.INVISIBLE)
     }
 
     @Test
     fun tryTakeDelayedPicture_startTest() {
-        println("Testing if tryTakeDelayedPicture() is called, then start() is called")
+        println("Testing if tryTakeDelayedPicture() is called, then unsetCountdownMode() is called")
+        //  Manually "turning on" the camera
+        mMainActivity?.setIsCameraAvailable(true)
+
+        //  Verify if mIsCameraAvailable is true
+        Assert.assertTrue(mMainActivity!!.mIsCameraAvailable)
+
+        //  "Clicking" to open the countdown and choose a countdown length
+        mMainActivity?.findViewById<ImageView>(R.id.countdown_toggle)?.performClick()
+        mMainActivity?.findViewById<Button>(R.id.btn_short_timer)?.performClick()
+
+        //  Verify if camera IsInPhotoMode and is InCountdownMode
+        Assert.assertTrue(mMainActivity!!.mIsInPhotoMode)
+        Assert.assertTrue(mMainActivity!!.mIsInCountdownMode)
+
+        // Call tryTakeDelayedPicture()
+        mMainActivity?.tryTakeDelayedPicture()
+
+        /** Want to use CountDownTimer to wait 10 seconds to see if unsetCountdownMode() is called, and verify mIsInCountdownMode is false */
+
+        mMainActivity?.unsetCountdownMode()
+
+        // Verify if mIsInCountdownMode is false
+        Assert.assertFalse(mMainActivity!!.mIsInCountdownMode)
     }
 }
