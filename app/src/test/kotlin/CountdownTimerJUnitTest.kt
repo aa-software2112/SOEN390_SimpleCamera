@@ -6,6 +6,8 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.simplemobiletools.camera.helpers.TIMER_SHORT
+import com.simplemobiletools.camera.helpers.TIMER_MEDIUM
+import com.simplemobiletools.camera.helpers.TIMER_LONG
 import com.simplemobiletools.camera.R
 import org.junit.* // ktlint-disable no-wildcard-imports
 import org.junit.runner.RunWith
@@ -23,30 +25,58 @@ class CountdownTimerJUnitTest : KotlinRobolectric() {
     @Test
     fun onCreate_initVariables_mIsInCountdownModeTest() {
         println("Testing if mIsInCountdownMode is initialized as false")
-        //  verifying that initially, mIsInCountdownMode is false
+        //  Verifying that initially, mIsInCountdownMode is false
         Assert.assertFalse(mMainActivity!!.mIsInCountdownMode)
     }
 
     @Test
     fun onCreate_initVariables_mCountdownTimeTest() {
         println("Testing if mCountdownTime is initialized as 0")
-        //  verifying that initially, mCountDownTime is 0
+        //  Verifying that initially, mCountDownTime is 0
         Assert.assertEquals(0, mMainActivity?.mCountdownTime)
     }
 
     @Test
     fun initButtons_btn_short_timerTest() {
         println("Testing if btn_short_timer is initialized as TIMER_SHORT=5")
+        //  Manually "turning on" the camera
+        mMainActivity?.setIsCameraAvailable(true)
+
+        //  "Clicking" to open the countdown and choose a countdown length
+        mMainActivity?.findViewById<ImageView>(R.id.countdown_toggle)?.performClick()
+        mMainActivity?.findViewById<Button>(R.id.btn_short_timer)?.performClick()
+
+        Assert.assertTrue(mMainActivity!!.mIsInCountdownMode)
+        Assert.assertEquals(TIMER_SHORT, mMainActivity?.mCountdownTime)
     }
 
     @Test
     fun initButtons_btn_medium_timerTest() {
         println("Testing if btn_medium_timer is initialized as TIMER_MEDIUM=10")
+        //  Manually "turning on" the camera
+        mMainActivity?.setIsCameraAvailable(true)
+
+        //  "Clicking" to open the countdown and choose a countdown length
+        mMainActivity?.findViewById<ImageView>(R.id.countdown_toggle)?.performClick()
+        mMainActivity?.findViewById<Button>(R.id.btn_medium_timer)?.performClick()
+
+        Assert.assertTrue(mMainActivity!!.mIsInCountdownMode)
+        Assert.assertEquals(TIMER_MEDIUM, mMainActivity?.mCountdownTime)
     }
 
     @Test
     fun initButtons_btn_long_timerTest() {
         println("Testing if btn_long_timer is initialized as TIMER_LONG=15")
+        //  Manually "turning on" the camera
+        mMainActivity?.setIsCameraAvailable(true)
+
+        //  "Clicking" to open the countdown and choose a countdown length
+        mMainActivity?.findViewById<ImageView>(R.id.countdown_toggle)?.performClick()
+        mMainActivity?.findViewById<Button>(R.id.btn_long_timer)?.performClick()
+
+        Assert.assertTrue(mMainActivity!!.mIsInCountdownMode)
+        Assert.assertEquals(TIMER_LONG, mMainActivity?.mCountdownTime)
+
     }
 
     @Test
