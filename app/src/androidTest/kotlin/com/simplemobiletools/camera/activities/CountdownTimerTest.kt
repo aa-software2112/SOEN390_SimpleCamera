@@ -4,13 +4,11 @@ import android.view.View
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.intent.matcher.IntentMatchers.* // ktlint-disable no-wildcard-imports
 import androidx.test.espresso.matcher.ViewMatchers.* // ktlint-disable no-wildcard-imports
 import androidx.test.filters.LargeTest
 import androidx.test.runner.AndroidJUnit4
 import com.simplemobiletools.camera.R
 import junit.framework.Assert.assertTrue
-import kotlinx.android.synthetic.main.activity_main.view.* // ktlint-disable no-wildcard-imports
 import org.hamcrest.Matchers.* // ktlint-disable no-wildcard-imports
 import org.junit.Before
 import org.junit.Test

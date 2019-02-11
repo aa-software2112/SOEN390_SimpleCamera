@@ -9,11 +9,7 @@ import androidx.test.rule.GrantPermissionRule
 import androidx.test.runner.AndroidJUnit4
 import org.junit.Rule
 import org.junit.runner.RunWith
-import android.os.Build.PRODUCT
-import android.os.Build.DEVICE
-import android.os.Build.BRAND
-import android.os.Build.MANUFACTURER
-import android.os.Build.FINGERPRINT
+
 import android.view.View
 import androidx.test.espresso.ViewInteraction
 
