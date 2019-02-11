@@ -76,7 +76,6 @@ class CountdownTimerJUnitTest : KotlinRobolectric() {
 
         Assert.assertTrue(mMainActivity!!.mIsInCountdownMode)
         Assert.assertEquals(TIMER_LONG, mMainActivity?.mCountdownTime)
-
     }
 
     @Test
