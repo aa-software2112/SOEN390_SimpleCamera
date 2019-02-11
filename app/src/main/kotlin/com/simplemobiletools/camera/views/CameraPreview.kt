@@ -15,14 +15,8 @@ import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Handler
 import android.os.HandlerThread
-import android.util.DisplayMetrics
-import android.util.Range
-import android.util.Size
-import android.util.SparseIntArray
-import android.view.MotionEvent
-import android.view.Surface
-import android.view.TextureView
-import android.view.ViewGroup
+import android.util.* // ktlint-disable no-wildcard-imports
+import android.view.* // ktlint-disable no-wildcard-imports
 import android.widget.Toast
 import com.simplemobiletools.camera.R
 import com.simplemobiletools.camera.activities.MainActivity
@@ -44,6 +38,7 @@ import java.util.concurrent.TimeUnit
 // based on the Android Camera2 photo sample at https://github.com/googlesamples/android-Camera2Basic
 // and video sample at https://github.com/googlesamples/android-Camera2Video
 class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
+
     private val FOCUS_TAG = "focus_tag"
     private val MAX_PREVIEW_WIDTH = 1920
     private val MAX_PREVIEW_HEIGHT = 1080
@@ -105,6 +100,7 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
     private val mCameraOpenCloseLock = Semaphore(1)
     private val mMediaActionSound = MediaActionSound()
     private var mZoomRect: Rect? = null
+    private var mUITestPhotoTaken = false
 
     constructor(context: Context) : super(context)
 
@@ -583,13 +579,16 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
 
             val captureCallback = object : CameraCaptureSession.CaptureCallback() {
                 override fun onCaptureCompleted(session: CameraCaptureSession, request: CaptureRequest, result: TotalCaptureResult) {
+                    mUITestPhotoTaken = true
                     unlockFocus()
                     mActivity.toggleBottomButtons(false)
+                    mActivity.toggleRightButtons(false)
                 }
 
                 override fun onCaptureFailed(session: CameraCaptureSession?, request: CaptureRequest?, failure: CaptureFailure?) {
                     super.onCaptureFailed(session, request, failure)
                     mActivity.toggleBottomButtons(false)
+                    mActivity.toggleRightButtons(false)
                 }
             }
 
@@ -984,4 +983,9 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {}
+
+    override fun getUITestPhotoTaken(): Boolean
+    {
+        return mUITestPhotoTaken
+    }
 }

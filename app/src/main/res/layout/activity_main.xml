@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/view_holder"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,15 +10,20 @@
     <com.simplemobiletools.camera.views.AutoFitTextureView
         android:id="@+id/camera_texture_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp" />
 
     <ImageView
         android:id="@+id/settings"
         android:layout_width="@dimen/icon_size"
         android:layout_height="@dimen/icon_size"
         android:layout_alignParentRight="true"
-        android:padding="@dimen/normal_margin"
-        android:src="@drawable/ic_settings_cog"/>
+        android:contentDescription="TODO" android:padding="@dimen/normal_margin"
+        android:src="@drawable/ic_settings_cog"
+        android:visibility="visible" />
 
     <ImageView
         android:id="@+id/toggle_photo_video"
@@ -25,8 +31,9 @@
         android:layout_height="@dimen/icon_size"
         android:layout_below="@+id/settings"
         android:layout_alignParentRight="true"
-        android:padding="@dimen/normal_margin"
-        android:src="@drawable/ic_video"/>
+        android:contentDescription="TODO" android:padding="@dimen/normal_margin"
+        android:src="@drawable/ic_video"
+        android:visibility="visible" />
 
     <ImageView
         android:id="@+id/change_resolution"
@@ -34,8 +41,9 @@
         android:layout_height="@dimen/icon_size"
         android:layout_below="@+id/toggle_photo_video"
         android:layout_alignParentRight="true"
-        android:padding="@dimen/normal_margin"
-        android:src="@drawable/ic_resolution"/>
+        android:contentDescription="TODO" android:padding="@dimen/normal_margin"
+        android:src="@drawable/ic_resolution"
+        android:visibility="visible" />
 
     <ImageView
         android:id="@+id/last_photo_video_preview"
@@ -43,37 +51,97 @@
         android:layout_height="@dimen/icon_size"
         android:layout_below="@+id/change_resolution"
         android:layout_alignParentRight="true"
-        android:padding="@dimen/medium_margin"/>
+        android:contentDescription="TODO" android:padding="@dimen/medium_margin"
+        android:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/countdown_toggle"
+        android:layout_width="@dimen/icon_size"
+        android:layout_height="@dimen/icon_size"
+        android:layout_weight="1"
+        android:contentDescription="TODO" android:padding="@dimen/normal_margin"
+        app:srcCompat="@drawable/ic_clock"
+        android:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/countdown_cancel"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_alignEnd="@+id/countdown_toggle"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/circle_background"
+        android:contentDescription="TODO" android:visibility="invisible"
+        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+    <LinearLayout
+        android:id="@+id/countdown_times"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="56dp"
+        android:gravity="right"
+        android:orientation="vertical"
+        android:visibility="invisible">
+
+        <Button
+            android:id="@+id/btn_short_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/countdown_times"
+            android:text="5 sec" />
+
+        <Button
+            android:id="@+id/btn_medium_timer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="10 sec" />
+
+        <Button
+            android:id="@+id/btn_long_timer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="15 sec" />
+
+        <Button
+            android:id="@+id/btn_30sec"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="30 sec"
+            android:visibility="invisible" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/btn_holder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:gravity="center_horizontal|bottom">
+        android:gravity="center_horizontal|bottom"
+        android:visibility="visible">
 
         <ImageView
             android:id="@+id/toggle_camera"
             android:layout_width="@dimen/icon_size"
             android:layout_height="@dimen/icon_size"
             android:layout_weight="1"
-            android:padding="@dimen/normal_margin"
-            android:src="@drawable/ic_camera_front"/>
+            android:contentDescription="TODO" android:padding="@dimen/normal_margin"
+            android:src="@drawable/ic_camera_front" />
 
         <ImageView
             android:id="@+id/shutter"
             android:layout_width="@dimen/icon_size"
             android:layout_height="@dimen/icon_size"
             android:layout_weight="1"
-            android:src="@drawable/ic_shutter"/>
+            android:contentDescription="TODO" android:src="@drawable/ic_shutter" />
 
         <ImageView
             android:id="@+id/toggle_flash"
             android:layout_width="@dimen/icon_size"
             android:layout_height="@dimen/icon_size"
             android:layout_weight="1"
-            android:padding="@dimen/normal_margin"
-            android:src="@drawable/ic_flash_off"/>
+            android:contentDescription="TODO" android:padding="@dimen/normal_margin"
+            android:src="@drawable/ic_flash_off" />
 
     </LinearLayout>
 
@@ -85,6 +153,34 @@
         android:layout_centerHorizontal="true"
         android:text="00:00"
         android:textColor="@android:color/white"
-        android:visibility="gone"/>
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/countdown_time_selected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="130dp"
+        android:text=""
+        android:textColor="@color/default_text_color"
+        android:textSize="40dp"
+        android:visibility="invisible" />
+
+
+    <TextView
+        android:id="@+id/countdown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/circle_shape"
+        android:gravity="center"
+        android:padding="12dp"
+        android:text="0"
+        android:textColor="@color/default_text_color"
+        android:textSize="40dp"
+        android:visibility="invisible" />
 
 </RelativeLayout>
