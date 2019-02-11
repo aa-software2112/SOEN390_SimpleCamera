@@ -229,12 +229,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         toggle_photo_video.setOnClickListener { handleTogglePhotoVideo() }
         change_resolution.setOnClickListener { mPreview?.showChangeResolutionDialog() }
         countdown_toggle.setOnClickListener { toggleCountdownTimer() }
-
-        // TODO
-        // - Right now this is somewhat hard-coded
-        // - May want to look into using Android Spinner instead (similar to dropdowns)
-        // - The 3 lines below should be 1 that takes the value from front end to set the delay
-        // - https://developer.android.com/guide/topics/ui/controls/spinner
         btn_short_timer.setOnClickListener { setCountdownMode(TIMER_SHORT) }
         btn_medium_timer.setOnClickListener { setCountdownMode(TIMER_MEDIUM) }
         btn_long_timer.setOnClickListener { setCountdownMode(TIMER_LONG) }
@@ -358,7 +352,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             toggle_photo_video.isClickable = !hide
             change_resolution.isClickable = !hide
             last_photo_video_preview.isClickable = !hide
-            if (hide) settings.beInvisible() else settings.beVisible() // Quick fix might look into slightly change this function later
+            if (hide) settings.beInvisible() else settings.beVisible()
         }
     }
 
@@ -536,9 +530,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                     toggleRightButtons(false)
                     cancel()
                 }
-                // TODO
-                // UI does not exactly match the mockup, need to change a few things
-                // e.g. the line below which should change countdown, not countdown_time_selected
                 countdown_time_selected.text = (millisUntilFinished / 1000).toString()
             }
 
