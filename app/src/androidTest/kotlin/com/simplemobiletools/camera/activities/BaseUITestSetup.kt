@@ -1,22 +1,13 @@
 package com.simplemobiletools.camera.activities
 
 import android.Manifest
-import android.app.Activity
 import android.os.Build
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.intent.Intents
-import androidx.test.espresso.intent.Intents.intended
-import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.rule.ActivityTestRule
-import org.junit.After
-import org.junit.Before
 
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.runner.AndroidJUnit4
 import org.junit.Rule
-import org.junit.Test
 import org.junit.runner.RunWith
 import android.os.Build.PRODUCT
 import android.os.Build.DEVICE
@@ -25,8 +16,6 @@ import android.os.Build.MANUFACTURER
 import android.os.Build.FINGERPRINT
 import android.view.View
 import androidx.test.espresso.ViewInteraction
-import androidx.test.espresso.action.ViewActions
-
 
 enum class TestActivities {
     MAIN_ACTIVITY,
@@ -47,7 +36,6 @@ enum class TestActivities {
 @RunWith(AndroidJUnit4::class)
 open class BaseUITestSetup(activityUnderTest: TestActivities) {
 
-
     /** Grants the write and camera persmissions - crucial to allowing the initial, main activity from
      * starting
      */
@@ -56,45 +44,41 @@ open class BaseUITestSetup(activityUnderTest: TestActivities) {
 
     /** Start the main activity before the first @Before method is called, and is released (terminated)
      * after the last @After method is called */
-    @get:Rule var mMainActivity: ActivityTestRule<MainActivity>? = null;
-    @get:Rule var mSettingsActivity: ActivityTestRule<SettingsActivity>? = null;
-    @get:Rule var mSplashActivity: ActivityTestRule<SplashActivity>? = null;
+    @get:Rule var mMainActivity: ActivityTestRule<MainActivity>? = null
+    @get:Rule var mSettingsActivity: ActivityTestRule<SettingsActivity>? = null
+    @get:Rule var mSplashActivity: ActivityTestRule<SplashActivity>? = null
 
     /** The fade value (the value to which fading out reaches) */
-    private var fadeValue = 0.5F;
+    private var fadeValue = 0.5F
 
     init {
         /** This initializer uses the activity enum passed to the constructor in order to launch the appropriate activity */
-        mMainActivity = ActivityTestRule <MainActivity>(MainActivity::class.java, false, TestActivities.MAIN_ACTIVITY == activityUnderTest);
-        mSettingsActivity = ActivityTestRule<SettingsActivity>(SettingsActivity::class.java, false, TestActivities.SETTINGS_ACTIVITY == activityUnderTest);
-        mSplashActivity = ActivityTestRule<SplashActivity>(SplashActivity::class.java, false, TestActivities.SPLASH_ACTIVITY == activityUnderTest);
+        mMainActivity = ActivityTestRule <MainActivity>(MainActivity::class.java, false, TestActivities.MAIN_ACTIVITY == activityUnderTest)
+        mSettingsActivity = ActivityTestRule<SettingsActivity>(SettingsActivity::class.java, false, TestActivities.SETTINGS_ACTIVITY == activityUnderTest)
+        mSplashActivity = ActivityTestRule<SplashActivity>(SplashActivity::class.java, false, TestActivities.SPLASH_ACTIVITY == activityUnderTest)
     }
 
-
-     fun isEmulator(): Boolean {
-        return (Build.FINGERPRINT.startsWith("generic")
-                || Build.FINGERPRINT.startsWith("unknown")
-                || Build.MODEL.contains("google_sdk")
-                || Build.MODEL.contains("Emulator")
-                || Build.MODEL.contains("Android SDK built for x86")
-                || Build.MANUFACTURER.contains("Genymotion")
-                || Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic")
-                || "google_sdk" == Build.PRODUCT)
+    fun isEmulator(): Boolean {
+        return (Build.FINGERPRINT.startsWith("generic") ||
+            Build.FINGERPRINT.startsWith("unknown") ||
+            Build.MODEL.contains("google_sdk") ||
+            Build.MODEL.contains("Emulator") ||
+            Build.MODEL.contains("Android SDK built for x86") ||
+            Build.MANUFACTURER.contains("Genymotion") ||
+            Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic") || "google_sdk" == Build.PRODUCT)
     }
 
     /** Waits for the fade to take place completely; only if in emulator mode (to compensate for slow runtime) */
-    fun waitOnViewFade(someView: View)
-    {
+    fun waitOnViewFade(someView: View) {
         /** Only wait in emulator mode */
         if (this.isEmulator())
-            while(someView.alpha.compareTo(fadeValue) != 0);
+            while (someView.alpha.compareTo(fadeValue) != 0)
     }
 
     /** Sleeps the emulator for a given time in milliseconds - if using a device, use Thread.sleep(...)
      * without calling this method
      * */
-    fun sleep(milliseconds: Long)
-    {
+    fun sleep(milliseconds: Long) {
         if (this.isEmulator())
             Thread.sleep(milliseconds)
     }
@@ -102,14 +86,10 @@ open class BaseUITestSetup(activityUnderTest: TestActivities) {
     /** There are times where the emulator will need a double click,
      * whereas the android device won't
      */
-    fun performClicks(vi: ViewInteraction)
-    {
+    fun performClicks(vi: ViewInteraction) {
         if (this.isEmulator())
             vi.perform(click(), click())
         else
             vi.perform(click())
     }
-
-
 }
-

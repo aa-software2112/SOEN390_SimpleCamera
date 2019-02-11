@@ -1,46 +1,30 @@
 package com.simplemobiletools.camera.activities
 
-import android.app.Activity
-import android.app.Instrumentation
-import android.content.Intent
-import android.net.Uri
 import android.view.View
-import android.view.ViewGroup
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.intent.Intents
-import androidx.test.espresso.intent.Intents.intended
-import androidx.test.espresso.intent.Intents.intending
-import androidx.test.espresso.intent.matcher.IntentMatchers.*
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.intent.matcher.IntentMatchers.* // ktlint-disable no-wildcard-imports
+import androidx.test.espresso.matcher.ViewMatchers.* // ktlint-disable no-wildcard-imports
 import androidx.test.filters.LargeTest
-import androidx.test.rule.ActivityTestRule
-import androidx.test.rule.GrantPermissionRule
 import androidx.test.runner.AndroidJUnit4
 import com.simplemobiletools.camera.R
-import com.simplemobiletools.commons.helpers.BROADCAST_REFRESH_MEDIA
 import junit.framework.Assert.assertTrue
-import kotlinx.android.synthetic.main.activity_main.view.*
-import org.hamcrest.Description
-import org.hamcrest.Matcher
-import org.hamcrest.Matchers.*
-import org.hamcrest.TypeSafeMatcher
+import kotlinx.android.synthetic.main.activity_main.view.* // ktlint-disable no-wildcard-imports
+import org.hamcrest.Matchers.* // ktlint-disable no-wildcard-imports
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
-class CountdownTimerTest: BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
+class CountdownTimerTest : BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
 
-    var view: View? = null;
-    var expectedStrings = Array<String>(3, {""});
+    var view: View? = null
+    var expectedStrings = Array<String>(3, { "" })
 
     @Before
-    fun setup()
-    {
+    fun setup() {
         /** Capture the view  */
         view = this.mMainActivity?.activity?.findViewById<View>(R.id.countdown_toggle)
 
@@ -50,21 +34,19 @@ class CountdownTimerTest: BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
         expectedStrings.set(2, "15 sec")
     }
 
-
     /** This is NOT an acceptance test; it verifies that the application is laid out as expected for the
      * countdown timer feature. I.E.: The appropriate countdown buttons are apparent
      *
      * Written By: Anthony Andreoli
      */
     @Test
-    fun countdownTimerUITest()
-    {
+    fun countdownTimerUITest() {
 
         /** Verify that the countdown toggle view is present */
         onView(withId(R.id.countdown_toggle)).check(matches(isDisplayed()))
 
         /** Wait until the alpha of the view fades, and perform double click */
-        this.waitOnViewFade(view!!);
+        this.waitOnViewFade(view!!)
 
         /** Now that the button has faded, click on it once to bring it to full opacity,
          * and another time to show the time dropdown
@@ -87,7 +69,7 @@ class CountdownTimerTest: BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
          * 3. Cancel the countdown
          * */
         expectedStrings.forEach {
-            this.waitOnViewFade(view!!);
+            this.waitOnViewFade(view!!)
 
             this.performClicks(onView(withId(R.id.countdown_toggle)))
 
@@ -99,12 +81,10 @@ class CountdownTimerTest: BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
 
             this.sleep(1000)
 
-            onView(withId(R.id.countdown_time_selected)).check(matches(allOf(isDisplayed(), withText(strExpected) )))
+            onView(withId(R.id.countdown_time_selected)).check(matches(allOf(isDisplayed(), withText(strExpected))))
 
             onView(withId(R.id.countdown_toggle)).perform(click())
-
         }
-
     }
 
     /** Acceptance Test 2: Photo taken after selected countdown time: Automatic
@@ -121,7 +101,7 @@ class CountdownTimerTest: BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
     fun photoTakenAfter10Seconds() {
 
         /** Wait for the button to fade out */
-        this.waitOnViewFade(view!!);
+        this.waitOnViewFade(view!!)
 
         /** Select countdown */
         this.performClicks(onView(withId(R.id.countdown_toggle)))
@@ -137,7 +117,6 @@ class CountdownTimerTest: BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
         Thread.sleep(((expectedStrings[1].split(" ")[0]).toLong() + 2)*1000)
 
         assertTrue(this.mMainActivity?.activity?.getPhotoTaken() == true)
-
     }
 
     /** Acceptance Test 3: Functional: Photo canceled midway through the countdown: Automatic
@@ -154,7 +133,7 @@ class CountdownTimerTest: BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
     @Test
     fun countdownTimerCancel() {
         /** Wait for the button to fade out */
-        this.waitOnViewFade(view!!);
+        this.waitOnViewFade(view!!)
 
         /** Select countdown */
         this.performClicks(onView(withId(R.id.countdown_toggle)))
@@ -178,5 +157,4 @@ class CountdownTimerTest: BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
         /** Check that display returned to original state - the countdown timer is no longer visible */
         onView(withId(R.id.countdown_time_selected)).check(matches(not(isDisplayed())))
     }
-
 }
