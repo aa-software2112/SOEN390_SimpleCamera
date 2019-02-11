@@ -71,8 +71,11 @@ open class BaseUITestSetup(activityUnderTest: TestActivities) {
     /** Waits for the fade to take place completely; only if in emulator mode (to compensate for slow runtime) */
     fun waitOnViewFade(someView: View) {
         /** Only wait in emulator mode */
-        if (this.isEmulator())
-            while (someView.alpha.compareTo(fadeValue) != 0)
+        if (this.isEmulator()) {
+            while (someView.alpha.compareTo(fadeValue) != 0) {
+                Thread.sleep(50)
+            }
+        }
     }
 
     /** Sleeps the emulator for a given time in milliseconds - if using a device, use Thread.sleep(...)
