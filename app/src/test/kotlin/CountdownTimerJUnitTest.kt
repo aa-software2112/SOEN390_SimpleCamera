@@ -124,6 +124,9 @@ class CountdownTimerJUnitTest : KotlinRobolectric() {
     @Test
     fun unsetCountdownMode_mIsInCountdownModeTest() {
         println("Testing if mIsInCountdownMode is false")
+        mMainActivity?.unsetCountdownMode()
+        // Verify if mIsInCountdownMode is false
+        Assert.assertFalse(mMainActivity!!.mIsInCountdownMode)
     }
 
     @Test
@@ -158,15 +161,6 @@ class CountdownTimerJUnitTest : KotlinRobolectric() {
         var countdownDropdownLinearLayout = mMainActivity?.findViewById<LinearLayout>(R.id.countdown_times)
         Assert.assertNotNull(countdownDropdownLinearLayout)
 
-        /**  Debugging purpose: in View.java, VISIBLE = 0x00000000 and INVISIBLE = 0x00000004
-
-        if (countdownDropdownLinearLayout?.visibility == 4) {
-        println("invisible")
-        }
-
-            countdownDropdownLinearLayout IS INVISIBLE
-         */
-
         //  Verify if countdownDropdownLinearLayout is INVISIBLE at first
         Assert.assertTrue(countdownDropdownLinearLayout?.visibility == View.INVISIBLE)
 
@@ -175,15 +169,6 @@ class CountdownTimerJUnitTest : KotlinRobolectric() {
 
         //  Verify if countdownDropdownLinearLayout is now VISIBLE
         Assert.assertTrue(countdownDropdownLinearLayout?.visibility == View.VISIBLE)
-
-        /**  Debugging purpose: in View.java, VISIBLE = 0x00000000 and INVISIBLE = 0x00000004
-
-        if (countdownDropdownLinearLayout?.visibility == 0) {
-        println("visible")
-        }
-
-            countdownDropdownLinearLayout IS INDEED VISIBLE
-         */
     }
 
     @Test
