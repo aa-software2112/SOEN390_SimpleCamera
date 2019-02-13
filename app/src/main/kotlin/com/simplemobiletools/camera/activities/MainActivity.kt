@@ -249,6 +249,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             override fun onTouch(view: View, event: MotionEvent): Boolean {
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> {
+                        //mBurstRunnable will call the burstMode() function after 2 secs
                         mBurstHandler.postDelayed(mBurstRunnable, 2000);
                         return true
                     }
@@ -709,6 +710,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     fun burstMode() {
         mBurstEnabled = true
-        shutterPressed()
+        
+        //Implement the code that will run until the runnable is stopped.
     }
 }
