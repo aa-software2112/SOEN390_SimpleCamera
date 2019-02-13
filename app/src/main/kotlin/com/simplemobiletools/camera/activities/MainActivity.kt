@@ -14,7 +14,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.simplemobiletools.camera.BuildConfig
-import com.simplemobiletools.camera.R
 import com.simplemobiletools.camera.extensions.config
 import com.simplemobiletools.camera.extensions.navBarHeight
 import com.simplemobiletools.camera.helpers.* // ktlint-disable no-wildcard-imports
@@ -27,6 +26,10 @@ import com.simplemobiletools.commons.helpers.* // ktlint-disable no-wildcard-imp
 import com.simplemobiletools.commons.models.Release
 import kotlinx.android.synthetic.main.activity_main.* // ktlint-disable no-wildcard-imports
 import android.os.CountDownTimer
+import com.simplemobiletools.camera.R
+import android.view.MotionEvent
+import android.view.View.OnTouchListener
+
 
 class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     private val FADE_DELAY = 6000L // in milliseconds
@@ -37,6 +40,8 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     private lateinit var mFocusCircleView: FocusCircleView
     private lateinit var mFadeHandler: Handler
     private lateinit var mCameraImpl: MyCameraImpl
+    private lateinit var mBurstHandler: Handler
+    private lateinit var mBurstRunnable: Runnable
 
     private var mPreview: MyPreview? = null
     private var mPreviewUri: Uri? = null
@@ -48,6 +53,8 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     var mLastHandledOrientation = 0
     internal var mIsInCountdownMode = false
     internal var mCountdownTime = 0
+    internal var mBurstEnabled = false;
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or
@@ -121,6 +128,11 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         mCameraImpl = MyCameraImpl(applicationContext)
         mIsInCountdownMode = false
         mCountdownTime = 0
+
+        mBurstHandler = Handler()
+        mBurstRunnable = Runnable {
+            burstMode()
+        }
 
         if (config.alwaysOpenBackCamera) {
             config.lastUsedCamera = mCameraImpl.getBackCameraId().toString()
@@ -224,7 +236,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         toggle_camera.setOnClickListener { toggleCamera() }
         last_photo_video_preview.setOnClickListener { showLastMediaPreview() }
         toggle_flash.setOnClickListener { toggleFlash() }
-        shutter.setOnClickListener { shutterPressed() }
         settings.setOnClickListener { launchSettings() }
         toggle_photo_video.setOnClickListener { handleTogglePhotoVideo() }
         change_resolution.setOnClickListener { mPreview?.showChangeResolutionDialog() }
@@ -232,6 +243,29 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         btn_short_timer.setOnClickListener { setCountdownMode(TIMER_SHORT) }
         btn_medium_timer.setOnClickListener { setCountdownMode(TIMER_MEDIUM) }
         btn_long_timer.setOnClickListener { setCountdownMode(TIMER_LONG) }
+
+
+        shutter.setOnTouchListener(object : OnTouchListener {
+            override fun onTouch(view: View, event: MotionEvent): Boolean {
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        mBurstHandler.postDelayed(mBurstRunnable, 2000);
+                        return true
+                    }
+
+                    MotionEvent.ACTION_UP -> {
+                        mBurstHandler.removeCallbacks(mBurstRunnable);
+                        if (!mBurstEnabled) {
+                            shutterPressed()
+                        }
+                        mBurstEnabled = false;
+                        return true
+                    }
+                }
+                return false
+            }
+        })
+
     }
 
     private fun toggleCamera() {
@@ -671,5 +705,10 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     fun getPhotoTaken(): Boolean? {
         return this.mPreview?.getUITestPhotoTaken()
+    }
+
+    fun burstMode() {
+        mBurstEnabled = true
+        shutterPressed()
     }
 }
