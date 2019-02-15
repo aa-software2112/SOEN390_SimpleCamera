@@ -710,7 +710,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     fun burstMode() {
         mBurstEnabled = true
-        
-        //Implement the code that will run until the runnable is stopped.
+
+        //implementation
     }
 }

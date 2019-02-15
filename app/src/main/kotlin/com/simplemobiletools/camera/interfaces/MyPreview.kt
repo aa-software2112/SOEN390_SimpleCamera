@@ -23,6 +23,8 @@ interface MyPreview {
 
     fun tryTakePicture()
 
+    fun tryBurst()
+
     fun toggleRecording()
 
     fun tryInitVideoMode()
