@@ -133,7 +133,16 @@
             android:layout_width="@dimen/icon_size"
             android:layout_height="@dimen/icon_size"
             android:layout_weight="1"
-            android:contentDescription="TODO" android:src="@drawable/ic_shutter" />
+            android:contentDescription="TODO" android:src="@drawable/ic_shutter"
+            android:visibility="invisible"/>
+
+        <ImageView
+            android:id="@+id/burst"
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
+            android:layout_weight="1"
+            android:contentDescription="TODO" android:src="@drawable/ic_burst"
+            android:visibility="visible"/>
 
         <ImageView
             android:id="@+id/toggle_flash"
