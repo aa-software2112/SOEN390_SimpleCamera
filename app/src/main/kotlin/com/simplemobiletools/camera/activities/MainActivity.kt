@@ -711,6 +711,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     fun burstMode() {
         mBurstEnabled = true
 
-        //implementation
+        mPreview!!.tryBurst()
     }
 }

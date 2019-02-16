@@ -39,6 +39,7 @@ import java.util.concurrent.TimeUnit
 // and video sample at https://github.com/googlesamples/android-Camera2Video
 class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
 
+    private val TAG = "CameraPreview"
     private val FOCUS_TAG = "focus_tag"
     private val MAX_PREVIEW_WIDTH = 1920
     private val MAX_PREVIEW_HEIGHT = 1080
@@ -46,6 +47,7 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
     private val MAX_VIDEO_HEIGHT = 2160
     private val CLICK_MS = 250
     private val CLICK_DIST = 20
+    private val BURST_SHOTS = 10 // the burst functionality will take 5 pictures
 
     private val DEFAULT_ORIENTATIONS = SparseIntArray(4).apply {
         append(Surface.ROTATION_0, 90)
@@ -603,9 +605,58 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
     }
 
     override fun tryBurst(){
+        try {
+            if (mCameraDevice == null) {
+                return
+            }
+
+            mCameraState = STATE_IN_BURST_MODE
+            mRotationAtCapture = mActivity.mLastHandledOrientation
+            val jpegOrientation = (mSensorOrientation + compensateDeviceRotation(mRotationAtCapture, mUseFrontCamera)) % 360
+            val captureBuilder = mCameraDevice!!.createCaptureRequest(CameraDevice.TEMPLATE_ZERO_SHUTTER_LAG).apply {
+                addTarget(mImageReader!!.surface)
+                setFlashAndExposure(this)
+                set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE)
+                set(CaptureRequest.JPEG_ORIENTATION, jpegOrientation)
+                set(CaptureRequest.CONTROL_CAPTURE_INTENT, CaptureRequest.CONTROL_CAPTURE_INTENT_ZERO_SHUTTER_LAG)
+                set(CaptureRequest.CONTROL_AE_TARGET_FPS_RANGE, getFrameRange())
+                if (mZoomRect != null) {
+                    set(CaptureRequest.SCALER_CROP_REGION, mZoomRect)
+                }
+            }
+
+            val captureCallback = object : CameraCaptureSession.CaptureCallback() {
+                override fun onCaptureCompleted(session: CameraCaptureSession, request: CaptureRequest, result: TotalCaptureResult) {
+                    println("burst burst")
+
+                }
+
+                override fun onCaptureFailed(session: CameraCaptureSession?, request: CaptureRequest?, failure: CaptureFailure?) {
+                    super.onCaptureFailed(session, request, failure)
+                    mActivity.toggleBottomButtons(false)
+                    mActivity.toggleRightButtons(false)
+                }
+            }
+
+            val captureRequest = captureBuilder.build()
+            var captureRequestList = mutableListOf<CaptureRequest>()
+            var i = 0
+            while (i < BURST_SHOTS){
+                captureRequestList.add(captureRequest)
+                i++
+            }
 
 
+            mCaptureSession?.apply {
+                // giving first priority to captureBurst
+                abortCaptures()
+                captureBurst(captureRequestList, captureCallback, null)
+            }
+        } catch (e: CameraAccessException) {
+            Log.e(TAG, "Capture burst $e")
+        }
     }
+
 
     // inspired by https://gist.github.com/royshil/8c760c2485257c85a11cafd958548482
     private fun focusArea(x: Float, y: Float, drawCircle: Boolean) {
