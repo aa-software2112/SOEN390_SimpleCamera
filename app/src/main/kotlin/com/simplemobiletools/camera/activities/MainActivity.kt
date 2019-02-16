@@ -259,7 +259,11 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                         if (!mBurstEnabled) {
                             shutterPressed()
                         }
+
                         mBurstEnabled = false;
+                        shutter.beVisible();
+                        burst.beGone();
+
                         return true
                     }
                 }
@@ -709,8 +713,11 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     }
 
     fun burstMode() {
-        mBurstEnabled = true
 
-        mPreview!!.tryBurst()
+        mBurstEnabled = true
+        shutter.beGone();
+        burst.beVisible();
+
+       // mPreview!!.tryBurst()
     }
 }
