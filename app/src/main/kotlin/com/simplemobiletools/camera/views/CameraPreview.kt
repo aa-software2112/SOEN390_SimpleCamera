@@ -604,7 +604,7 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
         }
     }
 
-    override fun tryBurst(){
+    override fun tryBurst() {
         try {
             if (mCameraDevice == null) {
                 return
@@ -628,7 +628,6 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
             val captureCallback = object : CameraCaptureSession.CaptureCallback() {
                 override fun onCaptureCompleted(session: CameraCaptureSession, request: CaptureRequest, result: TotalCaptureResult) {
                     println("burst burst")
-
                 }
 
                 override fun onCaptureFailed(session: CameraCaptureSession?, request: CaptureRequest?, failure: CaptureFailure?) {
@@ -641,11 +640,10 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
             val captureRequest = captureBuilder.build()
             var captureRequestList = mutableListOf<CaptureRequest>()
             var i = 0
-            while (i < BURST_SHOTS){
+            while (i < BURST_SHOTS) {
                 captureRequestList.add(captureRequest)
                 i++
             }
-
 
             mCaptureSession?.apply {
                 // giving first priority to captureBurst
@@ -656,7 +654,6 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
             Log.e(TAG, "Capture burst $e")
         }
     }
-
 
     // inspired by https://gist.github.com/royshil/8c760c2485257c85a11cafd958548482
     private fun focusArea(x: Float, y: Float, drawCircle: Boolean) {
