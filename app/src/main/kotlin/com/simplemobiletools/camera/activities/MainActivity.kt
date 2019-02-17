@@ -151,7 +151,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     private fun hideIntentButtons() {
         toggle_photo_video.beGone()
         settings.beGone()
-        last_photo_video_preview.beGone()
+        // last_photo_video_preview.beGone()
     }
 
     private fun tryInitCamera() {
@@ -222,12 +222,12 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     internal fun initButtons() {
         toggle_camera.setOnClickListener { toggleCamera() }
-        last_photo_video_preview.setOnClickListener { showLastMediaPreview() }
+        // last_photo_video_preview.setOnClickListener { showLastMediaPreview() }
         toggle_flash.setOnClickListener { toggleFlash() }
         shutter.setOnClickListener { shutterPressed() }
         settings.setOnClickListener { launchSettings() }
         toggle_photo_video.setOnClickListener { handleTogglePhotoVideo() }
-        change_resolution.setOnClickListener { mPreview?.showChangeResolutionDialog() }
+//        change_resolution.setOnClickListener { mPreview?.showChangeResolutionDialog() }
         countdown_toggle.setOnClickListener { toggleCountdownTimer() }
         btn_short_timer.setOnClickListener { setCountdownMode(TIMER_SHORT) }
         btn_medium_timer.setOnClickListener { setCountdownMode(TIMER_MEDIUM) }
@@ -333,10 +333,11 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             shutter.animate().alpha(alpha).start()
             toggle_camera.animate().alpha(alpha).start()
             toggle_flash.animate().alpha(alpha).start()
-
+            toggle_photo_video.animate().alpha(alpha).start()
             shutter.isClickable = !hide
             toggle_camera.isClickable = !hide
             toggle_flash.isClickable = !hide
+            toggle_photo_video.isClickable = !hide
         }
     }
 
@@ -345,14 +346,15 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             val alpha = if (hide) 0f else 1f
             settings.animate().alpha(alpha).start()
             toggle_photo_video.animate().alpha(alpha).start()
-            change_resolution.animate().alpha(alpha).start()
-            last_photo_video_preview.animate().alpha(alpha).start()
+//            change_resolution.animate().alpha(alpha).start()
+//            last_photo_video_preview.animate().alpha(alpha).start()
 
             settings.isClickable = !hide
             toggle_photo_video.isClickable = !hide
-            change_resolution.isClickable = !hide
-            last_photo_video_preview.isClickable = !hide
-            if (hide) settings.beInvisible() else settings.beVisible()
+//            change_resolution.isClickable = !hide
+//            last_photo_video_preview.isClickable = !hide
+            if (hide) settings.beInvisible() else settings.beVisible() // Quick fix might look into slightly change this function later
+
         }
     }
 
@@ -394,7 +396,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         config.initPhotoMode = mIsInPhotoMode
         showToggleCameraIfNeeded()
         checkButtons()
-        toggleBottomButtons(false)
+        // toggleBottomButtons(false)
     }
 
     internal fun checkButtons() {
@@ -452,7 +454,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                         .load(mPreviewUri)
                         .apply(options)
                         .transition(DrawableTransitionOptions.withCrossFade())
-                        .into(last_photo_video_preview)
+                        // .into(last_photo_video_preview)
             }
         }
     }
@@ -468,25 +470,27 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     private fun fadeOutButtons() {
         fadeAnim(settings, .5f)
         fadeAnim(countdown_toggle, .5f)
-        fadeAnim(toggle_photo_video, .0f)
-        fadeAnim(change_resolution, .0f)
-        fadeAnim(last_photo_video_preview, .0f)
         fadeAnim(countdown_times, .0f)
         fadeAnim(btn_short_timer, .0f)
         fadeAnim(btn_medium_timer, .0f)
         fadeAnim(btn_long_timer, .0f)
+        // fadeAnim(last_photo_video_preview, .0f)
+        // fadeAnim(toggle_photo_video, .0f)
+        fadeAnim(toggle_flash, .5f)
+//        fadeAnim(change_resolution, .5f)
     }
 
     private fun fadeInButtons() {
         fadeAnim(settings, 1f)
-        fadeAnim(toggle_photo_video, 1f)
-        fadeAnim(change_resolution, 1f)
-        fadeAnim(last_photo_video_preview, 1f)
+        fadeAnim(toggle_flash, 1f)
+        // fadeAnim(toggle_photo_video, 1f)
+//        fadeAnim(change_resolution, 1f)
         fadeAnim(countdown_toggle, 1f)
         fadeAnim(countdown_times, 1f)
         fadeAnim(btn_short_timer, 1f)
         fadeAnim(btn_medium_timer, 1f)
         fadeAnim(btn_long_timer, 1f)
+        // fadeAnim(last_photo_video_preview, 1f)
         scheduleFadeOut()
     }
 
@@ -584,7 +588,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     }
 
     private fun animateViews(degrees: Int) {
-        val views = arrayOf<View>(toggle_camera, toggle_flash, toggle_photo_video, change_resolution, shutter, settings, last_photo_video_preview, countdown_toggle, countdown_time_selected, countdown_times)
+        val views = arrayOf<View>(toggle_camera, toggle_flash, toggle_photo_video, /*change_resolution,*/ shutter, settings, /*last_photo_video_preview,*/ countdown_toggle, countdown_time_selected, countdown_times)
         for (view in views) {
             rotate(view, degrees)
         }
