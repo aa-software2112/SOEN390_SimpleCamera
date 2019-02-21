@@ -604,7 +604,6 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
         }
     }
 
-
     // inspired by https://gist.github.com/royshil/8c760c2485257c85a11cafd958548482
     private fun focusArea(x: Float, y: Float, drawCircle: Boolean) {
         mLastFocusX = x

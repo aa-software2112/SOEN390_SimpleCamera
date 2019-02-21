@@ -715,5 +715,4 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     fun getPhotoTaken(): Boolean? {
         return this.mPreview?.getUITestPhotoTaken()
     }
-
 }
