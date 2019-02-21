@@ -34,6 +34,7 @@ import android.view.View.OnTouchListener
 class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     private val FADE_DELAY = 6000L // in milliseconds
     private val COUNTDOWN_INTERVAL = 1000L
+    private val BURSTMODE_INTERVAL_BETWEEN_CAPTURES = 100L // in milliseconds
 
     lateinit var mTimerHandler: Handler
     private lateinit var mOrientationEventListener: OrientationEventListener
@@ -130,8 +131,11 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         mCountdownTime = 0
 
         mBurstHandler = Handler()
-        mBurstRunnable = Runnable {
-            burstMode()
+        mBurstRunnable = object : Runnable {
+            override fun run() {
+                shutterPressed()
+                mBurstHandler.postDelayed(this, BURSTMODE_INTERVAL_BETWEEN_CAPTURES)
+            }
         }
 
         if (config.alwaysOpenBackCamera) {
@@ -708,9 +712,4 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         return this.mPreview?.getUITestPhotoTaken()
     }
 
-    fun burstMode() {
-        mBurstEnabled = true
-
-        mPreview!!.tryBurst()
-    }
 }
