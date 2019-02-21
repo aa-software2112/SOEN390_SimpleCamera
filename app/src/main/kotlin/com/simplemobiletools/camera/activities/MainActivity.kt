@@ -30,7 +30,6 @@ import com.simplemobiletools.camera.R
 import android.view.MotionEvent
 import android.view.View.OnTouchListener
 
-
 class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     private val FADE_DELAY = 6000L // in milliseconds
     private val COUNTDOWN_INTERVAL = 1000L
@@ -54,8 +53,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     var mLastHandledOrientation = 0
     internal var mIsInCountdownMode = false
     internal var mCountdownTime = 0
-    internal var mBurstEnabled = false;
-
+    internal var mBurstEnabled = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or
@@ -133,6 +131,9 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         mBurstHandler = Handler()
         mBurstRunnable = object : Runnable {
             override fun run() {
+                mBurstEnabled = true
+                shutter.beGone()
+                burst.beVisible()
                 shutterPressed()
                 mBurstHandler.postDelayed(this, BURSTMODE_INTERVAL_BETWEEN_CAPTURES)
             }
@@ -248,29 +249,31 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         btn_medium_timer.setOnClickListener { setCountdownMode(TIMER_MEDIUM) }
         btn_long_timer.setOnClickListener { setCountdownMode(TIMER_LONG) }
 
-
         shutter.setOnTouchListener(object : OnTouchListener {
             override fun onTouch(view: View, event: MotionEvent): Boolean {
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> {
-                        //mBurstRunnable will call the burstMode() function after 2 secs
-                        mBurstHandler.postDelayed(mBurstRunnable, 2000);
+                        // mBurstRunnable will call the burstMode() function after 2 secs
+                        mBurstHandler.postDelayed(mBurstRunnable, 2000)
                         return true
                     }
 
                     MotionEvent.ACTION_UP -> {
-                        mBurstHandler.removeCallbacks(mBurstRunnable);
+                        mBurstHandler.removeCallbacks(mBurstRunnable)
                         if (!mBurstEnabled) {
                             shutterPressed()
                         }
-                        mBurstEnabled = false;
+
+                        mBurstEnabled = false
+                        shutter.beVisible()
+                        burst.beGone()
+
                         return true
                     }
                 }
                 return false
             }
         })
-
     }
 
     private fun toggleCamera() {
@@ -317,7 +320,8 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     private fun showLastMediaPreview() {
         if (mPreviewUri != null) {
-            val path = applicationContext.getRealPathFromURI(mPreviewUri!!) ?: mPreviewUri!!.toString()
+            val path = applicationContext.getRealPathFromURI(mPreviewUri!!)
+                    ?: mPreviewUri!!.toString()
             openPathIntent(path, false, BuildConfig.APPLICATION_ID)
         }
     }
@@ -561,7 +565,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     // TODO: May want to put this in CameraPreview.kt; next to tryTakePicture()
     internal fun tryTakeDelayedPicture() {
-        object : CountDownTimer(mCountdownTime*COUNTDOWN_INTERVAL, 1000) {
+        object : CountDownTimer(mCountdownTime * COUNTDOWN_INTERVAL, 1000) {
 
             override fun onTick(millisUntilFinished: Long) {
                 if (!mIsInCountdownMode) {
