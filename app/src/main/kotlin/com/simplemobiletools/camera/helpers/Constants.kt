@@ -41,7 +41,6 @@ const val STATE_WAITING_NON_PRECAPTURE = 5
 const val STATE_STARTING_RECORDING = 6
 const val STATE_STOPING_RECORDING = 7
 const val STATE_RECORDING = 8
-const val STATE_IN_BURST_MODE = 9
 
 fun compensateDeviceRotation(orientation: Int, isUsingFrontCamera: Boolean) = when {
     orientation == ORIENT_LANDSCAPE_LEFT -> 270
