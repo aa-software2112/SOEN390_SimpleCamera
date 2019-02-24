@@ -47,7 +47,6 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
     private val MAX_VIDEO_HEIGHT = 2160
     private val CLICK_MS = 250
     private val CLICK_DIST = 20
-    private val NUMBER_OF_SHOTS = 10 // the burst functionality will take 5 pictures
 
     private val DEFAULT_ORIENTATIONS = SparseIntArray(4).apply {
         append(Surface.ROTATION_0, 90)

@@ -42,6 +42,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     private lateinit var mCameraImpl: MyCameraImpl
     private lateinit var mBurstHandler: Handler
     private lateinit var mBurstRunnable: Runnable
+    private lateinit var mBurstModeSetup: Runnable
 
     private var mPreview: MyPreview? = null
     private var mPreviewUri: Uri? = null
@@ -129,12 +130,18 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         mCountdownTime = 0
 
         mBurstHandler = Handler()
+
+        mBurstModeSetup = Runnable {
+            // runs only once, that is after holding shutter button for 2 sec
+            if (!mIsInCountdownMode && mIsInPhotoMode) {
+                mBurstEnabled = true
+                handleShutter()
+            }
+        }
+
         mBurstRunnable = object : Runnable {
             override fun run() {
-                mBurstEnabled = true
-                shutter.beGone()
-                burst.beVisible()
-                shutterPressed()
+                mPreview?.tryTakePicture()
                 mBurstHandler.postDelayed(this, BURSTMODE_INTERVAL_BETWEEN_CAPTURES)
             }
         }
@@ -253,20 +260,21 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             override fun onTouch(view: View, event: MotionEvent): Boolean {
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> {
-                        // mBurstRunnable will call the burstMode() function after 2 secs
-                        mBurstHandler.postDelayed(mBurstRunnable, 2000)
+                        // will start mBurstModeSetup after holding for 2 seconds
+                        mBurstHandler.postDelayed(mBurstModeSetup, 2000)
                         return true
                     }
 
                     MotionEvent.ACTION_UP -> {
                         mBurstHandler.removeCallbacks(mBurstRunnable)
                         if (!mBurstEnabled) {
+                            /* regular shutterPressed() actions get executed if thumb was released
+                                 within 2 secs */
                             shutterPressed()
                         }
 
                         mBurstEnabled = false
-                        shutter.beVisible()
-                        burst.beGone()
+                        toggleBurstModeButton()
 
                         return true
                     }
@@ -337,6 +345,16 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         if (countdownDropdown.visibility == View.INVISIBLE) countdownDropdown.beVisible() else countdownDropdown.beInvisible()
     }
 
+    private fun toggleBurstModeButton() {
+        if (mBurstEnabled) {
+            shutter.beGone()
+            burst.beVisible()
+        } else {
+            burst.beGone()
+            shutter.beVisible()
+        }
+    }
+
     fun updateFlashlightState(state: Int) {
         config.flashlightState = state
         val flashDrawable = when (state) {
@@ -358,7 +376,10 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     }
 
     internal fun handleShutter() {
-        if (mIsInPhotoMode && !mIsInCountdownMode) {
+        if (mIsInPhotoMode && mBurstEnabled && !mIsInCountdownMode) {
+            toggleBurstModeButton()
+            mBurstHandler.post(mBurstRunnable)
+        } else if (mIsInPhotoMode && !mIsInCountdownMode) {
             toggleBottomButtons(true)
             mPreview?.tryTakePicture()
         } else if (mIsInPhotoMode && mIsInCountdownMode) {
