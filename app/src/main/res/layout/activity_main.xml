@@ -106,11 +106,11 @@
         android:layout_width="match_parent"
         android:layout_height="360dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="200dp"
+        android:layout_marginBottom="165dp"
         android:layout_weight="1"
         android:gravity="clip_vertical|center_horizontal"
-        android:visibility="visible"
-        android:orientation="horizontal" />
+        android:orientation="horizontal"
+        android:visibility="visible" />
 
     <LinearLayout
         android:id="@+id/btn_holder"

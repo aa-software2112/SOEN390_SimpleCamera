@@ -326,7 +326,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         } else if (mIsInPhotoMode && mIsInCountdownMode) {
             toggleBottomButtons(true)
             toggleRightButtons(true)
-            tryTakeDelayedPicture()
+            startCountdown()
         } else {
             mPreview?.toggleRecording()
         }
@@ -356,9 +356,13 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
             settings.isClickable = !hide
             toggle_photo_video.isClickable = !hide
+            last_image.isClickable = !hide
 //            change_resolution.isClickable = !hide
 //            last_photo_video_preview.isClickable = !hide
             if (hide) settings.beInvisible() else settings.beVisible() // Quick fix might look into slightly change this function later
+            if (hide) toggle_flash.beInvisible() else toggle_flash.beVisible()
+            if (hide) last_image.beInvisible() else last_image.beVisible()
+            if (hide) swipe_area.beInvisible() else swipe_area.beVisible()
 
         }
     }
@@ -531,11 +535,12 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         })
     }
 
-    // TODO: May want to put this in CameraPreview.kt; next to tryTakePicture()
-    internal fun tryTakeDelayedPicture() {
+    internal fun startCountdown() {
+        /* Starts the countdown timer and calls tryTakePicture() if it reaches 0. */
         object : CountDownTimer(mCountdownTime*COUNTDOWN_INTERVAL, 1000) {
 
             override fun onTick(millisUntilFinished: Long) {
+                /* Cancels the countdown */
                 if (!mIsInCountdownMode) {
                     toggleBottomButtons(false)
                     toggleRightButtons(false)
