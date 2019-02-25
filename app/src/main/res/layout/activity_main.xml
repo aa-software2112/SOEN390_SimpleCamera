@@ -13,8 +13,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp" />
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp" />
 
     <LinearLayout
             android:id="@+id/btn_bar"
@@ -98,6 +100,17 @@
                 android:padding="@dimen/normal_margin"
                 android:src="@drawable/ic_settings_cog"/>
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/swipe_area"
+        android:layout_width="match_parent"
+        android:layout_height="360dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="200dp"
+        android:layout_weight="1"
+        android:gravity="clip_vertical|center_horizontal"
+        android:visibility="visible"
+        android:orientation="horizontal" />
 
     <LinearLayout
         android:id="@+id/btn_holder"

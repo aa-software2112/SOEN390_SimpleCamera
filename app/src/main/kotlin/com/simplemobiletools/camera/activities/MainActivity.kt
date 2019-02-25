@@ -27,6 +27,7 @@ import com.simplemobiletools.commons.helpers.* // ktlint-disable no-wildcard-imp
 import com.simplemobiletools.commons.models.Release
 import kotlinx.android.synthetic.main.activity_main.* // ktlint-disable no-wildcard-imports
 import android.os.CountDownTimer
+import com.simplemobiletools.camera.implementations.OnSwipeTouchListener
 
 class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     private val FADE_DELAY = 6000L // in milliseconds
@@ -222,7 +223,11 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     internal fun initButtons() {
         toggle_camera.setOnClickListener { toggleCamera() }
-        // last_photo_video_preview.setOnClickListener { showLastMediaPreview() }
+        swipe_area.setOnTouchListener(object : OnSwipeTouchListener(applicationContext) {
+            override fun onSwipeLeft() {
+                showLastMediaPreview()
+            }
+        })
         toggle_flash.setOnClickListener { toggleFlash() }
         shutter.setOnClickListener { shutterPressed() }
         settings.setOnClickListener { launchSettings() }
@@ -469,6 +474,8 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     private fun fadeOutButtons() {
         fadeAnim(settings, .5f)
+        fadeAnim(last_image, .5f)
+        fadeAnim(toggle_flash, .5f)
         fadeAnim(countdown_toggle, .5f)
         fadeAnim(countdown_times, .0f)
         fadeAnim(btn_short_timer, .0f)
@@ -476,12 +483,12 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         fadeAnim(btn_long_timer, .0f)
         // fadeAnim(last_photo_video_preview, .0f)
         // fadeAnim(toggle_photo_video, .0f)
-        fadeAnim(toggle_flash, .5f)
 //        fadeAnim(change_resolution, .5f)
     }
 
     private fun fadeInButtons() {
         fadeAnim(settings, 1f)
+        fadeAnim(last_image, 1f)
         fadeAnim(toggle_flash, 1f)
         // fadeAnim(toggle_photo_video, 1f)
 //        fadeAnim(change_resolution, 1f)
