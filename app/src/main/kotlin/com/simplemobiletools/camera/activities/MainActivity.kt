@@ -40,14 +40,14 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     private var mPreview: MyPreview? = null
     private var mPreviewUri: Uri? = null
-    private var mIsInPhotoMode = false
-    private var mIsCameraAvailable = false
+    internal var mIsInPhotoMode = false
+    internal var mIsCameraAvailable = false
     private var mIsVideoCaptureIntent = false
     private var mIsHardwareShutterHandled = false
     private var mCurrVideoRecTimer = 0
     var mLastHandledOrientation = 0
-    private var mIsInCountdownMode = false
-    private var mCountdownTime = 0
+    internal var mIsInCountdownMode = false
+    internal var mCountdownTime = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or
@@ -220,7 +220,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         updateFlashlightState(initialFlashlightState)
     }
 
-    private fun initButtons() {
+    internal fun initButtons() {
         toggle_camera.setOnClickListener { toggleCamera() }
         last_photo_video_preview.setOnClickListener { showLastMediaPreview() }
         toggle_flash.setOnClickListener { toggleFlash() }
@@ -229,12 +229,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         toggle_photo_video.setOnClickListener { handleTogglePhotoVideo() }
         change_resolution.setOnClickListener { mPreview?.showChangeResolutionDialog() }
         countdown_toggle.setOnClickListener { toggleCountdownTimer() }
-
-        // TODO
-        // - Right now this is somewhat hard-coded
-        // - May want to look into using Android Spinner instead (similar to dropdowns)
-        // - The 3 lines below should be 1 that takes the value from front end to set the delay
-        // - https://developer.android.com/guide/topics/ui/controls/spinner
         btn_short_timer.setOnClickListener { setCountdownMode(TIMER_SHORT) }
         btn_medium_timer.setOnClickListener { setCountdownMode(TIMER_MEDIUM) }
         btn_long_timer.setOnClickListener { setCountdownMode(TIMER_LONG) }
@@ -246,7 +240,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         }
     }
 
-    private fun setCountdownMode(time: Int) {
+    internal fun setCountdownMode(time: Int) {
         if (checkCameraAvailable()) {
             mCountdownTime = time
             mIsInCountdownMode = true
@@ -254,7 +248,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         }
     }
 
-    private fun unsetCountdownMode() {
+    internal fun unsetCountdownMode() {
         mCountdownTime = 0
         mIsInCountdownMode = false
         toggleCountdownModeIcon(mCountdownTime)
@@ -269,7 +263,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         }
     }
 
-    private fun toggleCountdownModeIcon(time: Int) {
+    internal fun toggleCountdownModeIcon(time: Int) {
         if (mIsInCountdownMode) {
             countdown_cancel.beVisible()
             countdown_time_selected.beVisible()
@@ -295,7 +289,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         }
     }
 
-    private fun toggleCountdownTimerDropdown() {
+    internal fun toggleCountdownTimerDropdown() {
         var countdownDropdown = countdown_times
         if (countdownDropdown.visibility == View.INVISIBLE) countdownDropdown.beVisible() else countdownDropdown.beInvisible()
     }
@@ -314,13 +308,13 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         toggle_camera.setImageResource(if (isUsingFrontCamera) R.drawable.ic_camera_rear else R.drawable.ic_camera_front)
     }
 
-    private fun shutterPressed() {
+    internal fun shutterPressed() {
         if (checkCameraAvailable()) {
             handleShutter()
         }
     }
 
-    private fun handleShutter() {
+    internal fun handleShutter() {
         if (mIsInPhotoMode && !mIsInCountdownMode) {
             toggleBottomButtons(true)
             mPreview?.tryTakePicture()
@@ -358,7 +352,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             toggle_photo_video.isClickable = !hide
             change_resolution.isClickable = !hide
             last_photo_video_preview.isClickable = !hide
-            if (hide) settings.beInvisible() else settings.beVisible() // Quick fix might look into slightly change this function later
+            if (hide) settings.beInvisible() else settings.beVisible()
         }
     }
 
@@ -403,7 +397,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         toggleBottomButtons(false)
     }
 
-    private fun checkButtons() {
+    internal fun checkButtons() {
         if (mIsInPhotoMode) {
             initPhotoMode()
         } else {
@@ -419,7 +413,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         setupPreviewImage(true)
     }
 
-    private fun tryInitVideoMode() {
+    internal fun tryInitVideoMode() {
         if (mPreview?.initVideoMode() == true) {
             initVideoButtons()
         } else {
@@ -527,7 +521,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     }
 
     // TODO: May want to put this in CameraPreview.kt; next to tryTakePicture()
-    private fun tryTakeDelayedPicture() {
+    internal fun tryTakeDelayedPicture() {
         object : CountDownTimer(mCountdownTime*COUNTDOWN_INTERVAL, 1000) {
 
             override fun onTick(millisUntilFinished: Long) {
@@ -536,9 +530,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                     toggleRightButtons(false)
                     cancel()
                 }
-                // TODO
-                // UI does not exactly match the mockup, need to change a few things
-                // e.g. the line below which should change countdown, not countdown_time_selected
                 countdown_time_selected.text = (millisUntilFinished / 1000).toString()
             }
 
@@ -601,7 +592,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     private fun rotate(view: View, degrees: Int) = view.animate().rotation(degrees.toFloat()).start()
 
-    private fun checkCameraAvailable(): Boolean {
+    internal fun checkCameraAvailable(): Boolean {
         if (!mIsCameraAvailable) {
             toast(R.string.camera_unavailable)
         }
@@ -676,5 +667,9 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             add(Release(52, R.string.release_52))
             checkWhatsNew(this, BuildConfig.VERSION_CODE)
         }
+    }
+
+    fun getPhotoTaken(): Boolean? {
+        return this.mPreview?.getUITestPhotoTaken()
     }
 }
