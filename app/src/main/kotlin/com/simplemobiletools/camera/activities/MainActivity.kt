@@ -684,16 +684,10 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     }
 
     internal fun hideGridLine() {
-        line1.beInvisible()
-        line2.beInvisible()
-        line3.beInvisible()
-        line4.beInvisible()
+        gridline.beInvisible()
     }
 
     internal fun showGridLine() {
-        line1.beVisible()
-        line2.beVisible()
-        line3.beVisible()
-        line4.beVisible()
+        gridline.beVisible()
     }
 }
