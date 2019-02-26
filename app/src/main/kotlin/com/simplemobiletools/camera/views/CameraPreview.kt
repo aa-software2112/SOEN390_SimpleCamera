@@ -582,13 +582,13 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
                     mUITestPhotoTaken = true
                     unlockFocus()
                     mActivity.toggleBottomButtons(false)
-                    mActivity.toggleRightButtons(false)
+                    mActivity.toggleTopButtons(false)
                 }
 
                 override fun onCaptureFailed(session: CameraCaptureSession?, request: CaptureRequest?, failure: CaptureFailure?) {
                     super.onCaptureFailed(session, request, failure)
                     mActivity.toggleBottomButtons(false)
-                    mActivity.toggleRightButtons(false)
+                    mActivity.toggleTopButtons(false)
                 }
             }
 
