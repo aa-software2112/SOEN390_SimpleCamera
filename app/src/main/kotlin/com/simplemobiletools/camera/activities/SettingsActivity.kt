@@ -30,6 +30,7 @@ class SettingsActivity : SimpleActivity() {
         setupAvoidWhatsNew()
         setupSound()
         setupFocusBeforeCapture()
+        setupGridLine()
         setupVolumeButtonsAsShutter()
         setupTurnFlashOffAtStartup()
         setupFlipPhotos()
@@ -122,6 +123,14 @@ class SettingsActivity : SimpleActivity() {
         settings_focus_before_capture_holder.setOnClickListener {
             settings_focus_before_capture.toggle()
             config.focusBeforeCapture = settings_focus_before_capture.isChecked
+        }
+    }
+
+    private fun setupGridLine() {
+        settings_grid_line.isChecked = config.gridLineEnabled
+        settings_grid_line_holder.setOnClickListener {
+            settings_grid_line.toggle()
+            config.gridLineEnabled = settings_grid_line.isChecked
         }
     }
 

@@ -29,6 +29,10 @@ class Config(context: Context) : BaseConfig(context) {
         get() = prefs.getBoolean(FOCUS_BEFORE_CAPTURE, false)
         set(focus) = prefs.edit().putBoolean(FOCUS_BEFORE_CAPTURE, focus).apply()
 
+    var gridLineEnabled: Boolean
+        get() = prefs.getBoolean(GRID_LINE, false)
+        set(enabled) = prefs.edit().putBoolean(GRID_LINE, enabled).apply()
+
     var volumeButtonsAsShutter: Boolean
         get() = prefs.getBoolean(VOLUME_BUTTONS_AS_SHUTTER, false)
         set(volumeButtonsAsShutter) = prefs.edit().putBoolean(VOLUME_BUTTONS_AS_SHUTTER, volumeButtonsAsShutter).apply()
