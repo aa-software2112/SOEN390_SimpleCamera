@@ -354,6 +354,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                 swipe_area.beInvisible()
             } else {
                 settings.beVisible()
+                change_resolution.beVisible()
                 toggle_flash.beVisible()
                 last_image.beVisible()
                 swipe_area.beVisible()
