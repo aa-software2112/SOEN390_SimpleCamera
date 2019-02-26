@@ -1,10 +1,10 @@
 package com.simplemobiletools.camera.implementations
-import android.content.Context;
-import android.view.GestureDetector;
-import android.view.GestureDetector.SimpleOnGestureListener;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnTouchListener;
+import android.content.Context
+import android.view.GestureDetector
+import android.view.GestureDetector.SimpleOnGestureListener
+import android.view.MotionEvent
+import android.view.View
+import android.view.View.OnTouchListener
 
 /**
  * Implements OnTouchListener to detect swipes across a view.
@@ -30,7 +30,6 @@ open class OnSwipeTouchListener(ctx: Context) : OnTouchListener {
     }
 
     private inner class GestureListener : SimpleOnGestureListener() {
-
 
         override fun onDown(e: MotionEvent): Boolean {
             return true
@@ -64,8 +63,6 @@ open class OnSwipeTouchListener(ctx: Context) : OnTouchListener {
 
             return result
         }
-
-
     }
 
     open fun onSwipeRight() {}
