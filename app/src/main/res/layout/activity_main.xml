@@ -22,8 +22,7 @@
         android:layout_height="fill_parent"
         android:layout_marginBottom="56dp"
         android:layout_marginLeft="135dp"
-        android:background="@color/md_grey_600"
-        android:visibility="visible" />
+        android:background="@color/md_grey_600" />
 
     <View
         android:id="@+id/line2"
@@ -31,24 +30,21 @@
         android:layout_height="fill_parent"
         android:layout_marginBottom="56dp"
         android:layout_marginLeft="280dp"
-        android:background="@color/md_grey_600"
-        android:visibility="visible" />
+        android:background="@color/md_grey_600" />
 
     <View
         android:id="@+id/line3"
         android:layout_width="fill_parent"
         android:layout_height="1dp"
         android:layout_marginTop="230dp"
-        android:background="@color/md_grey_600"
-        android:visibility="visible" />
+        android:background="@color/md_grey_600" />
 
     <View
         android:id="@+id/line4"
         android:layout_width="fill_parent"
         android:layout_height="1dp"
         android:layout_marginTop="460dp"
-        android:background="@color/md_grey_600"
-        android:visibility="visible" />
+        android:background="@color/md_grey_600" />
 
     <ImageView
         android:id="@+id/settings"
