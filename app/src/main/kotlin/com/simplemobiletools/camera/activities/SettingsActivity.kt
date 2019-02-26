@@ -127,10 +127,10 @@ class SettingsActivity : SimpleActivity() {
     }
 
     private fun setupGridLine() {
-        settings_grid_line.isChecked = config.gridLineEnabled
+        settings_grid_line.isChecked = config.gridLineVisible
         settings_grid_line_holder.setOnClickListener {
             settings_grid_line.toggle()
-            config.gridLineEnabled = settings_grid_line.isChecked
+            config.gridLineVisible = settings_grid_line.isChecked
         }
     }
 
