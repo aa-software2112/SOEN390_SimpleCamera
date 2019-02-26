@@ -92,6 +92,16 @@
                 android:src="@drawable/ic_flash_off"/>
 
         <ImageView
+            android:id="@+id/change_resolution"
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
+            android:layout_alignParentRight="true"
+            android:layout_weight="1"
+            android:padding="@dimen/normal_margin"
+            android:src="@drawable/ic_resolution"
+            android:visibility="visible" />
+
+        <ImageView
                 android:id="@+id/settings"
                 android:layout_width="@dimen/icon_size"
                 android:layout_height="@dimen/icon_size"
@@ -99,6 +109,8 @@
                 android:layout_weight="1"
                 android:padding="@dimen/normal_margin"
                 android:src="@drawable/ic_settings_cog"/>
+
+
     </LinearLayout>
 
     <LinearLayout
@@ -142,6 +154,7 @@
                 android:layout_weight="1"
                 android:padding="@dimen/normal_margin"
                 android:src="@drawable/ic_video"/>
+
     </LinearLayout>
 
     <TextView
