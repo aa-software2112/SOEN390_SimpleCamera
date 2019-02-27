@@ -39,6 +39,7 @@ import java.util.concurrent.TimeUnit
 // and video sample at https://github.com/googlesamples/android-Camera2Video
 class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
 
+    private val TAG = "CameraPreview"
     private val FOCUS_TAG = "focus_tag"
     private val MAX_PREVIEW_WIDTH = 1920
     private val MAX_PREVIEW_HEIGHT = 1080
