@@ -23,6 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            android:layout_weight="1"
             android:gravity="center_horizontal|top"
             android:layout_alignParentEnd="true">
 
@@ -116,11 +117,12 @@
     <LinearLayout
         android:id="@+id/swipe_area"
         android:layout_width="match_parent"
-        android:layout_height="360dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="165dp"
+        android:layout_height="170dp"
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:layout_weight="1"
-        android:gravity="clip_vertical|center_horizontal"
+        android:gravity="clip_vertical|center_horizontal|center_vertical"
         android:orientation="horizontal"
         android:visibility="visible" />
 
@@ -129,6 +131,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_weight="1"
         android:gravity="center_horizontal|bottom"
         android:visibility="visible">
 
@@ -202,7 +205,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_centerInParent="true"
+        android:layout_centerVertical="true"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="0dp"
         android:layout_marginBottom="0dp"
