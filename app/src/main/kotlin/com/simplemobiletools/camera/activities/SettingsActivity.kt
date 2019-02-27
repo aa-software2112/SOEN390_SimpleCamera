@@ -58,7 +58,7 @@ class SettingsActivity : SimpleActivity() {
 
     private fun setupSectionColors() {
         val adjustedPrimaryColor = getAdjustedPrimaryColor()
-        arrayListOf(shutter_label, startup_label, saving_label).forEach {
+        arrayListOf(shutter_label, startup_label, saving_label/*,advanced_label*/).forEach {
             it.setTextColor(adjustedPrimaryColor)
         }
     }
