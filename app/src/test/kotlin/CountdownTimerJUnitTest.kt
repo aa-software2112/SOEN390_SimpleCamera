@@ -3,7 +3,7 @@ package test.kotlin
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import android.widget.TextView
 import com.simplemobiletools.camera.helpers.TIMER_SHORT
 import com.simplemobiletools.camera.helpers.TIMER_MEDIUM
@@ -157,18 +157,18 @@ class CountdownTimerJUnitTest : KotlinRobolectric() {
 
     @Test
     fun toggleCountdownTimerDropdown_countdownDropdownTest() {
-        println("Testing if countdownDropdown is INvisible, then countdownDropdown is changed to visible")
-        var countdownDropdownLinearLayout = mMainActivity?.findViewById<LinearLayout>(R.id.countdown_times)
-        Assert.assertNotNull(countdownDropdownLinearLayout)
+        println("Testing if countdownDropdown is Invisible, then countdownDropdown is changed to visible")
+        var countdownDropdownRelativeLayout = mMainActivity?.findViewById<RelativeLayout>(R.id.countdown_times)
+        Assert.assertNotNull(countdownDropdownRelativeLayout)
 
-        //  Verify if countdownDropdownLinearLayout is INVISIBLE at first
-        Assert.assertTrue(countdownDropdownLinearLayout?.visibility == View.INVISIBLE)
+        //  Verify if countdownDropdownRelativeLayout is INVISIBLE at first
+        Assert.assertTrue(countdownDropdownRelativeLayout?.visibility == View.INVISIBLE)
 
-        //  Call toggleCountdownTimerDropdown() method to switch countdownDropdownLinearLayout's visibility: from INVISIBLE to VISIBLE
+        //  Call toggleCountdownTimerDropdown() method to switch countdownDropdownRelativeLayout's visibility: from INVISIBLE to VISIBLE
         mMainActivity?.toggleCountdownTimerDropdown()
 
-        //  Verify if countdownDropdownLinearLayout is now VISIBLE
-        Assert.assertTrue(countdownDropdownLinearLayout?.visibility == View.VISIBLE)
+        //  Verify if countdownDropdownRelativeLayout is now VISIBLE
+        Assert.assertTrue(countdownDropdownRelativeLayout?.visibility == View.VISIBLE)
     }
 
     @Test
@@ -237,8 +237,8 @@ class CountdownTimerJUnitTest : KotlinRobolectric() {
     }
 
     @Test
-    fun tryTakeDelayedPicture_startTest() {
-        println("Testing if tryTakeDelayedPicture() is called, then unsetCountdownMode() is called")
+    fun startCountdown_startTest() {
+        println("Testing if startCountdown() is called, then unsetCountdownMode() is called")
         //  Manually "turning on" the camera
         mMainActivity?.setIsCameraAvailable(true)
 
@@ -253,8 +253,8 @@ class CountdownTimerJUnitTest : KotlinRobolectric() {
         Assert.assertTrue(mMainActivity!!.mIsInPhotoMode)
         Assert.assertTrue(mMainActivity!!.mIsInCountdownMode)
 
-        // Call tryTakeDelayedPicture()
-        mMainActivity?.tryTakeDelayedPicture()
+        // Call startCountdown()
+        mMainActivity?.startCountdown()
 
         /** Want to use CountDownTimer to wait 10 seconds to see if unsetCountdownMode() is called, and verify mIsInCountdownMode is false */
 

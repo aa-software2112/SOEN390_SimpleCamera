@@ -13,110 +13,125 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp" />
-
-    <ImageView
-        android:id="@+id/settings"
-        android:layout_width="@dimen/icon_size"
-        android:layout_height="@dimen/icon_size"
-        android:layout_alignParentRight="true"
-        android:contentDescription="TODO" android:padding="@dimen/normal_margin"
-        android:src="@drawable/ic_settings_cog"
-        android:visibility="visible" />
-
-    <ImageView
-        android:id="@+id/toggle_photo_video"
-        android:layout_width="@dimen/icon_size"
-        android:layout_height="@dimen/icon_size"
-        android:layout_below="@+id/settings"
-        android:layout_alignParentRight="true"
-        android:contentDescription="TODO" android:padding="@dimen/normal_margin"
-        android:src="@drawable/ic_video"
-        android:visibility="visible" />
-
-    <ImageView
-        android:id="@+id/change_resolution"
-        android:layout_width="@dimen/icon_size"
-        android:layout_height="@dimen/icon_size"
-        android:layout_below="@+id/toggle_photo_video"
-        android:layout_alignParentRight="true"
-        android:contentDescription="TODO" android:padding="@dimen/normal_margin"
-        android:src="@drawable/ic_resolution"
-        android:visibility="visible" />
-
-    <ImageView
-        android:id="@+id/last_photo_video_preview"
-        android:layout_width="@dimen/icon_size"
-        android:layout_height="@dimen/icon_size"
-        android:layout_below="@+id/change_resolution"
-        android:layout_alignParentRight="true"
-        android:contentDescription="TODO" android:padding="@dimen/medium_margin"
-        android:visibility="visible" />
-
-    <ImageView
-        android:id="@+id/countdown_toggle"
-        android:layout_width="@dimen/icon_size"
-        android:layout_height="@dimen/icon_size"
-        android:layout_weight="1"
-        android:contentDescription="TODO" android:padding="@dimen/normal_margin"
-        app:srcCompat="@drawable/ic_clock"
-        android:visibility="visible" />
-
-    <ImageView
-        android:id="@+id/countdown_cancel"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
-        android:layout_alignEnd="@+id/countdown_toggle"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/circle_background"
-        android:contentDescription="TODO" android:visibility="invisible"
-        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp" />
 
     <LinearLayout
-        android:id="@+id/countdown_times"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="56dp"
-        android:gravity="right"
-        android:orientation="vertical"
-        android:visibility="invisible">
-
-        <Button
-            android:id="@+id/btn_short_timer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/countdown_times"
-            android:text="5 sec" />
-
-        <Button
-            android:id="@+id/btn_medium_timer"
+            android:id="@+id/btn_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="10 sec" />
+            android:layout_alignParentTop="true"
+            android:layout_weight="1"
+            android:gravity="center_horizontal|top"
+            android:layout_alignParentEnd="true">
 
-        <Button
-            android:id="@+id/btn_long_timer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="15 sec" />
+        <RelativeLayout
+                android:id="@+id/countdown_bar"
+                android:layout_width="@dimen/icon_size"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_weight="1"
+                android:layout_alignParentEnd="true">
+            <ImageView
+                    android:id="@+id/countdown_toggle"
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:padding="@dimen/normal_margin"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true" app:srcCompat="@drawable/ic_clock"
+                    android:visibility="visible"/>
 
-        <Button
-            android:id="@+id/btn_30sec"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="30 sec"
-            android:visibility="invisible" />
+            <ImageView
+                    android:id="@+id/countdown_cancel"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignEnd="@+id/countdown_toggle"
+                    android:background="@drawable/circle_background"
+                    app:srcCompat="@android:drawable/ic_menu_close_clear_cancel"
+                    android:visibility="invisible"/>
+
+            <RelativeLayout
+                    android:id="@+id/countdown_times"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/countdown_toggle"
+                    android:visibility="invisible">
+
+                <Button
+                        android:id="@+id/btn_short_timer"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="5 sec"/>
+
+                <Button
+                        android:id="@+id/btn_medium_timer"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/btn_short_timer"
+                        android:text="10 sec"/>
+
+                <Button
+                        android:id="@+id/btn_long_timer"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/btn_medium_timer"
+                        android:text="15 sec"/>
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <ImageView
+                android:id="@+id/toggle_flash"
+                android:layout_width="@dimen/icon_size"
+                android:layout_height="@dimen/icon_size"
+                android:layout_weight="1"
+                android:padding="@dimen/normal_margin"
+                android:src="@drawable/ic_flash_off"/>
+
+        <ImageView
+            android:id="@+id/change_resolution"
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
+            android:layout_alignParentRight="true"
+            android:layout_weight="1"
+            android:padding="@dimen/normal_margin"
+            android:src="@drawable/ic_resolution"
+            android:visibility="visible" />
+
+        <ImageView
+                android:id="@+id/settings"
+                android:layout_width="@dimen/icon_size"
+                android:layout_height="@dimen/icon_size"
+                android:layout_alignParentRight="true"
+                android:layout_weight="1"
+                android:padding="@dimen/normal_margin"
+                android:src="@drawable/ic_settings_cog"/>
+
+
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/swipe_area"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_weight="1"
+        android:gravity="clip_vertical|center_horizontal|center_vertical"
+        android:orientation="horizontal"
+        android:visibility="visible" />
 
     <LinearLayout
         android:id="@+id/btn_holder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_weight="1"
         android:gravity="center_horizontal|bottom"
         android:visibility="visible">
 
@@ -130,13 +145,11 @@
             android:src="@drawable/ic_camera_front" />
 
         <ImageView
-            android:id="@+id/shutter"
-            android:layout_width="@dimen/icon_size"
-            android:layout_height="@dimen/icon_size"
-            android:layout_weight="1"
-            android:contentDescription="TODO"
-            android:src="@drawable/ic_shutter"
-            android:visibility="visible"/>
+                android:id="@+id/shutter"
+                android:layout_width="@dimen/icon_size"
+                android:layout_height="@dimen/icon_size"
+                android:layout_weight="1"
+                android:src="@drawable/ic_shutter"/>
 
         <ImageView
             android:id="@+id/burst"
@@ -148,13 +161,12 @@
             android:visibility="gone"/>
 
         <ImageView
-            android:id="@+id/toggle_flash"
-            android:layout_width="@dimen/icon_size"
-            android:layout_height="@dimen/icon_size"
-            android:layout_weight="1"
-            android:contentDescription="TODO"
-            android:padding="@dimen/normal_margin"
-            android:src="@drawable/ic_flash_off" />
+                android:id="@+id/toggle_photo_video"
+                android:layout_width="@dimen/icon_size"
+                android:layout_height="@dimen/icon_size"
+                android:layout_weight="1"
+                android:padding="@dimen/normal_margin"
+                android:src="@drawable/ic_video"/>
 
     </LinearLayout>
 
@@ -195,5 +207,19 @@
         android:textColor="@color/default_text_color"
         android:textSize="40dp"
         android:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/last_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="0dp"
+        android:rotation="270"
+        app:srcCompat="@android:drawable/arrow_up_float" />
 
 </RelativeLayout>
