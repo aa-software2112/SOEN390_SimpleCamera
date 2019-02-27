@@ -272,7 +272,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                     MotionEvent.ACTION_UP -> {
                         mBurstHandler.removeCallbacks(mBurstRunnable)
                         mBurstHandler.removeCallbacks(mBurstModeSetup)
-                        
                         if (!mBurstEnabled) {
                             /* regular shutterPressed() actions get executed if thumb was released
                                  within 2 secs */
