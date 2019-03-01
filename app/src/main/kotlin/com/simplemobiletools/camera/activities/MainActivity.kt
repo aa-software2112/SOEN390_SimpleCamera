@@ -26,6 +26,8 @@ import com.simplemobiletools.commons.helpers.* // ktlint-disable no-wildcard-imp
 import com.simplemobiletools.commons.models.Release
 import kotlinx.android.synthetic.main.activity_main.* // ktlint-disable no-wildcard-imports
 import android.os.CountDownTimer
+import kotlinx.android.synthetic.main.activity_main.view.*
+import kotlinx.android.synthetic.main.activity_settings.*
 import com.simplemobiletools.camera.implementations.OnSwipeTouchListener
 import com.simplemobiletools.camera.R
 import android.view.MotionEvent
@@ -94,6 +96,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         if (hasStorageAndCameraPermissions()) {
             mOrientationEventListener.enable()
         }
+        handleGridLine()
     }
 
     override fun onPause() {
@@ -749,5 +752,20 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     fun getPhotoTaken(): Boolean? {
         return this.mPreview?.getUITestPhotoTaken()
+    }
+
+    internal fun handleGridLine() {
+        if (!config.gridLineVisible) {
+            hideGridLine()
+        } else
+            showGridLine()
+    }
+
+    internal fun hideGridLine() {
+        gridline.beInvisible()
+    }
+
+    internal fun showGridLine() {
+        gridline.beVisible()
     }
 }
