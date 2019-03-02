@@ -280,7 +280,7 @@
                 android:clickable="false"
                 android:paddingStart="@dimen/medium_margin"
                 android:paddingLeft="@dimen/medium_margin"
-                android:text="GPS photo tagging"
+                android:text="Photo location stamp"
                 app:switchPadding="@dimen/medium_margin" />
 
         </RelativeLayout>
