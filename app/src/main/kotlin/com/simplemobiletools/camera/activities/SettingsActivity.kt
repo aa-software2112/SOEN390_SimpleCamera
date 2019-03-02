@@ -41,6 +41,7 @@ class SettingsActivity : SimpleActivity() {
         setupPhotoQuality()
         updateTextColors(settings_holder)
         setupSectionColors()
+        setupGpsTagging()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -58,7 +59,7 @@ class SettingsActivity : SimpleActivity() {
 
     private fun setupSectionColors() {
         val adjustedPrimaryColor = getAdjustedPrimaryColor()
-        arrayListOf(shutter_label, startup_label, saving_label/*,advanced_label*/).forEach {
+        arrayListOf(shutter_label, startup_label, gps_label, saving_label/*,advanced_label*/).forEach {
             it.setTextColor(adjustedPrimaryColor)
         }
     }
@@ -131,6 +132,14 @@ class SettingsActivity : SimpleActivity() {
         settings_grid_line_holder.setOnClickListener {
             settings_grid_line.toggle()
             config.gridLineVisible = settings_grid_line.isChecked
+        }
+    }
+
+    private fun setupGpsTagging() {
+        settings_gps_toggle.isChecked = config.gpsTaggingOn
+        gps_photo_tag_holder.setOnClickListener {
+            settings_gps_toggle.toggle()
+            config.gpsTaggingOn = settings_gps_toggle.isChecked
         }
     }
 
