@@ -71,8 +71,7 @@ class BurstShotTest : BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
 
         System.out.println("Final Number of Photos: " + finalNumPhotos)
         System.out.println("Difference: " + (finalNumPhotos - initialNumPhotos))
-        assertTrue(((finalNumPhotos - initialNumPhotos) < 10 && (finalNumPhotos - initialNumPhotos) > 5))
-        //assertEquals(5.0, (finalNumPhotos - initialNumPhotos) as Double, 2.0)
+        assertTrue(((finalNumPhotos - initialNumPhotos) < 5 && (finalNumPhotos - initialNumPhotos) > 2))
 
     }
 
