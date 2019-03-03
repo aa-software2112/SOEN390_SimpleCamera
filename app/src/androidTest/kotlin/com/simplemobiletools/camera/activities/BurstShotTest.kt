@@ -62,7 +62,7 @@ class BurstShotTest : BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
         Thread.sleep(SHUTTER_TO_BURST_MODE_TIME)
 
         /** Hold down the shutter for 1 more second, take roughly 10 pictures (since the rate is 100ms/photo) */
-        Thread.sleep(ONE_SECOND);
+        Thread.sleep(ONE_SECOND*3);
 
         /** Release the button */
         onView(withId(R.id.shutter)).perform(ViewActionHelper.release())
