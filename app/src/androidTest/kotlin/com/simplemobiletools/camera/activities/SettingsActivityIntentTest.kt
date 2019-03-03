@@ -32,11 +32,14 @@ class SettingsActivityIntentTest : BaseUITestSetup(TestActivities.MAIN_ACTIVITY)
         Intents.init()
 
         /** Sleep for 2 seconds in order to let the settings button fade-out */
-        this.sleep(5000)
+        Thread.sleep(7000)
 
         /** The settings button is pressed  - must click twice; once only opens the submenu, the other
          * switches to the Setting activity */
-        Espresso.onView(withId(R.id.settings)).perform(ViewActions.click(), ViewActions.click())
+        Espresso.onView(withId(R.id.settings)).perform(ViewActions.click())
+
+        Thread.sleep(2000)
+        Espresso.onView(withId(R.id.settings)).perform(ViewActions.click())
 
         /** Check if the settings activity intent was detected*/
         Intents.intended(IntentMatchers.hasComponent(SettingsActivity::class.java.getName()))
