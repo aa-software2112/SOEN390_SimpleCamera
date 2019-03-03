@@ -62,7 +62,7 @@ class BurstShotTest : BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
         Thread.sleep(SHUTTER_TO_BURST_MODE_TIME)
 
         /** Hold down the shutter for 1 more second, take roughly 10 pictures (since the rate is 100ms/photo) */
-        Thread.sleep(ONE_SECOND/2);
+        Thread.sleep(ONE_SECOND);
 
         /** Release the button */
         onView(withId(R.id.shutter)).perform(ViewActionHelper.release())
@@ -71,7 +71,8 @@ class BurstShotTest : BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
 
         System.out.println("Final Number of Photos: " + finalNumPhotos)
         System.out.println("Difference: " + (finalNumPhotos - initialNumPhotos))
-        assertEquals(5.0, (finalNumPhotos - initialNumPhotos) as Double, 2.0)
+        assertTrue(((finalNumPhotos - initialNumPhotos) < 10 && (finalNumPhotos - initialNumPhotos) > 5))
+        //assertEquals(5.0, (finalNumPhotos - initialNumPhotos) as Double, 2.0)
 
     }
 
