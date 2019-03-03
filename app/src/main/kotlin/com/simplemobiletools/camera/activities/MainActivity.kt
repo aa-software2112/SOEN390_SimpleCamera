@@ -253,6 +253,12 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             override fun onSwipeLeft() {
                 showLastMediaPreview()
             }
+            override fun onSwipeTop() {
+                toggleFilterScrollArea(false)
+            }
+            override fun onSwipeBottom() {
+                toggleFilterScrollArea(true)
+            }
         })
         toggle_flash.setOnClickListener { toggleFlash() }
         settings.setOnClickListener { launchSettings() }
@@ -331,6 +337,10 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             countdown_time_selected.beInvisible()
             countdown_time_selected.text = time.toString()
         }
+    }
+
+    internal fun toggleFilterScrollArea(hide: Boolean) {
+        if (hide) filter_scroll_area.beInvisible() else filter_scroll_area.beVisible()
     }
 
     private fun showLastMediaPreview() {

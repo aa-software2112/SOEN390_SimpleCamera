@@ -125,6 +125,7 @@
             android:layout_alignParentTop="true"
             android:layout_weight="1"
             android:layout_alignParentEnd="true">
+
             <ImageView
                 android:id="@+id/countdown_toggle"
                 android:layout_width="@dimen/icon_size"
@@ -133,6 +134,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true" app:srcCompat="@drawable/ic_clock"
                 android:visibility="visible"/>
+
 
             <ImageView
                 android:id="@+id/countdown_cancel"
@@ -216,6 +218,63 @@
         android:gravity="clip_vertical|center_horizontal|center_vertical"
         android:orientation="horizontal"
         android:visibility="visible" />
+
+    <HorizontalScrollView
+        android:id="@+id/filter_scroll_area"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="130dp"
+        android:visibility="invisible">
+
+        <LinearLayout
+            android:id="@+id/filter_linear_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/filter_classic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Classic"/>
+
+            <Button
+                android:id="@+id/filter_bw"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="B&amp;W"/>
+
+            <Button
+                android:id="@+id/filter_cozy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cozy"/>
+
+            <Button
+                android:id="@+id/filter_retro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Retro"/>
+
+            <Button
+                android:id="@+id/filter_memory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Memory"/>
+
+            <Button
+                android:id="@+id/filter_forest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Forest"/>
+
+
+        </LinearLayout>
+
+
+    </HorizontalScrollView>
 
     <LinearLayout
         android:id="@+id/btn_holder"
@@ -312,5 +371,6 @@
         android:layout_marginBottom="0dp"
         android:rotation="270"
         app:srcCompat="@android:drawable/arrow_up_float" />
+
 
 </RelativeLayout>
