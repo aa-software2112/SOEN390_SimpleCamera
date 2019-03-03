@@ -419,9 +419,11 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             shutter.animate().alpha(alpha).start()
             toggle_camera.animate().alpha(alpha).start()
             toggle_photo_video.animate().alpha(alpha).start()
+            filter_scroll_area.animate().alpha(alpha).start()
             shutter.isClickable = !hide
             toggle_camera.isClickable = !hide
             toggle_photo_video.isClickable = !hide
+            filter_scroll_area.isClickable = !hide
         }
     }
 
