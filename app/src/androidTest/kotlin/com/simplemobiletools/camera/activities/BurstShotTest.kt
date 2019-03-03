@@ -45,7 +45,7 @@ class BurstShotTest : BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
         //onView(withId(R.id.shutter)).perform(ViewActionHelper.release())
     }
 
-    /** Acceptance Test 7: Functional: When operating in burst mode, every capture taken during this duration should be saved﻿: Automatic
+    /** Acceptance Test 7: Functional: Continuous captures on shutter button hold when not in countdown mode and not in video mode: Automatic
      * 1. Application Starts
      * 2. Hold down shutter for 3 seconds - 2seconds to activate the burst
      * 3. Verifying camera is neither in countdown mode nor video mode
