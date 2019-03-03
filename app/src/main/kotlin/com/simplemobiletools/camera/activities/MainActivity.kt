@@ -265,6 +265,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         toggle_photo_video.setOnClickListener { handleTogglePhotoVideo() }
         change_resolution.setOnClickListener { handleChangeResolutionDialog() }
         countdown_toggle.setOnClickListener { toggleCountdownTimer() }
+        countdown_time_selected.setOnClickListener { toggleCountdownTimer() }
         btn_short_timer.setOnClickListener { setCountdownMode(TIMER_SHORT) }
         btn_medium_timer.setOnClickListener { setCountdownMode(TIMER_MEDIUM) }
         btn_long_timer.setOnClickListener { setCountdownMode(TIMER_LONG) }
@@ -329,12 +330,14 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     internal fun toggleCountdownModeIcon(time: Int) {
         if (mIsInCountdownMode) {
             countdown_cancel.beVisible()
+            countdown_toggle.beInvisible()
             countdown_time_selected.beVisible()
             countdown_time_selected.text = time.toString()
             toggleCountdownTimerDropdown()
         } else {
             countdown_cancel.beInvisible()
             countdown_time_selected.beInvisible()
+            countdown_toggle.beVisible()
             countdown_time_selected.text = time.toString()
         }
     }
