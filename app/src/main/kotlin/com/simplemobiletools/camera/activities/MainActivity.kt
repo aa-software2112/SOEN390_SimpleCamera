@@ -51,7 +51,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     private var mPreviewUri: Uri? = null
     internal var mIsInPhotoMode = false
     internal var mIsCameraAvailable = false
-    private var mIsVideoCaptureIntent = false
+    internal var mIsVideoCaptureIntent = false
     private var mIsHardwareShutterHandled = false
     private var mCurrVideoRecTimer = 0
     var mLastHandledOrientation = 0
