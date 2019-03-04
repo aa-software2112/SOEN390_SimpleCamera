@@ -96,7 +96,7 @@ class CountdownTimerTest : BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
      * Written By: Anthony Andreoli & Krishna Patel
      * */
     @Test
-    fun photoTakenAfter10Seconds() {
+    fun AcceptanceTest2() {
 
         /** Wait for the button to fade out */
         this.waitOnViewFade(view!!)
@@ -129,7 +129,7 @@ class CountdownTimerTest : BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
      * Written By: Anthony Andreoli & Krishna Patel
      * */
     @Test
-    fun countdownTimerCancel() {
+    fun AcceptanceTest3() {
         /** Wait for the button to fade out */
         this.waitOnViewFade(view!!)
 
