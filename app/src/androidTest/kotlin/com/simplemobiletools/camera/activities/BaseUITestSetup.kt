@@ -12,9 +12,6 @@ import org.junit.runner.RunWith
 
 import android.view.View
 import androidx.test.espresso.ViewInteraction
-import android.provider.MediaStore
-
-
 
 enum class TestActivities {
     MAIN_ACTIVITY,
@@ -95,6 +92,4 @@ open class BaseUITestSetup(activityUnderTest: TestActivities) {
         else
             vi.perform(click())
     }
-
-
 }

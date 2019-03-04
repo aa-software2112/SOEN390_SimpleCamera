@@ -1,20 +1,13 @@
 package com.simplemobiletools.camera.activities
 
 import android.provider.MediaStore
-import android.view.View
-import android.widget.Button
-import android.widget.ImageView
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.ViewAction
-import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.* // ktlint-disable no-wildcard-imports
 import androidx.test.filters.LargeTest
 import androidx.test.runner.AndroidJUnit4
 import com.simplemobiletools.camera.R
-import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertTrue
-import junit.framework.Assert.assertFalse
 import kotlinx.android.synthetic.main.activity_main.view.*
 import org.hamcrest.Matchers.* // ktlint-disable no-wildcard-imports
 import org.junit.After
@@ -35,14 +28,13 @@ class BurstShotTest : BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
     fun setup() {
 
         /** Release the button */
-        //onView(withId(R.id.shutter)).perform(ViewActionHelper.release())
+        // onView(withId(R.id.shutter)).perform(ViewActionHelper.release())
     }
 
     @After
-    fun tearDown()
-    {
+    fun tearDown() {
         /** Release the button */
-        //onView(withId(R.id.shutter)).perform(ViewActionHelper.release())
+        // onView(withId(R.id.shutter)).perform(ViewActionHelper.release())
     }
 
     /** Acceptance Test 7: Functional: Continuous captures on shutter button hold when not in countdown mode and not in video mode: Automatic
@@ -67,16 +59,15 @@ class BurstShotTest : BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
         Thread.sleep(SHUTTER_TO_BURST_MODE_TIME)
 
         /** Verifying button visibilities in burst shot mode */
-        onView(anyOf(withId(R.id.shutter))).check(matches(not(isDisplayed())));
-        onView(anyOf(withId(R.id.burst))).check(matches(isDisplayed()));
+        onView(anyOf(withId(R.id.shutter))).check(matches(not(isDisplayed())))
+        onView(anyOf(withId(R.id.burst))).check(matches(isDisplayed()))
 
         /** Release the button */
         onView(withId(R.id.shutter)).perform(ViewActionHelper.release())
 
         /** Verifying button visibilities after leaving burst shot mode */
-        onView(anyOf(withId(R.id.burst))).check(matches(not(isDisplayed())));
-        onView(anyOf(withId(R.id.shutter))).check(matches(isDisplayed()));
-
+        onView(anyOf(withId(R.id.burst))).check(matches(not(isDisplayed())))
+        onView(anyOf(withId(R.id.shutter))).check(matches(isDisplayed()))
     }
 
     /** Acceptance Test 8: Functional: When operating in burst mode, every capture taken during this duration should be saved﻿: Automatic
@@ -99,7 +90,7 @@ class BurstShotTest : BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
         Thread.sleep(SHUTTER_TO_BURST_MODE_TIME)
 
         /** Hold down the shutter for 1 more second, take roughly 10 pictures (since the rate is 100ms/photo) */
-        Thread.sleep(ONE_SECOND*3);
+        Thread.sleep(ONE_SECOND*3)
 
         /** Release the button */
         onView(withId(R.id.shutter)).perform(ViewActionHelper.release())
@@ -109,20 +100,18 @@ class BurstShotTest : BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
         System.out.println("Final Number of Photos: " + finalNumPhotos)
         System.out.println("Difference: " + (finalNumPhotos - initialNumPhotos))
         assertTrue(((finalNumPhotos - initialNumPhotos) < 5 && (finalNumPhotos - initialNumPhotos) > 2))
-
     }
 
-    fun getNumPhotos() : Int {
+    fun getNumPhotos(): Int {
         val columns = arrayOf(MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID)
         val orderBy = MediaStore.Images.Media._ID
         val cursor = mMainActivity?.activity?.applicationContext?.contentResolver?.query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null, null, orderBy)
-        //Total number of images
+        // Total number of images
         if (cursor != null) {
             return cursor!!.getCount()
         }
 
         return -1
     }
-
 }
