@@ -50,10 +50,8 @@ class BurstShotTest : BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
      * 2. Hold down shutter for 3 seconds - 2seconds to activate the burst
      * 3. Verifying camera is neither in countdown mode nor video mode
      * 4. Verifying that shutter button is INVISIBLE and that burst button is VISIBLE in this state
-     * 5. Photos are taken in burst mode for 1 second
-     * 6. Burst button is released
-     * 7. Verifying that shutter button is VISIBLE and that burst button is INVISIBLE in this state
-     * 8. Verifying that more than one photo was taken
+     * 5. Burst button is released
+     * 6. Verifying that shutter button is VISIBLE and that burst button is INVISIBLE in this state
      * Written By: Laura Wheatley
      */
     @Test
@@ -75,13 +73,9 @@ class BurstShotTest : BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
         /** Release the button */
         onView(withId(R.id.shutter)).perform(ViewActionHelper.release())
 
-        var finalNumPhotos = getNumPhotos()
-
         /** Verifying button visibilities after leaving burst shot mode */
         onView(anyOf(withId(R.id.burst))).check(matches(not(isDisplayed())));
         onView(anyOf(withId(R.id.shutter))).check(matches(isDisplayed()));
-
-        assertTrue(finalNumPhotos > 1)
 
     }
 
