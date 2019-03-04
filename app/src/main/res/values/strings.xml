@@ -36,7 +36,9 @@
     <string name="always_open_back_camera">Always open the app with the Back camera</string>
     <string name="save_photo_metadata">Save photo exif metadata</string>
     <string name="photo_compression_quality">Photo compression quality</string>
-    <string name="shutter">Shutter</string>
+    <string name="shutter">Shutter</string>s
+    <string name="advanced" translatable="false">Advanced Settings</string>
+    <string name="change_resolution" translatable="false">Change Resolution</string>
 
     <!-- Strings displayed only on Google Playstore. Optional, but good to have -->
     <!-- Short description has to have less than 80 chars -->
@@ -50,6 +52,7 @@
 
         This app is just one piece of a bigger series of apps. You can find the rest of them at https://www.simplemobiletools.com
     </string>
+    <string name="grid_line" translatable="false">Grid line</string>
 
     <!--
         Haven't found some strings? There's more at

@@ -30,6 +30,7 @@ class SettingsActivity : SimpleActivity() {
         setupAvoidWhatsNew()
         setupSound()
         setupFocusBeforeCapture()
+        setupGridLine()
         setupVolumeButtonsAsShutter()
         setupTurnFlashOffAtStartup()
         setupFlipPhotos()
@@ -57,7 +58,7 @@ class SettingsActivity : SimpleActivity() {
 
     private fun setupSectionColors() {
         val adjustedPrimaryColor = getAdjustedPrimaryColor()
-        arrayListOf(shutter_label, startup_label, saving_label).forEach {
+        arrayListOf(shutter_label, startup_label, saving_label/*,advanced_label*/).forEach {
             it.setTextColor(adjustedPrimaryColor)
         }
     }
@@ -122,6 +123,14 @@ class SettingsActivity : SimpleActivity() {
         settings_focus_before_capture_holder.setOnClickListener {
             settings_focus_before_capture.toggle()
             config.focusBeforeCapture = settings_focus_before_capture.isChecked
+        }
+    }
+
+    private fun setupGridLine() {
+        settings_grid_line.isChecked = config.gridLineVisible
+        settings_grid_line_holder.setOnClickListener {
+            settings_grid_line.toggle()
+            config.gridLineVisible = settings_grid_line.isChecked
         }
     }
 

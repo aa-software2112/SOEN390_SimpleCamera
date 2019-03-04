@@ -35,6 +35,7 @@ open class BaseUITestSetup(activityUnderTest: TestActivities) {
     /** Grants the write and camera persmissions - crucial to allowing the initial, main activity from
      * starting
      */
+    @get:Rule val r = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE)
     @get:Rule val g = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     @get:Rule val p = GrantPermissionRule.grant(Manifest.permission.CAMERA)
 
