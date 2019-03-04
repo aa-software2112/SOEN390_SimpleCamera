@@ -43,9 +43,9 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     private lateinit var mFocusCircleView: FocusCircleView
     private lateinit var mFadeHandler: Handler
     private lateinit var mCameraImpl: MyCameraImpl
-    private lateinit var mBurstHandler: Handler
-    private lateinit var mBurstRunnable: Runnable
-    private lateinit var mBurstModeSetup: Runnable
+    internal lateinit var mBurstHandler: Handler
+    internal lateinit var mBurstRunnable: Runnable
+    internal lateinit var mBurstModeSetup: Runnable
 
     private var mPreview: MyPreview? = null
     private var mPreviewUri: Uri? = null
@@ -354,7 +354,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         if (countdownDropdown.visibility == View.INVISIBLE) countdownDropdown.beVisible() else countdownDropdown.beInvisible()
     }
 
-    private fun toggleBurstModeButton() {
+    internal fun toggleBurstModeButton() {
         if (mBurstEnabled) {
             shutter.beGone()
             burst.beVisible()
