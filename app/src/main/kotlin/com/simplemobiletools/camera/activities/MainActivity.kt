@@ -59,6 +59,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     internal var mCountdownTime = 0
     internal var mBurstEnabled = false
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or
                 WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
@@ -253,9 +254,11 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             override fun onSwipeLeft() {
                 showLastMediaPreview()
             }
+
             override fun onSwipeTop() {
                 toggleFilterScrollArea(false)
             }
+
             override fun onSwipeBottom() {
                 toggleFilterScrollArea(true)
             }
@@ -620,7 +623,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     internal fun startCountdown() {
         /* Starts the countdown timer and calls tryTakePicture() if it reaches 0. */
-        object : CountDownTimer(mCountdownTime*COUNTDOWN_INTERVAL, 1000) {
+        object : CountDownTimer(mCountdownTime * COUNTDOWN_INTERVAL, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 /* Cancels the countdown */
                 if (!mIsInCountdownMode) {
@@ -784,5 +787,13 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     internal fun showGridLine() {
         gridline.beVisible()
+    }
+
+    fun colorEffectFilter(v: View) {
+        try {
+            mPreview?.previewFilter(v)
+        } catch (ex: Exception) {
+        }
+
     }
 }

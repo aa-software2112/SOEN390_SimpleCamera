@@ -985,8 +985,45 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {}
 
-    override fun getUITestPhotoTaken(): Boolean
-    {
+    override fun getUITestPhotoTaken(): Boolean {
         return mUITestPhotoTaken
+    }
+
+    override fun previewFilter(v: View) {
+        try {
+            when (v.id) {
+                R.id.filter_none -> {
+                    mPreviewRequestBuilder!!.set(CaptureRequest.CONTROL_EFFECT_MODE, CaptureRequest.CONTROL_EFFECT_MODE_OFF)
+                }
+                R.id.filter_mono -> {
+                    mPreviewRequestBuilder!!.set(CaptureRequest.CONTROL_EFFECT_MODE, CaptureRequest.CONTROL_EFFECT_MODE_MONO)
+                }
+                R.id.filter_negative -> {
+                    mPreviewRequestBuilder!!.set(CaptureRequest.CONTROL_EFFECT_MODE, CaptureRequest.CONTROL_EFFECT_MODE_NEGATIVE)
+                }
+
+                R.id.filter_sepia -> {
+                    mPreviewRequestBuilder!!.set(CaptureRequest.CONTROL_EFFECT_MODE, CaptureRequest.CONTROL_EFFECT_MODE_SEPIA)
+                }
+                R.id.filter_solarize -> {
+                    mPreviewRequestBuilder!!.set(CaptureRequest.CONTROL_EFFECT_MODE, CaptureRequest.CONTROL_EFFECT_MODE_SOLARIZE)
+                }
+                R.id.filter_whiteboard -> {
+                    mPreviewRequestBuilder!!.set(CaptureRequest.CONTROL_EFFECT_MODE, CaptureRequest.CONTROL_EFFECT_MODE_WHITEBOARD)
+                }
+                R.id.filter_aqua -> {
+                    mPreviewRequestBuilder!!.set(CaptureRequest.CONTROL_EFFECT_MODE, CaptureRequest.CONTROL_EFFECT_MODE_AQUA)
+                }
+                R.id.filter_posterize -> {
+                    mPreviewRequestBuilder!!.set(CaptureRequest.CONTROL_EFFECT_MODE, CaptureRequest.CONTROL_EFFECT_MODE_POSTERIZE)
+                }
+            }
+
+            mPreviewRequest = mPreviewRequestBuilder!!.build()
+            mCaptureSession?.setRepeatingRequest(mPreviewRequest, mCaptureCallback, mBackgroundHandler)
+
+        } catch (ex: Exception) {
+        }
+
     }
 }
