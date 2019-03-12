@@ -1021,9 +1021,7 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
 
             mPreviewRequest = mPreviewRequestBuilder!!.build()
             mCaptureSession?.setRepeatingRequest(mPreviewRequest, mCaptureCallback, mBackgroundHandler)
-
         } catch (ex: Exception) {
         }
-
     }
 }

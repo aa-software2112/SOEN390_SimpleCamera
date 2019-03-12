@@ -59,7 +59,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     internal var mCountdownTime = 0
     internal var mBurstEnabled = false
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or
                 WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
@@ -794,6 +793,5 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             mPreview?.previewFilter(v)
         } catch (ex: Exception) {
         }
-
     }
 }
