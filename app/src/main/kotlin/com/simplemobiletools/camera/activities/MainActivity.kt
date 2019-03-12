@@ -253,12 +253,19 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             override fun onSwipeLeft() {
                 showLastMediaPreview()
             }
+            override fun onSwipeTop() {
+                toggleFilterScrollArea(false)
+            }
+            override fun onSwipeBottom() {
+                toggleFilterScrollArea(true)
+            }
         })
         toggle_flash.setOnClickListener { toggleFlash() }
         settings.setOnClickListener { launchSettings() }
         toggle_photo_video.setOnClickListener { handleTogglePhotoVideo() }
         change_resolution.setOnClickListener { handleChangeResolutionDialog() }
         countdown_toggle.setOnClickListener { toggleCountdownTimer() }
+        countdown_time_selected.setOnClickListener { toggleCountdownTimer() }
         btn_short_timer.setOnClickListener { setCountdownMode(TIMER_SHORT) }
         btn_medium_timer.setOnClickListener { setCountdownMode(TIMER_MEDIUM) }
         btn_long_timer.setOnClickListener { setCountdownMode(TIMER_LONG) }
@@ -323,14 +330,20 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     internal fun toggleCountdownModeIcon(time: Int) {
         if (mIsInCountdownMode) {
             countdown_cancel.beVisible()
+            countdown_toggle.beInvisible()
             countdown_time_selected.beVisible()
             countdown_time_selected.text = time.toString()
             toggleCountdownTimerDropdown()
         } else {
             countdown_cancel.beInvisible()
             countdown_time_selected.beInvisible()
+            countdown_toggle.beVisible()
             countdown_time_selected.text = time.toString()
         }
+    }
+
+    internal fun toggleFilterScrollArea(hide: Boolean) {
+        if (hide) filter_scroll_area.beInvisible() else filter_scroll_area.beVisible()
     }
 
     private fun showLastMediaPreview() {
@@ -406,9 +419,11 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             shutter.animate().alpha(alpha).start()
             toggle_camera.animate().alpha(alpha).start()
             toggle_photo_video.animate().alpha(alpha).start()
+            filter_scroll_area.animate().alpha(alpha).start()
             shutter.isClickable = !hide
             toggle_camera.isClickable = !hide
             toggle_photo_video.isClickable = !hide
+            filter_scroll_area.isClickable = !hide
         }
     }
 
@@ -552,6 +567,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         fadeAnim(last_image, .5f)
         fadeAnim(toggle_flash, .5f)
         fadeAnim(countdown_toggle, .5f)
+        fadeAnim(countdown_time_selected, .5f)
         fadeAnim(countdown_times, .0f)
         fadeAnim(btn_short_timer, .0f)
         fadeAnim(btn_medium_timer, .0f)
@@ -564,6 +580,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         fadeAnim(last_image, 1f)
         fadeAnim(toggle_flash, 1f)
         fadeAnim(countdown_toggle, 1f)
+        fadeAnim(countdown_time_selected, 1f)
         fadeAnim(countdown_times, 1f)
         fadeAnim(btn_short_timer, 1f)
         fadeAnim(btn_medium_timer, 1f)
