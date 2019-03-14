@@ -238,7 +238,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="130dp"
-        android:visibility="invisible">
+        android:visibility="visible">
 
         <LinearLayout
             android:id="@+id/filter_linear_layout"
