@@ -80,6 +80,11 @@ class PhotoProcessor(
                 null
             }
 
+            val GPSLongitude = exif?.getAttribute(ExifInterface.TAG_GPS_DEST_LONGITUDE)
+            val GPSLatitude = exif?.getAttribute(ExifInterface.TAG_GPS_DEST_LATITUDE)
+            println("GPSlong:"+GPSLongitude)
+            println("GPSlat:"+GPSLatitude)
+
             val orient = exif?.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
                     ?: ExifInterface.ORIENTATION_UNDEFINED
 
