@@ -89,8 +89,10 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         checkWhatsNewDialog()
         setupOrientationEventListener()
 
-        addressText = findViewById<View>(R.id.address) as TextView
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        if (findViewById<View>(R.id.address) != null) {
+            addressText = findViewById<View>(R.id.address) as TextView
+            mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        }
     }
 
     override fun onResume() {

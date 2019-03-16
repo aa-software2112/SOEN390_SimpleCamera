@@ -19,6 +19,9 @@ import android.R.attr.x
 import android.R.attr.bitmap
 import android.graphics.*
 import java.lang.Float.intBitsToFloat
+import android.graphics.Bitmap
+
+
 
 
 class PhotoProcessor(
@@ -162,12 +165,14 @@ class PhotoProcessor(
     }
 
     internal fun addLocationStamp(bitmap: Bitmap, addressText: String?): Bitmap?{
-        val canvas = Canvas(bitmap)
+        val mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
+        val canvas = Canvas(mutableBitmap)
         val paint = Paint()
-        paint.setColor(Color.BLACK)
-        paint.setTextSize(10F)
-        canvas.drawText(addressText, intBitsToFloat(x), intBitsToFloat(y), paint)
-        return bitmap
+        paint.setColor(Color.WHITE)
+        paint.setTextSize(30F)
+        canvas.rotate(-90F, 190F,90F)
+        canvas.drawText(addressText, 30F, 30F, paint)
+        return mutableBitmap
     }
 
     override fun onPostExecute(path: String) {
