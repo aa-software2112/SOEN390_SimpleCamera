@@ -66,6 +66,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     internal var mCountdownTime = 0
     internal var mBurstEnabled = false
 
+    internal var mIsInGpsMode = false
     internal var mFusedLocationClient: FusedLocationProviderClient? = null
     internal var mLastLocation: Location? = null
     internal var addressText: TextView? = null

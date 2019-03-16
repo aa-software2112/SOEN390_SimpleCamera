@@ -1,8 +1,5 @@
 package com.simplemobiletools.camera.helpers
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Matrix
 import android.media.ExifInterface
 import android.net.Uri
 import android.os.AsyncTask
@@ -17,6 +14,12 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.OutputStream
+import android.R.attr.y
+import android.R.attr.x
+import android.R.attr.bitmap
+import android.graphics.*
+import java.lang.Float.intBitsToFloat
+
 
 class PhotoProcessor(
     val activity: MainActivity,
@@ -96,6 +99,10 @@ class PhotoProcessor(
                 image = rotate(image, totalRotation)
             }
 
+            if (activity.addressLine!!.isNotEmpty()){
+                image = addLocationStamp(image, activity.addressLine)
+            }
+
             if (isUsingFrontCamera && activity.config.flipPhotos) {
                 val matrix = Matrix()
                 if (path.startsWith(activity.internalStoragePath)) {
@@ -152,6 +159,15 @@ class PhotoProcessor(
             activity.showErrorToast(e.toString())
         }
         return null
+    }
+
+    internal fun addLocationStamp(bitmap: Bitmap, addressText: String?): Bitmap?{
+        val canvas = Canvas(bitmap)
+        val paint = Paint()
+        paint.setColor(Color.BLACK)
+        paint.setTextSize(10F)
+        canvas.drawText(addressText, intBitsToFloat(x), intBitsToFloat(y), paint)
+        return bitmap
     }
 
     override fun onPostExecute(path: String) {
