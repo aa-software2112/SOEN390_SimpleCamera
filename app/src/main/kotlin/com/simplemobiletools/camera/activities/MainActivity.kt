@@ -26,12 +26,18 @@ import com.simplemobiletools.commons.helpers.* // ktlint-disable no-wildcard-imp
 import com.simplemobiletools.commons.models.Release
 import kotlinx.android.synthetic.main.activity_main.* // ktlint-disable no-wildcard-imports
 import android.os.CountDownTimer
-import kotlinx.android.synthetic.main.activity_main.view.*
-import kotlinx.android.synthetic.main.activity_settings.*
 import com.simplemobiletools.camera.implementations.OnSwipeTouchListener
 import com.simplemobiletools.camera.R
 import android.view.MotionEvent
 import android.view.View.OnTouchListener
+
+
+import android.location.Location
+import android.annotation.SuppressLint
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import android.view.View
+import android.widget.TextView
 
 class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     private val FADE_DELAY = 6000L // in milliseconds
@@ -59,6 +65,11 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     internal var mCountdownTime = 0
     internal var mBurstEnabled = false
 
+    internal var mFusedLocationClient: FusedLocationProviderClient? = null
+    protected var mLastLocation: Location? = null
+    private var mLatitudeText: TextView? = null
+    private var mLongitudeText: TextView? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or
                 WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
@@ -75,6 +86,11 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         supportActionBar?.hide()
         checkWhatsNewDialog()
         setupOrientationEventListener()
+
+
+        mLatitudeText = findViewById<View>(R.id.latitude) as TextView
+        mLongitudeText = findViewById<View>(R.id.longitude) as TextView
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
     }
 
     override fun onResume() {
@@ -97,6 +113,8 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             mOrientationEventListener.enable()
         }
         handleGridLine()
+
+        getLastLocation()
     }
 
     override fun onPause() {
@@ -784,5 +802,20 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     internal fun showGridLine() {
         gridline.beVisible()
+    }
+
+    /**
+     * Need to have permission first to be able to get location: TURN ON LOCATION FOR APP
+     */
+    @SuppressLint("MissingPermission")
+    private fun getLastLocation() {
+        mFusedLocationClient!!.lastLocation
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful && task.result != null) {
+                        mLastLocation = task.result
+                        mLatitudeText!!.setText("latitude:   "+ (mLastLocation )!!.latitude)
+                        mLongitudeText!!.setText("longitude:   "+ (mLastLocation )!!.longitude)
+                    }
+                }
     }
 }
