@@ -31,7 +31,6 @@ import com.simplemobiletools.camera.R
 import android.view.MotionEvent
 import android.view.View.OnTouchListener
 
-
 import android.location.Location
 import android.annotation.SuppressLint
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -86,7 +85,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         supportActionBar?.hide()
         checkWhatsNewDialog()
         setupOrientationEventListener()
-
 
         mLatitudeText = findViewById<View>(R.id.latitude) as TextView
         mLongitudeText = findViewById<View>(R.id.longitude) as TextView
@@ -813,8 +811,8 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful && task.result != null) {
                         mLastLocation = task.result
-                        mLatitudeText!!.setText("latitude:   "+ (mLastLocation )!!.latitude)
-                        mLongitudeText!!.setText("longitude:   "+ (mLastLocation )!!.longitude)
+                        mLatitudeText!!.setText("latitude:   " + (mLastLocation)!!.latitude)
+                        mLongitudeText!!.setText("longitude:   " + (mLastLocation)!!.longitude)
                     }
                 }
     }
