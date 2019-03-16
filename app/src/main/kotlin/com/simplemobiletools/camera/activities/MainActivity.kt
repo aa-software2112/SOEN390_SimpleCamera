@@ -30,13 +30,15 @@ import com.simplemobiletools.camera.implementations.OnSwipeTouchListener
 import com.simplemobiletools.camera.R
 import android.view.MotionEvent
 import android.view.View.OnTouchListener
-
 import android.location.Location
 import android.annotation.SuppressLint
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import android.view.View
 import android.widget.TextView
+import android.location.Geocoder
+import android.location.Address
+import java.util.Locale
 
 class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     private val FADE_DELAY = 6000L // in milliseconds
@@ -65,9 +67,9 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     internal var mBurstEnabled = false
 
     internal var mFusedLocationClient: FusedLocationProviderClient? = null
-    protected var mLastLocation: Location? = null
-    private var mLatitudeText: TextView? = null
-    private var mLongitudeText: TextView? = null
+    internal var mLastLocation: Location? = null
+    internal var addressText: TextView? = null
+    internal var addressLine: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or
@@ -86,8 +88,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         checkWhatsNewDialog()
         setupOrientationEventListener()
 
-        mLatitudeText = findViewById<View>(R.id.latitude) as TextView
-        mLongitudeText = findViewById<View>(R.id.longitude) as TextView
+        addressText = findViewById<View>(R.id.address) as TextView
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
     }
 
@@ -806,13 +807,29 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
      * Need to have permission first to be able to get location: TURN ON LOCATION FOR APP
      */
     @SuppressLint("MissingPermission")
-    private fun getLastLocation() {
+    internal fun getLastLocation() {
+        val geocoder = Geocoder(this, Locale.getDefault())
+        var addresses: List<Address>
+        var latitude: Double
+        var longitude: Double
+
         mFusedLocationClient!!.lastLocation
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful && task.result != null) {
+
+                        // Record location information into variable mLastLocation
                         mLastLocation = task.result
-                        mLatitudeText!!.setText("latitude:   " + (mLastLocation)!!.latitude)
-                        mLongitudeText!!.setText("longitude:   " + (mLastLocation)!!.longitude)
+
+                        // Get the latitude and longitude from mLastLocation
+                        latitude = mLastLocation!!.latitude
+                        longitude = mLastLocation!!.longitude
+
+                        // Transform latitude and longitude into address -- maxResults = 1 just because we want to fetch 1 address. Can be changed to more if desired
+                        addresses = geocoder.getFromLocation(latitude, longitude, 1)
+
+                        // Get the first address in the array and display it
+                        addressLine = addresses[0].getAddressLine(0)
+                        addressText!!.setText("Address:" + addressLine)
                     }
                 }
     }
