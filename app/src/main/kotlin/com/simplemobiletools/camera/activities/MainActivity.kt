@@ -45,7 +45,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     internal lateinit var mBurstRunnable: Runnable
     internal lateinit var mBurstModeSetup: Runnable
 
-    private var mSupportedFilter: IntArray? =null
+    private var mSupportedFilter: IntArray? = null
     private var mPreview: MyPreview? = null
     private var mPreviewUri: Uri? = null
     internal var mIsInPhotoMode = false
@@ -795,15 +795,34 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         }
     }
 
-    fun showAvailableFilters(){
-        if(mSupportedFilter?.get(0) == null) filter_none.beGone()
-        if(mSupportedFilter?.get(1) == null) filter_mono.beGone()
-        if(mSupportedFilter?.get(2) == null) filter_negative.beGone()
-        if(mSupportedFilter?.get(3) == null) filter_solarize.beGone()
-        if(mSupportedFilter?.get(4) == null) filter_sepia.beGone()
-        if(mSupportedFilter?.get(5) == null) filter_posterize.beGone()
-        if(mSupportedFilter?.get(6) == null) filter_whiteboard.beGone()
-        if(mSupportedFilter?.get(7) == null) filter_blackboard.beGone()
-        if(mSupportedFilter?.get(8) == null) filter_aqua.beGone()
+    fun showAvailableFilters() {
+
+        if (mSupportedFilter?.get(0) == null) filter_none.beGone()
+        else filter_none.beVisible()
+
+        if (mSupportedFilter?.get(1) == null) filter_mono.beGone()
+        else filter_mono.beVisible()
+
+        if (mSupportedFilter?.get(2) == null) filter_negative.beGone()
+        else filter_negative.beVisible()
+
+        if (mSupportedFilter?.get(3) == null) filter_solarize.beGone()
+        else filter_solarize.beVisible()
+
+        if (mSupportedFilter?.get(4) == null) filter_sepia.beGone()
+        else filter_sepia.beVisible()
+
+        if (mSupportedFilter?.get(5) == null) filter_posterize.beGone()
+        else filter_posterize.beVisible()
+
+        if (mSupportedFilter?.get(6) == null) filter_whiteboard.beGone()
+        else filter_whiteboard.beVisible()
+
+        if (mSupportedFilter?.get(7) == null) filter_blackboard.beGone()
+        else filter_blackboard.beVisible()
+
+        if (mSupportedFilter?.get(8) == null) filter_aqua.beGone()
+        else filter_aqua.beVisible()
+
     }
 }
