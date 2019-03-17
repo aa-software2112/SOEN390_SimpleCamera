@@ -37,4 +37,6 @@ interface MyPreview {
     fun getUITestPhotoTaken(): Boolean
 
     fun previewFilter(v: View)
+
+    fun getAvailableFilters(): IntArray
 }

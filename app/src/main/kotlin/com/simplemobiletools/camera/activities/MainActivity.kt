@@ -45,6 +45,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     internal lateinit var mBurstRunnable: Runnable
     internal lateinit var mBurstModeSetup: Runnable
 
+    private var mSupportedFilter: IntArray? =null
     private var mPreview: MyPreview? = null
     private var mPreviewUri: Uri? = null
     internal var mIsInPhotoMode = false
@@ -130,7 +131,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         mCameraImpl = MyCameraImpl(applicationContext)
         mIsInCountdownMode = false
         mCountdownTime = 0
-
         mBurstHandler = Handler()
 
         mBurstModeSetup = Runnable {
@@ -243,6 +243,8 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         val initialFlashlightState = if (config.turnFlashOffAtStartup) FLASH_OFF else config.flashlightState
         mPreview!!.setFlashlightState(initialFlashlightState)
         updateFlashlightState(initialFlashlightState)
+
+        mSupportedFilter = mPreview?.getAvailableFilters()
     }
 
     internal fun initButtons() {
@@ -297,6 +299,16 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                 return false
             }
         })
+
+        if(mSupportedFilter?.get(0) == null) filter_none.beGone()
+        if(mSupportedFilter?.get(1) == null) filter_mono.beGone()
+        if(mSupportedFilter?.get(2) == null) filter_negative.beGone()
+        if(mSupportedFilter?.get(3) == null) filter_solarize.beGone()
+        if(mSupportedFilter?.get(4) == null) filter_sepia.beGone()
+        if(mSupportedFilter?.get(5) == null) filter_posterize.beGone()
+        if(mSupportedFilter?.get(6) == null) filter_whiteboard.beGone()
+        if(mSupportedFilter?.get(7) == null) filter_blackboard.beGone()
+        if(mSupportedFilter?.get(8) == null) filter_aqua.beGone()
     }
 
     private fun toggleCamera() {
