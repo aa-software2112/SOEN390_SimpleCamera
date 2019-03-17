@@ -510,7 +510,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     internal fun checkButtons() {
         if (mIsInPhotoMode) {
             initPhotoMode()
-            hideNotAvailableFilters()
         } else {
             tryInitVideoMode()
         }
