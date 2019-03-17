@@ -20,6 +20,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
+import java.lang.Float.intBitsToFloat
 
 class PhotoProcessor(
     val activity: MainActivity,
@@ -166,11 +167,13 @@ class PhotoProcessor(
         val paint = Paint()
         paint.setColor(Color.WHITE)
         paint.setTextSize(90F)
+        val width = mutableBitmap.getScaledWidth(canvas)/2
+        val floatWidth = width.toFloat()
         val addressDisplay = addressText!!.split(',')
         val addressSpecific = addressDisplay[0] + "," + addressDisplay[1]
-        canvas.drawText(addressSpecific, 1800F, 400F, paint)
+        canvas.drawText(addressSpecific, floatWidth, 600F, paint)
         paint.setTextSize(60F)
-        canvas.drawText(addressCoordinates, 1800F, 450F, paint)
+        canvas.drawText(addressCoordinates, floatWidth, 700F, paint)
         return mutableBitmap
     }
 

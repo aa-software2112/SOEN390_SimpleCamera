@@ -833,7 +833,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                         // Get the first address in the array and display it
                         addressLine = addresses[0].getAddressLine(0)
                         addressText!!.setText("Address:" + addressLine)
-                        addressCoordinates = latitude.toString() + "N," + longitude.toString() + "E"
+                        addressCoordinates = latitude.toString().dropLast(3) + "N," + longitude.toString().dropLast(3) + "E"
                     }
                 }
     }
