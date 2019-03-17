@@ -1,7 +1,6 @@
 package com.simplemobiletools.camera.interfaces
 
 import android.net.Uri
-import android.view.View
 
 interface MyPreview {
     fun onResumed()

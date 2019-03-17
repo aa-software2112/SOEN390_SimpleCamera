@@ -993,11 +993,9 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
     override fun previewFilter(index: Int) {
         try {
 
-
             mPreviewRequestBuilder!!.set(CaptureRequest.CONTROL_EFFECT_MODE, index)
             mPreviewRequest = mPreviewRequestBuilder!!.build()
             mCaptureSession?.setRepeatingRequest(mPreviewRequest, mCaptureCallback, mBackgroundHandler)
-
         } catch (ex: Exception) {
         }
     }
