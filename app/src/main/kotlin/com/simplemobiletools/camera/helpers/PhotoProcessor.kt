@@ -20,7 +20,6 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
-import java.lang.Float.intBitsToFloat
 
 class PhotoProcessor(
     val activity: MainActivity,

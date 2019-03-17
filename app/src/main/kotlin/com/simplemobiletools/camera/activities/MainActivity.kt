@@ -66,9 +66,9 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     internal var mCountdownTime = 0
     internal var mBurstEnabled = false
 
+    internal var mIsInGPSMode = false
     internal var mFusedLocationClient: FusedLocationProviderClient? = null
     internal var mLastLocation: Location? = null
-    internal var addressText: TextView? = null
     internal var addressLine: String? = null
     internal var addressCoordinates: String? = null
 
@@ -89,10 +89,11 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         checkWhatsNewDialog()
         setupOrientationEventListener()
 
-        if (findViewById<View>(R.id.address) != null) {
-            addressText = findViewById<View>(R.id.address) as TextView
+        /*if (mIsInGPSMode) {
+
             mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        }
+        }*/
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
     }
 
     override fun onResume() {
@@ -152,6 +153,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         mCameraImpl = MyCameraImpl(applicationContext)
         mIsInCountdownMode = false
         mCountdownTime = 0
+        mIsInGPSMode = config.gpsTaggingOn
 
         mBurstHandler = Handler()
 
@@ -832,7 +834,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
                         // Get the first address in the array and display it
                         addressLine = addresses[0].getAddressLine(0)
-                        addressText!!.setText("Address:" + addressLine)
                         addressCoordinates = latitude.toString().dropLast(3) + "N," + longitude.toString().dropLast(3) + "E"
                     }
                 }
