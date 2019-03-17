@@ -18,5 +18,7 @@ jobs:
       language: android
       before_script: chmod +x gradlew
       script: 
+        - ls
         - ./gradlew jacocoTestReport
-        - cd /displayJacoco/dist/ && ./output_jacoco_metrics.exe
+        - cd TRAVIS_BUILD_DIR/displayJacoco/dist/
+        - ./output_jacoco_metrics.exe
