@@ -17,4 +17,6 @@ jobs:
     - stage: tests
       language: android
       before_script: chmod +x gradlew
-      script: ./gradlew testDebugUnitTestExtended
+      script: 
+        - ./gradlew jacocoTestReport
+        - cd /displayJacoco/dist/ && ./output_jacoco_metrics.exe
