@@ -6,6 +6,7 @@ import android.os.AsyncTask
 import android.os.Environment
 import com.simplemobiletools.camera.R
 import com.simplemobiletools.camera.activities.MainActivity
+import com.simplemobiletools.camera.BuildConfig
 import com.simplemobiletools.camera.extensions.config
 import com.simplemobiletools.camera.extensions.getOutputMediaFile
 import com.simplemobiletools.commons.extensions.* // ktlint-disable no-wildcard-imports
@@ -14,14 +15,9 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.OutputStream
-import android.R.attr.y
-import android.R.attr.x
-import android.R.attr.bitmap
 import android.graphics.*
-import java.lang.Float.intBitsToFloat
 import android.graphics.Bitmap
-
-
+import java.lang.Float.intBitsToFloat
 
 
 class PhotoProcessor(
@@ -101,9 +97,8 @@ class PhotoProcessor(
                 // make sure the image itself is rotated at third party intents
                 image = rotate(image, totalRotation)
             }
-
             if (activity.addressLine!!.isNotEmpty()){
-                image = addLocationStamp(image, activity.addressLine)
+                image = addLocationStamp(image, activity.addressLine, activity.addressCoordinates)
             }
 
             if (isUsingFrontCamera && activity.config.flipPhotos) {
@@ -164,14 +159,17 @@ class PhotoProcessor(
         return null
     }
 
-    internal fun addLocationStamp(bitmap: Bitmap, addressText: String?): Bitmap?{
+    internal fun addLocationStamp(bitmap: Bitmap, addressText: String?, addressCoordinates: String?): Bitmap? {
         val mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
         val canvas = Canvas(mutableBitmap)
         val paint = Paint()
         paint.setColor(Color.WHITE)
-        paint.setTextSize(30F)
-        canvas.rotate(-90F, 190F,90F)
-        canvas.drawText(addressText, 30F, 30F, paint)
+        paint.setTextSize(90F)
+        val addressDisplay = addressText!!.split(',')
+        val addressSpecific = addressDisplay[0] + "," + addressDisplay[1]
+        canvas.drawText(addressSpecific, 1800F, 400F, paint);
+        paint.setTextSize(60F)
+        canvas.drawText(addressCoordinates, 1800F, 450F, paint);
         return mutableBitmap
     }
 
