@@ -315,7 +315,7 @@
                 android:layout_height="wrap_content"
                 android:onClick="colorEffectFilter"
                 android:padding="10dp"
-                android:text="Posterize" />
+                android:text="Blackboard" />
 
 
         </LinearLayout>
