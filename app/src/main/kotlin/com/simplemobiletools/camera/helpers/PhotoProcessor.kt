@@ -6,7 +6,6 @@ import android.os.AsyncTask
 import android.os.Environment
 import com.simplemobiletools.camera.R
 import com.simplemobiletools.camera.activities.MainActivity
-import com.simplemobiletools.camera.BuildConfig
 import com.simplemobiletools.camera.extensions.config
 import com.simplemobiletools.camera.extensions.getOutputMediaFile
 import com.simplemobiletools.commons.extensions.* // ktlint-disable no-wildcard-imports
@@ -15,10 +14,7 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.OutputStream
-import android.graphics.*
 import android.graphics.Bitmap
-import java.lang.Float.intBitsToFloat
-
 
 class PhotoProcessor(
     val activity: MainActivity,
@@ -97,7 +93,7 @@ class PhotoProcessor(
                 // make sure the image itself is rotated at third party intents
                 image = rotate(image, totalRotation)
             }
-            if (activity.addressLine!!.isNotEmpty()){
+            if (activity.addressLine!!.isNotEmpty()) {
                 image = addLocationStamp(image, activity.addressLine, activity.addressCoordinates)
             }
 
@@ -167,9 +163,9 @@ class PhotoProcessor(
         paint.setTextSize(90F)
         val addressDisplay = addressText!!.split(',')
         val addressSpecific = addressDisplay[0] + "," + addressDisplay[1]
-        canvas.drawText(addressSpecific, 1800F, 400F, paint);
+        canvas.drawText(addressSpecific, 1800F, 400F, paint)
         paint.setTextSize(60F)
-        canvas.drawText(addressCoordinates, 1800F, 450F, paint);
+        canvas.drawText(addressCoordinates, 1800F, 450F, paint)
         return mutableBitmap
     }
 

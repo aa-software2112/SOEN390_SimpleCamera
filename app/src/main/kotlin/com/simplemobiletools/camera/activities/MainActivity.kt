@@ -65,12 +65,12 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     internal var mIsInCountdownMode = false
     internal var mCountdownTime = 0
     internal var mBurstEnabled = false
-    
+
     internal var mFusedLocationClient: FusedLocationProviderClient? = null
     internal var mLastLocation: Location? = null
     internal var addressText: TextView? = null
     internal var addressLine: String? = null
-    internal var addressCoordinates : String? = null
+    internal var addressCoordinates: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or
