@@ -15,6 +15,11 @@ import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.OutputStream
 import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.BitmapFactory
+import android.graphics.Matrix
 
 class PhotoProcessor(
     val activity: MainActivity,
