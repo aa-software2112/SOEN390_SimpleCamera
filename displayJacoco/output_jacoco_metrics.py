@@ -1,11 +1,6 @@
 import xml.etree.ElementTree as ET
 import os
-from enum import Enum
 from sys import exit
-
-class RETURN_CODES(Enum):
-    FAIL = 1
-    SUCCESS = 0
 
 
 total_instructions_missed = 0
@@ -79,7 +74,7 @@ EXTRA_BACK_REF = "../" if "dist" in os.getcwd() else ""
 REL_PATH_TO_JACOCO_XML = EXTRA_BACK_REF + "../app/build/reports/jacoco/jacocoTestReport/" + "jacocoTestReport.xml"
 
 if not os.path.isfile(REL_PATH_TO_JACOCO_XML):
-    exit(RETURN_CODES.FAIL.value)
+    exit(1)
 
 tree = ET.parse(REL_PATH_TO_JACOCO_XML)
 root = tree.getroot()
@@ -113,4 +108,4 @@ for child in root:
 print_alt("")
 display_total()
 
-exit(RETURN_CODES.SUCCESS.value)
+exit(0)
