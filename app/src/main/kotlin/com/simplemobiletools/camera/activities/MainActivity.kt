@@ -343,7 +343,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     }
 
     internal fun toggleFilterScrollArea(hide: Boolean) {
-        if (hide) filter_scroll_area.beInvisible() else filter_scroll_area.beVisible()
+        if (mIsInPhotoMode && !hide) filter_scroll_area.beVisible() else filter_scroll_area.beInvisible()
     }
 
     private fun showLastMediaPreview() {
@@ -506,8 +506,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         toggle_photo_video.setImageResource(R.drawable.ic_video)
         shutter.setImageResource(R.drawable.ic_shutter)
         countdown_toggle.beVisible()
-        filter_scroll_area.beVisible()
-        toggleFilterScrollArea(false)
         mPreview?.initPhotoMode()
         setupPreviewImage(true)
     }
@@ -527,7 +525,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         countdown_toggle.beInvisible()
         countdown_times.beInvisible()
         filter_scroll_area.beInvisible()
-        toggleFilterScrollArea(true)
         showToggleCameraIfNeeded()
         shutter.setImageResource(R.drawable.ic_video_rec)
         setupPreviewImage(false)
