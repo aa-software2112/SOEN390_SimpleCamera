@@ -269,7 +269,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         btn_short_timer.setOnClickListener { setCountdownMode(TIMER_SHORT) }
         btn_medium_timer.setOnClickListener { setCountdownMode(TIMER_MEDIUM) }
         btn_long_timer.setOnClickListener { setCountdownMode(TIMER_LONG) }
-        filter_scroll_area.setOnClickListener { }
 
         shutter.setOnTouchListener(object : OnTouchListener {
             override fun onTouch(view: View, event: MotionEvent): Boolean {
@@ -508,6 +507,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         shutter.setImageResource(R.drawable.ic_shutter)
         countdown_toggle.beVisible()
         filter_scroll_area.beVisible()
+        toggleFilterScrollArea(false)
         mPreview?.initPhotoMode()
         setupPreviewImage(true)
     }
@@ -527,6 +527,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         countdown_toggle.beInvisible()
         countdown_times.beInvisible()
         filter_scroll_area.beInvisible()
+        toggleFilterScrollArea(true)
         showToggleCameraIfNeeded()
         shutter.setImageResource(R.drawable.ic_video_rec)
         setupPreviewImage(false)
