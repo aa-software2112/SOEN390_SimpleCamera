@@ -243,6 +243,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         val initialFlashlightState = if (config.turnFlashOffAtStartup) FLASH_OFF else config.flashlightState
         mPreview!!.setFlashlightState(initialFlashlightState)
         updateFlashlightState(initialFlashlightState)
+
     }
 
     internal fun initButtons() {
@@ -297,6 +298,16 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                 return false
             }
         })
+
+        filter_none.beGone()
+        filter_mono.beGone()
+        filter_negative.beGone()
+        filter_solarize.beGone()
+        filter_sepia.beGone()
+        filter_posterize.beGone()
+        filter_whiteboard.beGone()
+        filter_blackboard.beGone()
+        filter_aqua.beGone()
     }
 
     private fun toggleCamera() {
@@ -343,7 +354,10 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     }
 
     internal fun toggleFilterScrollArea(hide: Boolean) {
-        if (mIsInPhotoMode && !hide) filter_scroll_area.beVisible() else filter_scroll_area.beInvisible()
+        if (mIsInPhotoMode && !hide) {
+            filter_scroll_area.beVisible()
+            hideNotAvailableFilters()
+        } else filter_scroll_area.beInvisible()
     }
 
     private fun showLastMediaPreview() {
@@ -790,22 +804,74 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     fun colorEffectFilter(v: View) {
         try {
-            mPreview?.previewFilter(v)
+            var index = 0
+            when (v.id) {
+                R.id.filter_none -> {
+                    index = 0
+                }
+                R.id.filter_mono -> {
+                    index = 1
+                }
+                R.id.filter_negative -> {
+                    index = 2
+                }
+                R.id.filter_solarize -> {
+                    index = 3
+                }
+                R.id.filter_sepia -> {
+                    index = 4
+                }
+                R.id.filter_posterize -> {
+                    index = 5
+                }
+                R.id.filter_whiteboard -> {
+                    index = 6
+                }
+                R.id.filter_blackboard -> {
+                    index = 7
+                }
+                R.id.filter_aqua -> {
+                    index = 8
+                }
+            }
+            mPreview?.previewFilter(index)
+
         } catch (ex: Exception) {
         }
     }
 
     fun hideNotAvailableFilters() {
 
-        if (mSupportedFilter?.get(0) == null) filter_none.beGone()
-        if (mSupportedFilter?.get(1) == null) filter_mono.beGone()
-        if (mSupportedFilter?.get(2) == null) filter_negative.beGone()
-        if (mSupportedFilter?.get(3) == null) filter_solarize.beGone()
-        if (mSupportedFilter?.get(4) == null) filter_sepia.beGone()
-        if (mSupportedFilter?.get(5) == null) filter_posterize.beGone()
-        if (mSupportedFilter?.get(6) == null) filter_whiteboard.beGone()
-        if (mSupportedFilter?.get(7) == null) filter_blackboard.beGone()
-        if (mSupportedFilter?.get(8) == null) filter_aqua.beGone()
-
+        for (i in mPreview?.getAvailableFilters()!!.indices) {
+            when (i) {
+                0 -> {
+                    filter_none.beVisible()
+                }
+                1 -> {
+                    filter_mono.beVisible()
+                }
+                2 -> {
+                    filter_negative.beVisible()
+                }
+                3 -> {
+                    filter_solarize.beVisible()
+                }
+                4 -> {
+                    filter_sepia.beVisible()
+                }
+                5 -> {
+                    filter_posterize.beVisible()
+                }
+                6 -> {
+                    filter_whiteboard.beVisible()
+                }
+                7 -> {
+                    filter_blackboard.beVisible()
+                }
+                8 -> {
+                    filter_aqua.beVisible()
+                }
+            }
+        }
     }
 }

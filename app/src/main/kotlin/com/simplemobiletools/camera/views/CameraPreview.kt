@@ -990,51 +990,22 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
         return mUITestPhotoTaken
     }
 
-    override fun previewFilter(v: View) {
+    override fun previewFilter(index: Int) {
         try {
 
-            val  supported = getAvailableFilters()
 
-            when (v.id) {
-                R.id.filter_none -> {
-                    mPreviewRequestBuilder!!.set(CaptureRequest.CONTROL_EFFECT_MODE, supported[0])
-                }
-                R.id.filter_mono -> {
-                    mPreviewRequestBuilder!!.set(CaptureRequest.CONTROL_EFFECT_MODE, supported[1])
-                }
-                R.id.filter_negative -> {
-                    mPreviewRequestBuilder!!.set(CaptureRequest.CONTROL_EFFECT_MODE, supported[2])
-                }
-                R.id.filter_solarize -> {
-                    mPreviewRequestBuilder!!.set(CaptureRequest.CONTROL_EFFECT_MODE, supported[3])
-                }
-                R.id.filter_sepia -> {
-                    mPreviewRequestBuilder!!.set(CaptureRequest.CONTROL_EFFECT_MODE, supported[4])
-                }
-                R.id.filter_posterize -> {
-                    mPreviewRequestBuilder!!.set(CaptureRequest.CONTROL_EFFECT_MODE, supported[5])
-                }
-                R.id.filter_whiteboard -> {
-                    mPreviewRequestBuilder!!.set(CaptureRequest.CONTROL_EFFECT_MODE,supported[6])
-                }
-                R.id.filter_blackboard -> {
-                    mPreviewRequestBuilder!!.set(CaptureRequest.CONTROL_EFFECT_MODE, supported[7])
-                }
-                R.id.filter_aqua -> {
-                    mPreviewRequestBuilder!!.set(CaptureRequest.CONTROL_EFFECT_MODE, supported[8])
-                }
-            }
-
+            mPreviewRequestBuilder!!.set(CaptureRequest.CONTROL_EFFECT_MODE, index)
             mPreviewRequest = mPreviewRequestBuilder!!.build()
             mCaptureSession?.setRepeatingRequest(mPreviewRequest, mCaptureCallback, mBackgroundHandler)
+
         } catch (ex: Exception) {
         }
     }
 
-    override fun getAvailableFilters(): IntArray{
+    override fun getAvailableFilters(): IntArray {
 
         val characteristics = this.getCameraCharacteristics()
-        val  supported = characteristics.get(CameraCharacteristics.CONTROL_AVAILABLE_EFFECTS)
+        val supported = characteristics.get(CameraCharacteristics.CONTROL_AVAILABLE_EFFECTS)
 
         return supported
     }
