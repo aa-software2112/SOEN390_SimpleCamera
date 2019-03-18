@@ -1,6 +1,5 @@
 package test.kotlin
 
-import com.simplemobiletools.camera.R
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -56,5 +55,4 @@ class GPSUnitTest : KotlinRobolectric() {
         Assert.assertNotEquals("", mMainActivity?.addressSecondLine)
         Assert.assertNotEquals("", mMainActivity?.addressCoordinates)
     }
-
 }
