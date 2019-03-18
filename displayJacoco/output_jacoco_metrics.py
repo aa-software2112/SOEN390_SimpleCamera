@@ -101,7 +101,6 @@ for child in root:
                     display_package_branch(missed, covered)
                     update_branch_count(missed, covered)
                     branch_metric_exists = True
-
         if branch_metric_exists == False:
             display_na_branch()
         print_alt("")
