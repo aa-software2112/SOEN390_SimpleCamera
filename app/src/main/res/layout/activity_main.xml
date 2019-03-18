@@ -18,6 +18,20 @@
         android:layout_marginTop="0dp"
         android:layout_marginEnd="0dp" />
 
+    <LinearLayout
+        android:id="@+id/GPS"
+        android:layout_width="match_parent"
+        android:layout_height="228dp"
+        android:layout_alignBottom="@+id/btn_holder"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="224dp"
+        android:layout_marginBottom="279dp"
+        android:gravity="clip_vertical|center_horizontal|center_vertical"
+        android:orientation="horizontal">
+
+
+    </LinearLayout>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/gridline"
         android:layout_width="match_parent"

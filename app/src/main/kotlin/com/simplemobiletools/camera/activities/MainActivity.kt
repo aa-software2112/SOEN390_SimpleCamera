@@ -30,6 +30,14 @@ import com.simplemobiletools.camera.implementations.OnSwipeTouchListener
 import com.simplemobiletools.camera.R
 import android.view.MotionEvent
 import android.view.View.OnTouchListener
+import android.location.Location
+import android.annotation.SuppressLint
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import android.view.View
+import android.location.Geocoder
+import android.location.Address
+import java.util.Locale
 
 class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     private val FADE_DELAY = 6000L // in milliseconds
@@ -58,6 +66,12 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     internal var mCountdownTime = 0
     internal var mBurstEnabled = false
 
+    internal var mFusedLocationClient: FusedLocationProviderClient? = null
+    internal var mLastLocation: Location? = null
+    internal var addressFirstLine: String? = null
+    internal var addressSecondLine: String? = null
+    internal var addressCoordinates: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or
                 WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
@@ -74,6 +88,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         supportActionBar?.hide()
         checkWhatsNewDialog()
         setupOrientationEventListener()
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
     }
 
     override fun onResume() {
@@ -96,6 +111,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             mOrientationEventListener.enable()
         }
         handleGridLine()
+        handleGPS()
     }
 
     override fun onPause() {
@@ -801,6 +817,57 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         gridline.beVisible()
     }
 
+    internal fun handleGPS() {
+        if (!config.gpsTaggingOn) {
+            addressFirstLine = ""
+            addressSecondLine = ""
+            addressCoordinates = ""
+        } else
+            stampGPS()
+    }
+
+    /**
+     * Need to have permission first to be able to get location: TURN ON LOCATION FOR APP
+     */
+    @SuppressLint("MissingPermission")
+    internal fun stampGPS() {
+
+        val geocoder = Geocoder(this, Locale.getDefault())
+        var addresses: List<Address>
+        var addressNumber: String
+        var addressStreet: String
+        var addressProvince: String
+        var addressCountry: String
+        var latitude: Double
+        var longitude: Double
+
+        mFusedLocationClient!!.lastLocation
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful && task.result != null) {
+
+                        // Record location information into variable mLastLocation
+                        mLastLocation = task.result
+
+                        // Get the latitude and longitude from mLastLocation
+                        latitude = mLastLocation!!.latitude
+                        longitude = mLastLocation!!.longitude
+
+                        // Transform latitude and longitude into address -- maxResults = 1 just because we want to fetch 1 address. Can be changed to more if desired
+                        addresses = geocoder.getFromLocation(latitude, longitude, 1)
+
+                        // Parse the first address in the array
+                        addressNumber = addresses[0].featureName
+                        addressStreet = addresses[0].thoroughfare
+                        addressFirstLine = addressNumber + " " + addressStreet
+
+                        addressProvince = addresses[0].adminArea
+                        addressCountry = addresses[0].countryCode
+                        addressSecondLine = addressProvince + ", " + addressCountry
+
+                        addressCoordinates = latitude.toString().dropLast(3) + "N," + longitude.toString().dropLast(3) + "E"
+                    }
+                }
+      
     fun colorEffectFilter(v: View) {
         try {
             var index = 0
@@ -871,5 +938,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                 }
             }
         }
+      
     }
 }

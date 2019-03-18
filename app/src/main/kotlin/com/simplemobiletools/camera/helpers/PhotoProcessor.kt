@@ -1,8 +1,5 @@
 package com.simplemobiletools.camera.helpers
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Matrix
 import android.media.ExifInterface
 import android.net.Uri
 import android.os.AsyncTask
@@ -17,6 +14,12 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.OutputStream
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.BitmapFactory
+import android.graphics.Matrix
 
 class PhotoProcessor(
     val activity: MainActivity,
@@ -95,6 +98,9 @@ class PhotoProcessor(
                 // make sure the image itself is rotated at third party intents
                 image = rotate(image, totalRotation)
             }
+            if (activity.addressFirstLine != "" && activity.addressSecondLine != "" && activity.addressCoordinates != "") {
+                image = addLocationStamp(image, activity.addressFirstLine, activity.addressSecondLine, activity.addressCoordinates)
+            }
 
             if (isUsingFrontCamera && activity.config.flipPhotos) {
                 val matrix = Matrix()
@@ -152,6 +158,26 @@ class PhotoProcessor(
             activity.showErrorToast(e.toString())
         }
         return null
+    }
+
+    internal fun addLocationStamp(bitmap: Bitmap, addressFirstLine: String?, addressSecondLine: String?, addressCoordinates: String?): Bitmap? {
+
+        val mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
+        val canvas = Canvas(mutableBitmap)
+        val paint = Paint()
+        paint.setColor(Color.WHITE)
+        paint.setTextSize(90F)
+
+        val width = mutableBitmap.getScaledWidth(canvas) - mutableBitmap.getScaledWidth(canvas) + 50F
+        val floatWidth = width.toFloat()
+
+        canvas.drawText(addressFirstLine, floatWidth, 150F, paint)
+        canvas.drawText(addressSecondLine, floatWidth, 250F, paint)
+
+        paint.setTextSize(60F)
+        canvas.drawText(addressCoordinates, floatWidth, 350F, paint)
+
+        return mutableBitmap
     }
 
     override fun onPostExecute(path: String) {
