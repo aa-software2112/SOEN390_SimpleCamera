@@ -1,17 +1,9 @@
 package test.kotlin
 
-import android.view.View
-import android.widget.ImageView
-import com.nhaarman.mockito_kotlin.verify
-import com.simplemobiletools.camera.R
-import kotlinx.android.synthetic.main.activity_settings.*
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import com.simplemobiletools.camera.interfaces.MyPreview
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
 
 @RunWith(RobolectricTestRunner::class)
 class GPSUnitTest : KotlinRobolectric() {
@@ -53,7 +45,6 @@ class GPSUnitTest : KotlinRobolectric() {
         /*
         * Testing if GPS feature is toggled ON, then stampGPS method is called
         */
-
     }
 
     @Test
