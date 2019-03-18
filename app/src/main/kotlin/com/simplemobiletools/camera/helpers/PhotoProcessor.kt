@@ -166,7 +166,7 @@ class PhotoProcessor(
         val paint = Paint()
         paint.setColor(Color.WHITE)
         paint.setTextSize(90F)
-        val width = mutableBitmap.getScaledWidth(canvas)/2
+        val width = mutableBitmap.getScaledWidth(canvas) / 2
         val floatWidth = width.toFloat()
         val addressDisplay = addressText!!.split(',')
         val addressSpecific = addressDisplay[0] + "," + addressDisplay[1]

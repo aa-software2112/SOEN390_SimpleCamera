@@ -35,7 +35,6 @@ import android.annotation.SuppressLint
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import android.view.View
-import android.widget.TextView
 import android.location.Geocoder
 import android.location.Address
 import java.util.Locale
