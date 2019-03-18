@@ -34,4 +34,8 @@ interface MyPreview {
     fun checkFlashlight()
 
     fun getUITestPhotoTaken(): Boolean
+
+    fun previewFilter(index: Int)
+
+    fun getAvailableFilters(): IntArray
 }

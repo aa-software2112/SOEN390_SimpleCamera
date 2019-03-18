@@ -53,6 +53,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     internal lateinit var mBurstRunnable: Runnable
     internal lateinit var mBurstModeSetup: Runnable
 
+    private var mSupportedFilter: IntArray? = null
     private var mPreview: MyPreview? = null
     private var mPreviewUri: Uri? = null
     internal var mIsInPhotoMode = false
@@ -146,7 +147,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         mCameraImpl = MyCameraImpl(applicationContext)
         mIsInCountdownMode = false
         mCountdownTime = 0
-
         mBurstHandler = Handler()
 
         mBurstModeSetup = Runnable {
@@ -267,9 +267,11 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             override fun onSwipeLeft() {
                 showLastMediaPreview()
             }
+
             override fun onSwipeTop() {
                 toggleFilterScrollArea(false)
             }
+
             override fun onSwipeBottom() {
                 toggleFilterScrollArea(true)
             }
@@ -311,6 +313,16 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                 return false
             }
         })
+
+        filter_none.beGone()
+        filter_mono.beGone()
+        filter_negative.beGone()
+        filter_solarize.beGone()
+        filter_sepia.beGone()
+        filter_posterize.beGone()
+        filter_whiteboard.beGone()
+        filter_blackboard.beGone()
+        filter_aqua.beGone()
     }
 
     private fun toggleCamera() {
@@ -357,7 +369,10 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     }
 
     internal fun toggleFilterScrollArea(hide: Boolean) {
-        if (hide) filter_scroll_area.beInvisible() else filter_scroll_area.beVisible()
+        if (mIsInPhotoMode && !mIsInCountdownMode && !hide) {
+            filter_scroll_area.beVisible()
+            hideNotAvailableFilters()
+        } else filter_scroll_area.beInvisible()
     }
 
     private fun showLastMediaPreview() {
@@ -421,6 +436,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         } else if (mIsInPhotoMode && mIsInCountdownMode) {
             toggleBottomButtons(true)
             toggleTopButtons(true)
+            toggleFilterScrollArea(true)
             startCountdown()
         } else {
             mPreview?.toggleRecording()
@@ -538,6 +554,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         toggle_photo_video.setImageResource(R.drawable.ic_camera)
         countdown_toggle.beInvisible()
         countdown_times.beInvisible()
+        filter_scroll_area.beInvisible()
         showToggleCameraIfNeeded()
         shutter.setImageResource(R.drawable.ic_video_rec)
         setupPreviewImage(false)
@@ -634,7 +651,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     internal fun startCountdown() {
         /* Starts the countdown timer and calls tryTakePicture() if it reaches 0. */
-        object : CountDownTimer(mCountdownTime*COUNTDOWN_INTERVAL, 1000) {
+        object : CountDownTimer(mCountdownTime * COUNTDOWN_INTERVAL, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 /* Cancels the countdown */
                 if (!mIsInCountdownMode) {
@@ -850,5 +867,77 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                         addressCoordinates = latitude.toString().dropLast(3) + "N," + longitude.toString().dropLast(3) + "E"
                     }
                 }
+      
+    fun colorEffectFilter(v: View) {
+        try {
+            var index = 0
+            when (v.id) {
+                R.id.filter_none -> {
+                    index = 0
+                }
+                R.id.filter_mono -> {
+                    index = 1
+                }
+                R.id.filter_negative -> {
+                    index = 2
+                }
+                R.id.filter_solarize -> {
+                    index = 3
+                }
+                R.id.filter_sepia -> {
+                    index = 4
+                }
+                R.id.filter_posterize -> {
+                    index = 5
+                }
+                R.id.filter_whiteboard -> {
+                    index = 6
+                }
+                R.id.filter_blackboard -> {
+                    index = 7
+                }
+                R.id.filter_aqua -> {
+                    index = 8
+                }
+            }
+            mPreview?.previewFilter(index)
+        } catch (ex: Exception) {
+        }
+    }
+
+    fun hideNotAvailableFilters() {
+
+        for (i in mPreview?.getAvailableFilters()!!.indices) {
+            when (i) {
+                0 -> {
+                    filter_none.beVisible()
+                }
+                1 -> {
+                    filter_mono.beVisible()
+                }
+                2 -> {
+                    filter_negative.beVisible()
+                }
+                3 -> {
+                    filter_solarize.beVisible()
+                }
+                4 -> {
+                    filter_sepia.beVisible()
+                }
+                5 -> {
+                    filter_posterize.beVisible()
+                }
+                6 -> {
+                    filter_whiteboard.beVisible()
+                }
+                7 -> {
+                    filter_blackboard.beVisible()
+                }
+                8 -> {
+                    filter_aqua.beVisible()
+                }
+            }
+        }
+      
     }
 }
