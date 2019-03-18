@@ -65,7 +65,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     internal var mCountdownTime = 0
     internal var mBurstEnabled = false
 
-    internal var mIsInGPSMode = false
     internal var mFusedLocationClient: FusedLocationProviderClient? = null
     internal var mLastLocation: Location? = null
     internal var addressLine: String? = null
@@ -87,11 +86,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         supportActionBar?.hide()
         checkWhatsNewDialog()
         setupOrientationEventListener()
-
-        /*if (mIsInGPSMode) {
-
-            mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        }*/
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
     }
 
@@ -115,8 +109,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             mOrientationEventListener.enable()
         }
         handleGridLine()
-
-        getLastLocation()
+        handleGPS()
     }
 
     override fun onPause() {
@@ -152,7 +145,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         mCameraImpl = MyCameraImpl(applicationContext)
         mIsInCountdownMode = false
         mCountdownTime = 0
-        mIsInGPSMode = config.gpsTaggingOn
 
         mBurstHandler = Handler()
 
@@ -807,11 +799,21 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         gridline.beVisible()
     }
 
+    internal fun handleGPS() {
+        if (!config.gpsTaggingOn) {
+            println("GPS is off")
+            addressLine = ""
+            addressCoordinates = ""
+        } else
+            stampGPS()
+    }
+
     /**
      * Need to have permission first to be able to get location: TURN ON LOCATION FOR APP
      */
     @SuppressLint("MissingPermission")
-    internal fun getLastLocation() {
+    internal fun stampGPS() {
+
         val geocoder = Geocoder(this, Locale.getDefault())
         var addresses: List<Address>
         var latitude: Double
