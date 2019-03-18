@@ -353,7 +353,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     }
 
     internal fun toggleFilterScrollArea(hide: Boolean) {
-        if (mIsInPhotoMode && !hide) {
+        if (mIsInPhotoMode && !mIsInCountdownMode && !hide) {
             filter_scroll_area.beVisible()
             hideNotAvailableFilters()
         } else filter_scroll_area.beInvisible()
@@ -420,6 +420,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         } else if (mIsInPhotoMode && mIsInCountdownMode) {
             toggleBottomButtons(true)
             toggleTopButtons(true)
+            toggleFilterScrollArea(true)
             startCountdown()
         } else {
             mPreview?.toggleRecording()
