@@ -1,5 +1,6 @@
 package test.kotlin
 
+import com.simplemobiletools.camera.R
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -13,13 +14,9 @@ class GPSUnitTest : KotlinRobolectric() {
      * */
 
     @Test
-    fun testmFusedLocationClient_Null() {
-        /* Testing if mFusedLocationClient is initialized as null */
-    }
-
-    @Test
     fun testmLastLocation_Null() {
         /* Testing if mLastLocation is initialized as null */
+        Assert.assertEquals(null, mMainActivity?.mLastLocation)
     }
 
     @Test
@@ -38,13 +35,6 @@ class GPSUnitTest : KotlinRobolectric() {
     fun testAddressCoordinates_Null() {
         /* Testing if addressCoordinates is initialized as null */
         Assert.assertEquals("", mMainActivity?.addressCoordinates)
-    }
-
-    @Test
-    fun testHandleGPS_ifON() {
-        /*
-        * Testing if GPS feature is toggled ON, then stampGPS method is called
-        */
     }
 
     @Test
@@ -67,21 +57,4 @@ class GPSUnitTest : KotlinRobolectric() {
         Assert.assertNotEquals("", mMainActivity?.addressCoordinates)
     }
 
-    /**
-     *   PHOTO PROCESSOR UNIT TESTS
-     * */
-
-    @Test
-    fun testAddLocationStamp_call() {
-        /*
-        * Testing if GPS feature is toggled ON and a shutter button is pressed, then addLocationStamp is called
-        */
-    }
-
-    @Test
-    fun testAddLocationStamp_width() {
-        /*
-        * Testing if addLocationStamp is called, then width val = width-width + 50F
-        */
-    }
 }
