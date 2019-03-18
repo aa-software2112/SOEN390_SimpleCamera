@@ -6,6 +6,7 @@ import android.os.Environment
 import android.view.View
 import android.widget.ImageView
 import com.simplemobiletools.camera.activities.MainActivity
+import com.simplemobiletools.camera.activities.SettingsActivity
 import org.junit.* // ktlint-disable no-wildcard-imports
 import org.junit.Assert
 import org.junit.runner.RunWith
