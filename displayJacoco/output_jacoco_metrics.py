@@ -74,6 +74,7 @@ EXTRA_BACK_REF = "../" if "dist" in os.getcwd() else ""
 REL_PATH_TO_JACOCO_XML = EXTRA_BACK_REF + "../app/build/reports/jacoco/jacocoTestReport/" + "jacocoTestReport.xml"
 
 if not os.path.isfile(REL_PATH_TO_JACOCO_XML):
+    print_alt("Could not find " + REL_PATH_TO_JACOCO_XML + "... Exiting")
     exit(1)
 
 tree = ET.parse(REL_PATH_TO_JACOCO_XML)
