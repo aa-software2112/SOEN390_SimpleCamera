@@ -7,6 +7,7 @@ import android.graphics.Matrix
 import android.graphics.Rect
 import android.graphics.SurfaceTexture
 import android.hardware.camera2.* // ktlint-disable no-wildcard-imports
+import android.hardware.camera2.CameraCharacteristics.CONTROL_AVAILABLE_EFFECTS
 import android.hardware.camera2.params.MeteringRectangle
 import android.hardware.camera2.params.StreamConfigurationMap
 import android.media.ImageReader
@@ -985,8 +986,25 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {}
 
-    override fun getUITestPhotoTaken(): Boolean
-    {
+    override fun getUITestPhotoTaken(): Boolean {
         return mUITestPhotoTaken
+    }
+
+    override fun previewFilter(index: Int) {
+        try {
+
+            mPreviewRequestBuilder!!.set(CaptureRequest.CONTROL_EFFECT_MODE, index)
+            mPreviewRequest = mPreviewRequestBuilder!!.build()
+            mCaptureSession?.setRepeatingRequest(mPreviewRequest, mCaptureCallback, mBackgroundHandler)
+        } catch (ex: Exception) {
+        }
+    }
+
+    override fun getAvailableFilters(): IntArray {
+
+        val characteristics = this.getCameraCharacteristics()
+        val supported = characteristics.get(CameraCharacteristics.CONTROL_AVAILABLE_EFFECTS)
+
+        return supported
     }
 }
