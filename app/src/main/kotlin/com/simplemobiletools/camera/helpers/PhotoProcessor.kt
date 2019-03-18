@@ -98,8 +98,8 @@ class PhotoProcessor(
                 // make sure the image itself is rotated at third party intents
                 image = rotate(image, totalRotation)
             }
-            if (activity.addressLine != "" && activity.addressCoordinates != "") {
-                image = addLocationStamp(image, activity.addressLine, activity.addressCoordinates)
+            if (activity.addressFirstLine != "" && activity.addressSecondLine != "" && activity.addressCoordinates != "") {
+                image = addLocationStamp(image, activity.addressFirstLine, activity.addressSecondLine, activity.addressCoordinates)
             }
 
             if (isUsingFrontCamera && activity.config.flipPhotos) {
@@ -160,7 +160,7 @@ class PhotoProcessor(
         return null
     }
 
-    internal fun addLocationStamp(bitmap: Bitmap, addressText: String?, addressCoordinates: String?): Bitmap? {
+    internal fun addLocationStamp(bitmap: Bitmap, addressFirstLine: String?, addressSecondLine: String?, addressCoordinates: String?): Bitmap? {
 
         val mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
         val canvas = Canvas(mutableBitmap)
@@ -168,13 +168,14 @@ class PhotoProcessor(
         paint.setColor(Color.WHITE)
         paint.setTextSize(90F)
 
-        val width = mutableBitmap.getScaledWidth(canvas) / 2
+        val width = mutableBitmap.getScaledWidth(canvas) - mutableBitmap.getScaledWidth(canvas) + 50F
         val floatWidth = width.toFloat()
-        val addressDisplay = addressText!!.split(',')
-        val addressSpecific = addressDisplay[0] + "," + addressDisplay[1]
-        canvas.drawText(addressSpecific, floatWidth, 600F, paint)
+
+        canvas.drawText(addressFirstLine, floatWidth, 150F, paint)
+        canvas.drawText(addressSecondLine, floatWidth, 250F, paint)
+
         paint.setTextSize(60F)
-        canvas.drawText(addressCoordinates, floatWidth, 700F, paint)
+        canvas.drawText(addressCoordinates, floatWidth, 350F, paint)
 
         return mutableBitmap
     }

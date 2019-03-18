@@ -67,7 +67,8 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     internal var mFusedLocationClient: FusedLocationProviderClient? = null
     internal var mLastLocation: Location? = null
-    internal var addressLine: String? = null
+    internal var addressFirstLine: String? = null
+    internal var addressSecondLine: String? = null
     internal var addressCoordinates: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -801,7 +802,8 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     internal fun handleGPS() {
         if (!config.gpsTaggingOn) {
-            addressLine = ""
+            addressFirstLine = ""
+            addressSecondLine = ""
             addressCoordinates = ""
         } else
             stampGPS()
@@ -815,6 +817,10 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
         val geocoder = Geocoder(this, Locale.getDefault())
         var addresses: List<Address>
+        var addressNumber: String
+        var addressStreet: String
+        var addressProvince: String
+        var addressCountry: String
         var latitude: Double
         var longitude: Double
 
@@ -832,8 +838,15 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                         // Transform latitude and longitude into address -- maxResults = 1 just because we want to fetch 1 address. Can be changed to more if desired
                         addresses = geocoder.getFromLocation(latitude, longitude, 1)
 
-                        // Get the first address in the array and display it
-                        addressLine = addresses[0].getAddressLine(0)
+                        // Parse the first address in the array
+                        addressNumber = addresses[0].featureName
+                        addressStreet = addresses[0].thoroughfare
+                        addressFirstLine = addressNumber + " " + addressStreet
+
+                        addressProvince = addresses[0].adminArea
+                        addressCountry = addresses[0].countryCode
+                        addressSecondLine = addressProvince + ", " + addressCountry
+
                         addressCoordinates = latitude.toString().dropLast(3) + "N," + longitude.toString().dropLast(3) + "E"
                     }
                 }
