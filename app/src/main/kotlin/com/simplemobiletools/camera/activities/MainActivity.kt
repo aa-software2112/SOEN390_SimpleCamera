@@ -801,7 +801,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     internal fun handleGPS() {
         if (!config.gpsTaggingOn) {
-            println("GPS is off")
             addressLine = ""
             addressCoordinates = ""
         } else

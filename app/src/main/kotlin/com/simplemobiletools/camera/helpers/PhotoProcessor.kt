@@ -162,17 +162,21 @@ class PhotoProcessor(
 
     internal fun addLocationStamp(bitmap: Bitmap, addressText: String?, addressCoordinates: String?): Bitmap? {
         val mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
-        val canvas = Canvas(mutableBitmap)
-        val paint = Paint()
-        paint.setColor(Color.WHITE)
-        paint.setTextSize(90F)
-        val width = mutableBitmap.getScaledWidth(canvas) / 2
-        val floatWidth = width.toFloat()
-        val addressDisplay = addressText!!.split(',')
-        val addressSpecific = addressDisplay[0] + "," + addressDisplay[1]
-        canvas.drawText(addressSpecific, floatWidth, 600F, paint)
-        paint.setTextSize(60F)
-        canvas.drawText(addressCoordinates, floatWidth, 700F, paint)
+
+        if (activity.addressLine != "" && activity.addressCoordinates != "") {
+            val canvas = Canvas(mutableBitmap)
+            val paint = Paint()
+            paint.setColor(Color.WHITE)
+            paint.setTextSize(90F)
+            val width = mutableBitmap.getScaledWidth(canvas) / 2
+            val floatWidth = width.toFloat()
+            val addressDisplay = addressText!!.split(',')
+            val addressSpecific = addressDisplay[0] + "," + addressDisplay[1]
+            canvas.drawText(addressSpecific, floatWidth, 600F, paint)
+            paint.setTextSize(60F)
+            canvas.drawText(addressCoordinates, floatWidth, 700F, paint)
+            return mutableBitmap
+        }
         return mutableBitmap
     }
 
