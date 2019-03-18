@@ -867,7 +867,8 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                         addressCoordinates = latitude.toString().dropLast(3) + "N," + longitude.toString().dropLast(3) + "E"
                     }
                 }
-      
+    }
+
     fun colorEffectFilter(v: View) {
         try {
             var index = 0
@@ -938,6 +939,5 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                 }
             }
         }
-      
     }
 }
