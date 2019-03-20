@@ -33,6 +33,10 @@ class Config(context: Context) : BaseConfig(context) {
         get() = prefs.getBoolean(GRID_LINE, false)
         set(enabled) = prefs.edit().putBoolean(GRID_LINE, enabled).apply()
 
+    var gpsTaggingOn: Boolean
+        get() = prefs.getBoolean(GPS_TAGGING, false)
+        set(enabled) = prefs.edit().putBoolean(GPS_TAGGING, enabled).apply()
+
     var volumeButtonsAsShutter: Boolean
         get() = prefs.getBoolean(VOLUME_BUTTONS_AS_SHUTTER, false)
         set(volumeButtonsAsShutter) = prefs.edit().putBoolean(VOLUME_BUTTONS_AS_SHUTTER, volumeButtonsAsShutter).apply()
