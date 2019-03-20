@@ -50,4 +50,15 @@ class CameraFilterUnitTest : KotlinRobolectric() {
         assert(mMainActivity?.findViewById<AppCompatButton>(R.id.filter_blackboard)?.isVisible()!!)
         assert(mMainActivity?.findViewById<AppCompatButton>(R.id.filter_aqua)?.isVisible()!!)
     }
+
+    @Test
+    fun testPreviewFilter() {
+        /*
+        * Test characterizing that the previewFilter function cannot be tested with this
+        * testing config.
+         */
+        val filterNoneIndex = 0
+
+        assert(!mMainActivity!!.testPreviewFilterWrapper(filterNoneIndex))
+    }
 }

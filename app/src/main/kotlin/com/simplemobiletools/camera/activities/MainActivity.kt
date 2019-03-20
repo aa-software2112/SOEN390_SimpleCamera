@@ -940,4 +940,8 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             }
         }
     }
+
+    fun testPreviewFilterWrapper(index: Int): Boolean {
+        return this.mPreview!!.previewFilter(index)
+    }
 }
