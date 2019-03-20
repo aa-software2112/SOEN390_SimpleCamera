@@ -371,7 +371,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     internal fun toggleFilterScrollArea(hide: Boolean) {
         if (mIsInPhotoMode && !mIsInCountdownMode && !hide) {
             filter_scroll_area.beVisible()
-            hideNotAvailableFilters()
+            hideNotAvailableFilters(mPreview?.getAvailableFilters()!!)
         } else filter_scroll_area.beInvisible()
     }
 
@@ -906,9 +906,9 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         }
     }
 
-    fun hideNotAvailableFilters() {
+    fun hideNotAvailableFilters(intArr: IntArray) {
 
-        for (i in mPreview?.getAvailableFilters()!!.indices) {
+        for (i in intArr.indices) {
             when (i) {
                 0 -> {
                     filter_none.beVisible()
@@ -939,5 +939,9 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                 }
             }
         }
+    }
+
+    fun testPreviewFilterWrapper(index: Int): Boolean {
+        return this.mPreview!!.previewFilter(index)
     }
 }
