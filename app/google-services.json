@@ -1,0 +1,44 @@
+{
+  "project_info": {
+    "project_number": "96589587843",
+    "firebase_url": "https://soen390-2019.firebaseio.com",
+    "project_id": "soen390-2019",
+    "storage_bucket": "soen390-2019.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:96589587843:android:cea210d36a3ce314",
+        "android_client_info": {
+          "package_name": "com.simplemobiletools.camera",
+          "package_name": "com.simplemobiletools.camera.debug"
+
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "96589587843-iu3j9o49p8da8oqas97phsftqk9h1cfk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYlI8tS79UnNPUE9HiIgX1WniQyyZaKrk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
