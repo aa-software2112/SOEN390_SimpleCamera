@@ -38,11 +38,14 @@ import android.view.View
 import android.location.Geocoder
 import android.location.Address
 import java.util.Locale
+import com.google.firebase.analytics.FirebaseAnalytics
 
 class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     private val FADE_DELAY = 6000L // in milliseconds
     private val COUNTDOWN_INTERVAL = 1000L
     private val BURSTMODE_INTERVAL_BETWEEN_CAPTURES = 100L // in milliseconds
+
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     lateinit var mTimerHandler: Handler
     private lateinit var mOrientationEventListener: OrientationEventListener
@@ -89,6 +92,8 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         checkWhatsNewDialog()
         setupOrientationEventListener()
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
     }
 
     override fun onResume() {
@@ -427,6 +432,11 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     }
 
     internal fun handleShutter() {
+
+        val bundle = Bundle()
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "handleShutter")
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
+
         if (mIsInPhotoMode && mBurstEnabled && !mIsInCountdownMode) {
             toggleBurstModeButton()
             mBurstHandler.post(mBurstRunnable)

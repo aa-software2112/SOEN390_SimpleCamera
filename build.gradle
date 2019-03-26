@@ -14,6 +14,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'org.jacoco:org.jacoco.core:0.7.1.201405082137'
         classpath 'com.github.ksoichiro:gradle-console-reporter:0.6.2'
+        classpath 'com.google.gms:google-services:4.1.0'
         //classpath 'org.jacoco:org.jacoco.core:0.7.6.201602180812'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
