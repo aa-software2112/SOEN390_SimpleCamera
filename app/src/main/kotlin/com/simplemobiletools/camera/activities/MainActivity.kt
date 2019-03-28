@@ -645,7 +645,9 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         runOnUiThread(object : Runnable {
             override fun run() {
                 video_rec_curr_timer.text = mCurrVideoRecTimer++.getFormattedDuration()
-                space_remaining.text = DeviceStorageUtil.bytesToHuman((DeviceStorageUtil()).freeMemory()) + " left"
+                if (config.spaceRemainingOn) {
+                    space_remaining.text = DeviceStorageUtil.bytesToHuman(DeviceStorageUtil.freeMemory()) + " left"
+                }
                 mTimerHandler.postDelayed(this, 1000L)
             }
         })
@@ -749,7 +751,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             if (isRecording) {
                 shutter.setImageResource(R.drawable.ic_video_stop)
                 toggle_camera.beInvisible()
-                space_remaining.beVisible()
+                if (config.spaceRemainingOn) space_remaining.beVisible()
                 showTimer()
             } else {
                 shutter.setImageResource(R.drawable.ic_video_rec)

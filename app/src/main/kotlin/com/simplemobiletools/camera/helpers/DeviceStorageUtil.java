@@ -5,14 +5,14 @@ import android.os.StatFs;
 
 import java.text.DecimalFormat;
 
-public class DeviceStorageUtil {
+public final class DeviceStorageUtil {
 
     /**
      * Returns the amount of space left on the device
      *
      * @return amount of free bytes on the device
      */
-    public long freeMemory()
+    public static long freeMemory()
     {
         StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
         // number of free blocks on the file system * size (in bytes) of a block on the file system
