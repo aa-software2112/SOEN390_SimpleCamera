@@ -9,11 +9,13 @@ public class DeviceStorageUtil {
 
     /**
      * Returns the amount of space left on the device
-     * @return
+     *
+     * @return amount of free bytes on the device
      */
     public long freeMemory()
     {
         StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
+        // number of free blocks on the file system * size (in bytes) of a block on the file system
         long   free   = (statFs.getAvailableBlocksLong() * statFs.getBlockSizeLong());
         return free;
     }
@@ -25,9 +27,9 @@ public class DeviceStorageUtil {
     }
 
     /**
-     * Converts the bytes to a human readable format (e.g. 1Gb)
-     * @param size
-     * @return
+     * Converts bytes to a human readable format (e.g. 1Gb)
+     *
+     * @return human readable string representing the amount of space left on the device
      */
     public static String bytesToHuman (long size)
     {
@@ -46,7 +48,7 @@ public class DeviceStorageUtil {
         if (size >= Pb && size < Eb)    return floatForm((double)size / Pb) + " Pb";
         if (size >= Eb)                 return floatForm((double)size / Eb) + " Eb";
 
-        return "???";
+        return "?";
     }
 
 }

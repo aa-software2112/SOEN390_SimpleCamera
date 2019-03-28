@@ -33,6 +33,10 @@ class Config(context: Context) : BaseConfig(context) {
         get() = prefs.getBoolean(GRID_LINE, false)
         set(enabled) = prefs.edit().putBoolean(GRID_LINE, enabled).apply()
 
+    var spaceRemainingOn: Boolean
+        get() = prefs.getBoolean(SPACE_REMAINING, false)
+        set(enabled) = prefs.edit().putBoolean(SPACE_REMAINING, enabled).apply()
+
     var gpsTaggingOn: Boolean
         get() = prefs.getBoolean(GPS_TAGGING, false)
         set(enabled) = prefs.edit().putBoolean(GPS_TAGGING, enabled).apply()

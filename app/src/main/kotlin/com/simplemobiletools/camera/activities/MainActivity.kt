@@ -640,7 +640,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         mTimerHandler.removeCallbacksAndMessages(null)
     }
 
-
     private fun setupTimer() {
         runOnUiThread(object : Runnable {
             override fun run() {
