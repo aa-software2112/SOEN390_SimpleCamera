@@ -171,7 +171,7 @@
                 android:gravity="center"
                 android:text="0"
                 android:textColor="@color/default_text_color"
-                android:textSize="14dp"
+                android:textSize="12dp"
                 android:visibility="invisible" />
 
             <ImageView
