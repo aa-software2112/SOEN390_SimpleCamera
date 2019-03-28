@@ -35,7 +35,7 @@ interface MyPreview {
 
     fun getUITestPhotoTaken(): Boolean
 
-    fun previewFilter(index: Int)
+    fun previewFilter(index: Int): Boolean
 
     fun getAvailableFilters(): IntArray
 }
