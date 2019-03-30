@@ -37,6 +37,8 @@ import com.google.android.gms.location.LocationServices
 import android.view.View
 import android.location.Geocoder
 import android.location.Address
+import android.util.Log
+import com.simplemobiletools.camera.implementations.QRScanner
 import java.util.Locale
 
 class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
@@ -65,6 +67,9 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     internal var mIsInCountdownMode = false
     internal var mCountdownTime = 0
     internal var mBurstEnabled = false
+
+    /** QR Scanner */
+    internal lateinit var mQrScanner: QRScanner
 
     internal var mFusedLocationClient: FusedLocationProviderClient? = null
     internal var mLastLocation: Location? = null
@@ -148,6 +153,8 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         mIsInCountdownMode = false
         mCountdownTime = 0
         mBurstHandler = Handler()
+        mQrScanner = QRScanner(this.getApplicationContext());
+
 
         mBurstModeSetup = Runnable {
             // runs only once, that is after holding shutter button for 2 sec
@@ -241,7 +248,13 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         (btn_holder.layoutParams as RelativeLayout.LayoutParams).setMargins(0, 0, 0, (navBarHeight + resources.getDimension(R.dimen.activity_margin)).toInt())
 
         checkVideoCaptureIntent()
+
         mPreview = CameraPreview(this, camera_texture_view, mIsInPhotoMode)
+        /** QR scanner must maintain an instance of the preview
+         * to capture an image
+         */
+        QRScanner.setCameraPreview(mPreview)
+
         view_holder.addView(mPreview as ViewGroup)
         checkImageCaptureIntent()
         mPreview?.setIsImageCaptureIntent(isImageCaptureIntent())
@@ -262,7 +275,9 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     }
 
     internal fun initButtons() {
+        System.out.println("Initializing Buttons");
         toggle_camera.setOnClickListener { toggleCamera() }
+
         swipe_area.setOnTouchListener(object : OnSwipeTouchListener(applicationContext) {
             override fun onSwipeLeft() {
                 showLastMediaPreview()
@@ -275,7 +290,39 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             override fun onSwipeBottom() {
                 toggleFilterScrollArea(true)
             }
+
+            override fun onTouch(v: View, event: MotionEvent): Boolean {
+
+                /** Must call super here in order to
+                 * keep swipes working
+                 */
+                super.onTouch(v, event);
+
+
+                if (MotionEvent.ACTION_DOWN == event.getAction())
+                {
+                   System.out.println("ACTION_DOWN")
+                    mQrScanner.scheduleQR(3000);
+
+                   return true;
+                }
+                else if (MotionEvent.ACTION_UP == event.getAction())
+                {
+                   System.out.println("ACTION_UP")
+                    mQrScanner.cancelQr();
+                   return true;
+                }
+
+                return true;
+            }
+
         })
+
+
+        swipe_area.setOnLongClickListener({
+            true
+        })
+
         toggle_flash.setOnClickListener { toggleFlash() }
         settings.setOnClickListener { launchSettings() }
         toggle_photo_video.setOnClickListener { handleTogglePhotoVideo() }

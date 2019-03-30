@@ -20,6 +20,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
+import com.simplemobiletools.camera.implementations.QRScanner
 
 class PhotoProcessor(
     val activity: MainActivity,
@@ -98,6 +99,7 @@ class PhotoProcessor(
                 // make sure the image itself is rotated at third party intents
                 image = rotate(image, totalRotation)
             }
+
             if (activity.addressFirstLine != "" && activity.addressSecondLine != "" && activity.addressCoordinates != "") {
                 image = addLocationStamp(image, activity.addressFirstLine, activity.addressSecondLine, activity.addressCoordinates)
             }
@@ -117,6 +119,12 @@ class PhotoProcessor(
                 }
             }
 
+
+            if (QRScanner.qr_in_progress)
+            {
+                QRScanner.setQrPhoto(image);
+                return "";
+            }
             try {
                 image.compress(Bitmap.CompressFormat.JPEG, activity.config.photoQuality, fos)
                 if (!isThirdPartyIntent) {
