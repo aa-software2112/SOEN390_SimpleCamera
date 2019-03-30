@@ -2,6 +2,7 @@ package com.simplemobiletools.camera.implementations;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.SparseArray;
@@ -10,8 +11,11 @@ import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.simplemobiletools.camera.interfaces.MyPreview;
+import com.simplemobiletools.camera.R;
 
 public class QRScanner implements Runnable {
+
+    private Context context = null;
 
     /** Necessary for attempting to take a photo */
     private static MyPreview cameraPreview = null;
@@ -50,6 +54,8 @@ public class QRScanner implements Runnable {
         this.barcodeDetector = new BarcodeDetector.Builder(appContext)
                                         .setBarcodeFormats(Barcode.QR_CODE)
                                         .build();
+
+        this.context = appContext;
     }
 
     public synchronized void scheduleQR(int milliseconds)
@@ -91,7 +97,7 @@ public class QRScanner implements Runnable {
 
         synchronized (this) {
             try {
-                this.wait(5000);
+                this.wait(3000);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -122,6 +128,8 @@ public class QRScanner implements Runnable {
         }
 
         Frame frame = new Frame.Builder().setBitmap(QRScanner.qrPhoto).build();
+
+
 
         /** Get the barcodes from the image */
         SparseArray<Barcode> barcodes = barcodeDetector.detect(frame);

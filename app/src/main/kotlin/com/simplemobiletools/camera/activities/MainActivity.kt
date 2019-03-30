@@ -37,7 +37,12 @@ import com.google.android.gms.location.LocationServices
 import android.view.View
 import android.location.Geocoder
 import android.location.Address
+import android.os.HandlerThread
 import android.util.Log
+import com.google.android.gms.vision.CameraSource
+import com.google.android.gms.vision.Detector
+import com.google.android.gms.vision.barcode.Barcode
+import com.google.android.gms.vision.barcode.BarcodeDetector
 import com.simplemobiletools.camera.implementations.QRScanner
 import java.util.Locale
 
@@ -70,6 +75,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     /** QR Scanner */
     internal lateinit var mQrScanner: QRScanner
+    internal lateinit var mCameraSource: CameraSource
 
     internal var mFusedLocationClient: FusedLocationProviderClient? = null
     internal var mLastLocation: Location? = null
@@ -202,12 +208,50 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         settings.beGone()
     }
 
+    @SuppressLint("MissingPermission")
     private fun tryInitCamera() {
         handlePermission(PERMISSION_CAMERA) {
             if (it) {
                 handlePermission(PERMISSION_WRITE_STORAGE) {
                     if (it) {
                         initializeCamera()
+
+                        /** QR code */
+                        var barcodeDetector = BarcodeDetector.Builder(getApplicationContext())
+                                .setBarcodeFormats(Barcode.QR_CODE)
+                                .build()
+
+                        if (!barcodeDetector.isOperational())
+                        {
+                            System.out.println("Barcode Detector not working");
+                        }
+
+                        barcodeDetector.setProcessor(object : Detector.Processor<Barcode> {
+                            override fun release()
+                            {}
+
+                            override fun receiveDetections(p0: Detector.Detections<Barcode>?) {
+                                System.out.println(p0?.detectedItems);
+                                System.out.println("Detection");
+
+                            }
+
+                        })
+
+                        var fps: Float = 20.0f;
+                        mCameraSource = CameraSource.Builder(getApplicationContext(), barcodeDetector)
+                                .setFacing(CameraSource.CAMERA_FACING_BACK)
+                                .build();
+
+                        try {
+                            mCameraSource.start();
+                        } catch(e: Exception)
+                        {
+                            e.printStackTrace();
+                        }
+
+
+
                     } else {
                         toast(R.string.no_storage_permissions)
                         finish()
@@ -275,6 +319,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     }
 
     internal fun initButtons() {
+
         System.out.println("Initializing Buttons");
         toggle_camera.setOnClickListener { toggleCamera() }
 
@@ -316,11 +361,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                 return true;
             }
 
-        })
-
-
-        swipe_area.setOnLongClickListener({
-            true
         })
 
         toggle_flash.setOnClickListener { toggleFlash() }
