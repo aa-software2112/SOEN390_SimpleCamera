@@ -41,6 +41,7 @@ class StorageUnitTest : KotlinRobolectric() {
         mMainActivity?.config?.spaceRemainingOn = true
         Assert.assertEquals(true, mMainActivity?.config?.spaceRemainingOn)
 
+        //Fake Storage Capacity
         ShadowStatFs.registerStats("/tmp", 100, 1230, 1120)
         val statsFs = StatFs("/tmp")
 
