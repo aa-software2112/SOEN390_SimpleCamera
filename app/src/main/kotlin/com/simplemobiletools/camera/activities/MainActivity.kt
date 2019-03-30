@@ -45,11 +45,14 @@ import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
 import com.simplemobiletools.camera.implementations.QRScanner
 import java.util.Locale
+import com.google.firebase.analytics.FirebaseAnalytics
 
 class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     private val FADE_DELAY = 6000L // in milliseconds
     private val COUNTDOWN_INTERVAL = 1000L
     private val BURSTMODE_INTERVAL_BETWEEN_CAPTURES = 100L // in milliseconds
+
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     lateinit var mTimerHandler: Handler
     private lateinit var mOrientationEventListener: OrientationEventListener
@@ -100,6 +103,8 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         checkWhatsNewDialog()
         setupOrientationEventListener()
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
     }
 
     override fun onResume() {
@@ -215,43 +220,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                 handlePermission(PERMISSION_WRITE_STORAGE) {
                     if (it) {
                         initializeCamera()
-
-                        /** QR code */
-                        var barcodeDetector = BarcodeDetector.Builder(getApplicationContext())
-                                .setBarcodeFormats(Barcode.QR_CODE)
-                                .build()
-
-                        if (!barcodeDetector.isOperational())
-                        {
-                            System.out.println("Barcode Detector not working");
-                        }
-
-                        barcodeDetector.setProcessor(object : Detector.Processor<Barcode> {
-                            override fun release()
-                            {}
-
-                            override fun receiveDetections(p0: Detector.Detections<Barcode>?) {
-                                System.out.println(p0?.detectedItems);
-                                System.out.println("Detection");
-
-                            }
-
-                        })
-
-                        var fps: Float = 20.0f;
-                        mCameraSource = CameraSource.Builder(getApplicationContext(), barcodeDetector)
-                                .setFacing(CameraSource.CAMERA_FACING_BACK)
-                                .build();
-
-                        try {
-                            mCameraSource.start();
-                        } catch(e: Exception)
-                        {
-                            e.printStackTrace();
-                        }
-
-
-
                     } else {
                         toast(R.string.no_storage_permissions)
                         finish()
@@ -514,6 +482,11 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     }
 
     internal fun handleShutter() {
+
+        val bundle = Bundle()
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "handleShutter")
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
+
         if (mIsInPhotoMode && mBurstEnabled && !mIsInCountdownMode) {
             toggleBurstModeButton()
             mBurstHandler.post(mBurstRunnable)
