@@ -20,7 +20,10 @@ class StorageUnitTest : KotlinRobolectric() {
 
     @Test
     fun testBytesToHuman() {
-        Assert.assertEquals("1.18 Mb", DeviceStorageUtil.bytesToHuman(1233234))
+        Assert.assertEquals("9.54 Mb", DeviceStorageUtil.bytesToHuman(9999999))
+        Assert.assertEquals("953.67 Mb", DeviceStorageUtil.bytesToHuman(999999999))
+        Assert.assertEquals("9.31 Gb", DeviceStorageUtil.bytesToHuman(9999999999))
+
     }
 
     @Test
@@ -43,10 +46,19 @@ class StorageUnitTest : KotlinRobolectric() {
 
         //Fake Storage Capacity
         ShadowStatFs.registerStats("/tmp", 100, 1230, 1120)
-        val statsFs = StatFs("/tmp")
 
         mMainActivity?.setRecordingState(true)
         Assert.assertEquals(true, mMainActivity?.findViewById<TextView>(R.id.space_remaining)?.isVisible())
         Assert.assertEquals("4.38 Mb left", mMainActivity?.findViewById<TextView>(R.id.space_remaining)?.value)
+
+        // Stop Recording
+        mMainActivity?.setRecordingState(false)
+
+        //Fake Storage Capacity
+        ShadowStatFs.registerStats("/tmp", 100, 1120, 12220)
+
+        mMainActivity?.setRecordingState(true)
+        Assert.assertEquals(true, mMainActivity?.findViewById<TextView>(R.id.space_remaining)?.isVisible())
+        Assert.assertEquals("47.73 Mb left", mMainActivity?.findViewById<TextView>(R.id.space_remaining)?.value)
     }
 }
