@@ -31,6 +31,7 @@ class SettingsActivity : SimpleActivity() {
         setupSound()
         setupFocusBeforeCapture()
         setupGridLine()
+        setupSpaceRemaining()
         setupVolumeButtonsAsShutter()
         setupTurnFlashOffAtStartup()
         setupFlipPhotos()
@@ -132,6 +133,14 @@ class SettingsActivity : SimpleActivity() {
         settings_grid_line_holder.setOnClickListener {
             settings_grid_line.toggle()
             config.gridLineVisible = settings_grid_line.isChecked
+        }
+    }
+
+    private fun setupSpaceRemaining() {
+        settings_space_remaining.isChecked = config.spaceRemainingOn
+        settings_space_remaining_holder.setOnClickListener {
+            settings_space_remaining.toggle()
+            config.spaceRemainingOn = settings_space_remaining.isChecked
         }
     }
 

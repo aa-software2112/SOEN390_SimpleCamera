@@ -536,6 +536,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         toggle_photo_video.setImageResource(R.drawable.ic_video)
         shutter.setImageResource(R.drawable.ic_shutter)
         countdown_toggle.beVisible()
+        space_remaining.beGone()
         mPreview?.initPhotoMode()
         setupPreviewImage(true)
     }
@@ -597,7 +598,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         fadeAnim(change_resolution, .5f)
         fadeAnim(last_image, .5f)
         fadeAnim(toggle_flash, .5f)
-        fadeAnim(countdown_toggle, .5f)
+        if (mIsInPhotoMode) fadeAnim(countdown_toggle, .5f) else fadeAnim(space_remaining, .5f)
         fadeAnim(countdown_time_selected, .5f)
         fadeAnim(countdown_times, .0f)
         fadeAnim(btn_short_timer, .0f)
@@ -610,7 +611,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         fadeAnim(change_resolution, 1f)
         fadeAnim(last_image, 1f)
         fadeAnim(toggle_flash, 1f)
-        fadeAnim(countdown_toggle, 1f)
+        if (mIsInPhotoMode) fadeAnim(countdown_toggle, 1f) else fadeAnim(space_remaining, 1f)
         fadeAnim(countdown_time_selected, 1f)
         fadeAnim(countdown_times, 1f)
         fadeAnim(btn_short_timer, 1f)
@@ -644,6 +645,9 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         runOnUiThread(object : Runnable {
             override fun run() {
                 video_rec_curr_timer.text = mCurrVideoRecTimer++.getFormattedDuration()
+                if (config.spaceRemainingOn) {
+                    space_remaining.text = DeviceStorageUtil.bytesToHuman(DeviceStorageUtil.freeMemory()) + " left"
+                }
                 mTimerHandler.postDelayed(this, 1000L)
             }
         })
@@ -747,10 +751,12 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             if (isRecording) {
                 shutter.setImageResource(R.drawable.ic_video_stop)
                 toggle_camera.beInvisible()
+                if (config.spaceRemainingOn) space_remaining.beVisible()
                 showTimer()
             } else {
                 shutter.setImageResource(R.drawable.ic_video_rec)
                 showToggleCameraIfNeeded()
+                space_remaining.beGone()
                 hideTimer()
             }
         }
