@@ -244,8 +244,15 @@
         android:layout_weight="1"
         android:gravity="clip_vertical|center_horizontal|center_vertical"
         android:orientation="horizontal"
-        android:background="#aaaaaa"
         android:visibility="visible" />
+
+    <ProgressBar
+        android:id="@+id/qrProgressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_centerInParent="true" />
 
     <HorizontalScrollView
         android:id="@+id/filter_scroll_area"

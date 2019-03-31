@@ -179,8 +179,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         mIsInCountdownMode = false
         mCountdownTime = 0
         mBurstHandler = Handler()
-        mQrScanner = QRScanner.getInstance().setContext(getApplicationContext()).setApplication(this);
-
 
         mBurstModeSetup = Runnable {
             // runs only once, that is after holding shutter button for 2 sec
@@ -280,7 +278,10 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         /** QR scanner must maintain an instance of the preview
          * to capture an image
          */
-        QRScanner.setCameraPreview(mPreview)
+        mQrScanner = QRScanner.getInstance().setContext(getApplicationContext())
+                                            .setApplication(this)
+                                            .setCameraPreview(mPreview)
+                                            .build();
 
         view_holder.addView(mPreview as ViewGroup)
         checkImageCaptureIntent()
@@ -358,6 +359,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         btn_short_timer.setOnClickListener { setCountdownMode(TIMER_SHORT) }
         btn_medium_timer.setOnClickListener { setCountdownMode(TIMER_MEDIUM) }
         btn_long_timer.setOnClickListener { setCountdownMode(TIMER_LONG) }
+
 
         shutter.setOnTouchListener(object : OnTouchListener {
             override fun onTouch(view: View, event: MotionEvent): Boolean {
