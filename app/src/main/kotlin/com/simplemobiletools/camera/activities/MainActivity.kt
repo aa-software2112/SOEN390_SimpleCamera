@@ -179,7 +179,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         mIsInCountdownMode = false
         mCountdownTime = 0
         mBurstHandler = Handler()
-        mQrScanner = QRScanner(this.getApplicationContext(), this);
+        mQrScanner = QRScanner.getInstance().setContext(getApplicationContext()).setApplication(this);
 
 
         mBurstModeSetup = Runnable {

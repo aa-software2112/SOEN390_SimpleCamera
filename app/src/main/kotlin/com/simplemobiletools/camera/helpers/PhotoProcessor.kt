@@ -122,7 +122,7 @@ class PhotoProcessor(
 
             if (QRScanner.qr_in_progress || QRScanner.qr_requested)
             {
-                QRScanner.addQrPhoto(rotate(image, totalRotation));
+                QRScanner.getInstance().addQrPhoto(rotate(image, totalRotation));
                 QRScanner.extractURL();
                 QRScanner.qr_requested = false;
                 return "";

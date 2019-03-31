@@ -40,8 +40,12 @@ import static androidx.core.content.ContextCompat.startActivity;
 
 public class QRScanner implements Runnable {
 
-    private static Context context = null;
-    private static MainActivity activity = null;
+    /** The context of the main activity, and the
+     * activity itself. These will be used to run context-based
+     * API within the nested thread in this class
+     */
+    private Context context = null;
+    private MainActivity activity = null;
 
     /** Necessary for attempting to take a photo */
     private static CameraPreview cameraPreview = null;
@@ -70,7 +74,81 @@ public class QRScanner implements Runnable {
     private static FirebaseVisionBarcode barcode = null;
 
 
-    public static void addQrPhoto(Bitmap image)
+    private static QRScanner singletonInstance = null;
+
+    /** This class must be a singleton because it deals with
+     * the application interface and camera, and having multiple instances of these
+     * interactions will add multiple levels of uncertainty and synchronization issues.
+     * @return QRScanner singleton
+     */
+    public static QRScanner getInstance()
+    {
+        if (singletonInstance == null)
+        {
+            singletonInstance = new QRScanner();
+        }
+
+        return singletonInstance;
+    }
+
+    private QRScanner()
+    {
+        this.init();
+    }
+
+    public QRScanner setContext(Context context)
+    {
+        this.context = context;
+        return QRScanner.getInstance();
+    }
+
+    public QRScanner setApplication(MainActivity activity)
+    {
+        this.activity = activity;
+        return QRScanner.getInstance();
+    }
+
+    private void init()
+    {
+        /** A queue that will hold all bitmaps taken to be processed for QR purposes */
+        this.bitmapQueue = new ConcurrentLinkedQueue<Bitmap>();
+
+        /** A new loop to run threads on a non-UI looper so that UI does not stall during requets */
+        this.handlerThread = new HandlerThread("BackgroundRunner");
+        this.handlerThread.start();
+        this.handler = new Handler(this.handlerThread.getLooper());
+
+        /** Need to be able to send requests to the original UI looper for displaying
+         * popup/alert windows; they can only be created through the main looper
+         */
+        this.UIHandler = new Handler(Looper.getMainLooper()) {
+
+            /** A custom implementation for handling messages for this looper,
+             * it is merely used to display the alert dialog
+             * @param m The message received on this handler
+             */
+            @Override
+            public void handleMessage(Message m)
+            {
+                ((AlertDialog)m.obj).show();
+            }
+        };
+
+        /** Setup Firebase options ahead of time so that they don't need
+         * to be re-instantiated every time a barcode is attempted to be read
+         */
+        options = new FirebaseVisionBarcodeDetectorOptions.Builder()
+                .setBarcodeFormats(
+                        FirebaseVisionBarcode.FORMAT_QR_CODE)
+                .build();
+
+        detector = FirebaseVision.getInstance()
+                .getVisionBarcodeDetector(options);
+
+    }
+
+
+    public void addQrPhoto(Bitmap image)
     {
         QRScanner.bitmapQueue.add(image);
     }
@@ -82,32 +160,6 @@ public class QRScanner implements Runnable {
         QRScanner.cameraPreview = (CameraPreview) cameraPreview;
     }
 
-    public QRScanner(Context appContext, MainActivity activity)
-    {
-        this.bitmapQueue = new ConcurrentLinkedQueue<Bitmap>();
-        this.activity = activity;
-        this.handlerThread = new HandlerThread("BackgroundRunner");
-        this.handlerThread.start();
-        this.handler = new Handler(this.handlerThread.getLooper());
-        this.context = appContext;
-        this.UIHandler = new Handler(Looper.getMainLooper()) {
-            @Override
-            public void handleMessage(Message m)
-            {
-                ((AlertDialog)m.obj).show();
-            }
-        };
-
-        options = new FirebaseVisionBarcodeDetectorOptions.Builder()
-                .setBarcodeFormats(
-                        FirebaseVisionBarcode.FORMAT_QR_CODE,
-                        FirebaseVisionBarcode.FORMAT_AZTEC)
-                .build();
-
-        detector = FirebaseVision.getInstance()
-                .getVisionBarcodeDetector(options);
-
-    }
 
     public synchronized void scheduleQR(int milliseconds)
     {
