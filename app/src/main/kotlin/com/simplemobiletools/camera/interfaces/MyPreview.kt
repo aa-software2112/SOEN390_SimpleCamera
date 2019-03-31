@@ -38,4 +38,5 @@ interface MyPreview {
     fun previewFilter(index: Int): Boolean
 
     fun getAvailableFilters(): IntArray
-}
+
+ }

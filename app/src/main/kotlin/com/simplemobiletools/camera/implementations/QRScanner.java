@@ -1,29 +1,58 @@
 package com.simplemobiletools.camera.implementations;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Looper;
+import android.os.Message;
 import android.util.SparseArray;
 
-import com.google.android.gms.vision.Frame;
-import com.google.android.gms.vision.barcode.Barcode;
-import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.ml.vision.FirebaseVision;
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetector;
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetectorOptions;
+import com.google.firebase.ml.vision.common.FirebaseVisionImage;
+import com.simplemobiletools.camera.activities.MainActivity;
+import com.simplemobiletools.camera.activities.SimpleActivity;
 import com.simplemobiletools.camera.interfaces.MyPreview;
 import com.simplemobiletools.camera.R;
+import com.simplemobiletools.camera.views.CameraPreview;
+
+import java.io.DataInput;
+import java.nio.ByteBuffer;
+import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+import androidx.annotation.NonNull;
+
+import static androidx.core.content.ContextCompat.startActivity;
 
 public class QRScanner implements Runnable {
 
-    private Context context = null;
+    private static Context context = null;
+    private static MainActivity activity = null;
 
     /** Necessary for attempting to take a photo */
-    private static MyPreview cameraPreview = null;
+    private static CameraPreview cameraPreview = null;
+    private static boolean canTakePhoto = true;
+
 
     /** Holds the next photo to be run through the QR processor */
-    public static Bitmap qrPhoto = null;
+    private static Queue<Bitmap> bitmapQueue = null;
 
     /** Scheduling flags */
+    public static boolean qr_requested = true;
     public static boolean qr_in_progress = false;
     private static boolean qr_scheduled = false;
 
@@ -32,30 +61,52 @@ public class QRScanner implements Runnable {
 
     /** Used for running the QR scan with a timeout on-hold */
     private Handler handler = null;
+    private static Handler UIHandler = null;
 
     /** Holding the barcode detector instance */
-    BarcodeDetector barcodeDetector = null;
+    private static FirebaseVisionBarcodeDetectorOptions  options = null;
+    private static FirebaseVisionBarcodeDetector detector = null;
 
-    public static void setQrPhoto(Bitmap image)
+    private static FirebaseVisionBarcode barcode = null;
+
+
+    public static void addQrPhoto(Bitmap image)
     {
-        QRScanner.qrPhoto = image;
+        QRScanner.bitmapQueue.add(image);
     }
+
+    public static void canTakePhoto() {QRScanner.canTakePhoto = true;}
 
     public static void setCameraPreview(MyPreview cameraPreview)
     {
-        QRScanner.cameraPreview = cameraPreview;
+        QRScanner.cameraPreview = (CameraPreview) cameraPreview;
     }
 
-    public QRScanner(Context appContext)
+    public QRScanner(Context appContext, MainActivity activity)
     {
+        this.bitmapQueue = new ConcurrentLinkedQueue<Bitmap>();
+        this.activity = activity;
         this.handlerThread = new HandlerThread("BackgroundRunner");
         this.handlerThread.start();
         this.handler = new Handler(this.handlerThread.getLooper());
-        this.barcodeDetector = new BarcodeDetector.Builder(appContext)
-                                        .setBarcodeFormats(Barcode.QR_CODE)
-                                        .build();
-
         this.context = appContext;
+        this.UIHandler = new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(Message m)
+            {
+                ((AlertDialog)m.obj).show();
+            }
+        };
+
+        options = new FirebaseVisionBarcodeDetectorOptions.Builder()
+                .setBarcodeFormats(
+                        FirebaseVisionBarcode.FORMAT_QR_CODE,
+                        FirebaseVisionBarcode.FORMAT_AZTEC)
+                .build();
+
+        detector = FirebaseVision.getInstance()
+                .getVisionBarcodeDetector(options);
+
     }
 
     public synchronized void scheduleQR(int milliseconds)
@@ -80,6 +131,7 @@ public class QRScanner implements Runnable {
     @Override
     public void run() {
 
+        QRScanner.qr_requested = true;
         QRScanner.qr_in_progress = true;
 
         /** 1. Reset the photo
@@ -87,62 +139,97 @@ public class QRScanner implements Runnable {
          *  3. Delay to make sure it was taken
          *  4. If image is NULL after wait, don't evaluatre QR, otherwise attempt evaluation
          */
-        QRScanner.qrPhoto = null;
 
         /** No camera preview, can't perform QR */
         if (QRScanner.cameraPreview == null)
             return;
 
-        QRScanner.cameraPreview.tryTakePicture();
-
-        synchronized (this) {
-            try {
-                this.wait(3000);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        if(QRScanner.cameraPreview.isInPreviewMode()) {
+            System.out.println("Taking photo");
+            QRScanner.cameraPreview.tryTakePicture();
         }
 
         System.out.println("Running callback");
-
-        /** Attempt to extract the string from the last taken QR photo */
-        String qrString = null;
-        qrString = this.extractURL();
 
         QRScanner.qr_in_progress = false;
 
     }
 
-    public String extractURL()
+    public static String extractURL()
     {
 
+
+
         /** No photo exists */
-        if (QRScanner.qrPhoto == null)
+        if (QRScanner.bitmapQueue.isEmpty())
         {
             return "";
         }
 
-        if (!this.barcodeDetector.isOperational())
-        {
-            return "";
+        while(!QRScanner.bitmapQueue.isEmpty()) {
+            Bitmap bitmap = QRScanner.bitmapQueue.poll();
+            FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(bitmap);
+
+            Task<List<FirebaseVisionBarcode>> result = QRScanner.detector.detectInImage(image)
+                    .addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionBarcode>>() {
+
+                        @Override
+                        public void onSuccess(List<FirebaseVisionBarcode> barcodes) {
+
+                            /** Only process a single barcode - ignore the rest */
+                            if (barcodes.size() == 0)
+                            {
+                                return;
+                            }
+
+                            /** Barcode to process */
+                            QRScanner.barcode = barcodes.get(0);
+
+                            System.out.println(barcode.getRawValue());
+
+                            /** Redirect user to web page if it is a URL */
+                            if(barcode.getValueType() == FirebaseVisionBarcode.TYPE_URL)
+                            {
+                                /** Create an alert dialog */
+                                AlertDialog alert = new AlertDialog.Builder(activity, android.R.style.Theme_Material_Dialog_Alert)
+                                        .setTitle(R.string.qr_alert_title)
+                                        .setMessage("Would you like to view this link?\n\t" + barcode.getRawValue())
+                                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Intent toInternet = new Intent(Intent.ACTION_VIEW, Uri.parse(barcode.getRawValue()) );
+                                                toInternet.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                context.startActivity(toInternet);
+                                            }
+                                        })
+                                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+
+                                            }
+                                        })
+                                        .create();
+
+                                QRScanner.UIHandler.sendMessage(Message.obtain(QRScanner.UIHandler,
+                                        0, alert));
+
+                            }
+
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
+
+
         }
 
-        Frame frame = new Frame.Builder().setBitmap(QRScanner.qrPhoto).build();
-
-
-
-        /** Get the barcodes from the image */
-        SparseArray<Barcode> barcodes = barcodeDetector.detect(frame);
-
-        if (barcodes.size() > 0 )
-        {
-            return barcodes.valueAt(0).rawValue;
-        }
-        else
-        {
-            return "";
-        }
-
+        return "";
     }
 
 

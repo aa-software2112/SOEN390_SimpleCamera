@@ -32,6 +32,7 @@ import android.view.MotionEvent
 import android.view.View.OnTouchListener
 import android.location.Location
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import android.view.View
@@ -39,6 +40,10 @@ import android.location.Geocoder
 import android.location.Address
 import android.os.HandlerThread
 import android.util.Log
+import androidx.annotation.NonNull
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.android.gms.tasks.Task
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.barcode.Barcode
@@ -46,6 +51,16 @@ import com.google.android.gms.vision.barcode.BarcodeDetector
 import com.simplemobiletools.camera.implementations.QRScanner
 import java.util.Locale
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.ml.vision.FirebaseVision
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetectorOptions
+import com.google.firebase.ml.vision.common.FirebaseVisionImage
+import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata
+import com.google.zxing.BinaryBitmap
+import com.google.zxing.LuminanceSource
+import com.google.zxing.MultiFormatReader
+import com.google.zxing.RGBLuminanceSource
+import com.google.zxing.common.HybridBinarizer
 
 class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     private val FADE_DELAY = 6000L // in milliseconds
@@ -164,7 +179,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         mIsInCountdownMode = false
         mCountdownTime = 0
         mBurstHandler = Handler()
-        mQrScanner = QRScanner(this.getApplicationContext());
+        mQrScanner = QRScanner(this.getApplicationContext(), this);
 
 
         mBurstModeSetup = Runnable {
@@ -312,17 +327,20 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                 super.onTouch(v, event);
 
 
+
                 if (MotionEvent.ACTION_DOWN == event.getAction())
                 {
-                   System.out.println("ACTION_DOWN")
-                    mQrScanner.scheduleQR(3000);
+                    System.out.println("ACTION_DOWN")
+                    mQrScanner.scheduleQR(250);
 
                    return true;
                 }
                 else if (MotionEvent.ACTION_UP == event.getAction())
                 {
-                   System.out.println("ACTION_UP")
+                    System.out.println("ACTION_UP")
+
                     mQrScanner.cancelQr();
+
                    return true;
                 }
 
@@ -378,6 +396,28 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         filter_whiteboard.beGone()
         filter_blackboard.beGone()
         filter_aqua.beGone()
+    }
+
+    private fun scanQRImage(bMap: Bitmap) : String {
+        var contents = "";
+
+        var intArray:IntArray = IntArray(bMap.getWidth()*bMap.getHeight());
+        //copy pixel data from the Bitmap into the 'intArray' array
+        bMap.getPixels(intArray, 0, bMap.getWidth(), 0, 0, bMap.getWidth(), bMap.getHeight());
+
+        var source = RGBLuminanceSource(bMap.getWidth(), bMap.getHeight(), intArray);
+        var bitmap = BinaryBitmap(HybridBinarizer(source));
+
+        var reader = MultiFormatReader();
+
+        try {
+            var result = reader.decode(bitmap);
+            contents = result.getText();
+        }
+        catch (e: Exception) {
+            Log.e("QrTest", "Error decoding barcode", e);
+        }
+        return contents;
     }
 
     private fun toggleCamera() {

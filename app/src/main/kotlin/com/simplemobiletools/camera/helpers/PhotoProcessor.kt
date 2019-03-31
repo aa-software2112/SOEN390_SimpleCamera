@@ -120,14 +120,17 @@ class PhotoProcessor(
             }
 
 
+            if (QRScanner.qr_in_progress || QRScanner.qr_requested)
+            {
+                QRScanner.addQrPhoto(rotate(image, totalRotation));
+                QRScanner.extractURL();
+                QRScanner.qr_requested = false;
+                return "";
+            }
 
             try {
                 image.compress(Bitmap.CompressFormat.JPEG, activity.config.photoQuality, fos)
-                if (QRScanner.qr_in_progress)
-                {
-                    QRScanner.setQrPhoto(image);
-                    return "";
-                }
+
 
                 if (!isThirdPartyIntent) {
                     activity.saveImageRotation(path, totalRotation)

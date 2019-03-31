@@ -53,7 +53,7 @@
         This app is just one piece of a bigger series of apps. You can find the rest of them at https://www.simplemobiletools.com
     </string>
     <string name="grid_line" translatable="false">Grid line</string>
-
+    <string name="qr_alert_title" translatable="false">QR Navigation</string>
     <!--
         Haven't found some strings? There's more at
         https://github.com/SimpleMobileTools/Simple-Commons/tree/master/commons/src/main/res
