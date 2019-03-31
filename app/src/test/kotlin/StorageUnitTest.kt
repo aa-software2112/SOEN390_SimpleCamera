@@ -1,8 +1,5 @@
 package test.kotlin
 
-import android.Manifest
-import android.os.Environment
-import android.os.StatFs
 import android.widget.TextView
 import com.simplemobiletools.camera.R
 import org.junit.runner.RunWith
@@ -14,7 +11,6 @@ import com.simplemobiletools.commons.extensions.value
 import org.junit.* // ktlint-disable no-wildcard-imports
 import org.robolectric.shadows.ShadowStatFs
 
-
 @RunWith(RobolectricTestRunner::class)
 class StorageUnitTest : KotlinRobolectric() {
 
@@ -23,13 +19,12 @@ class StorageUnitTest : KotlinRobolectric() {
         Assert.assertEquals("9.54 Mb", DeviceStorageUtil.bytesToHuman(9999999))
         Assert.assertEquals("953.67 Mb", DeviceStorageUtil.bytesToHuman(999999999))
         Assert.assertEquals("9.31 Gb", DeviceStorageUtil.bytesToHuman(9999999999))
-
     }
 
     @Test
     fun testZeroSpace() {
 
-        //Toggle the space remaining
+        // Toggle the space remaining
         mMainActivity?.config?.spaceRemainingOn = true
         Assert.assertEquals(true, mMainActivity?.config?.spaceRemainingOn)
 
@@ -40,11 +35,11 @@ class StorageUnitTest : KotlinRobolectric() {
 
     @Test
     fun testFreeSpace() {
-        //Toggle the space remaining
+        // Toggle the space remaining
         mMainActivity?.config?.spaceRemainingOn = true
         Assert.assertEquals(true, mMainActivity?.config?.spaceRemainingOn)
 
-        //Fake Storage Capacity
+        // Fake Storage Capacity
         ShadowStatFs.registerStats("/tmp", 100, 1230, 1120)
 
         mMainActivity?.setRecordingState(true)
@@ -54,7 +49,7 @@ class StorageUnitTest : KotlinRobolectric() {
         // Stop Recording
         mMainActivity?.setRecordingState(false)
 
-        //Fake Storage Capacity
+        // Fake Storage Capacity
         ShadowStatFs.registerStats("/tmp", 100, 1120, 12220)
 
         mMainActivity?.setRecordingState(true)
