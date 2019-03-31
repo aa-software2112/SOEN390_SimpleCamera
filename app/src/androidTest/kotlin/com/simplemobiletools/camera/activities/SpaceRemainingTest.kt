@@ -52,6 +52,8 @@ class SpaceRemainingTest : BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
         /** Navigate to Settings */
         this.performClicks(onView(withId(R.id.settings)))
 
+        Thread.sleep(1000);
+
         /** Verify if the space remaining toggle view is present */
         onView(withId(R.id.settings_space_remaining_holder)).check(matches(isDisplayed()))
         onView(withId(R.id.settings_space_remaining)).check(matches(isDisplayed()))
@@ -80,7 +82,7 @@ class SpaceRemainingTest : BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
 
             /** Switch to video mode */
             onView(withId(R.id.toggle_photo_video)).perform(click())
-            Thread.sleep(3000)
+            Thread.sleep(500)
         }
 
         /** Open the shutter */
@@ -88,13 +90,15 @@ class SpaceRemainingTest : BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
 
         /** Verify if the space remaining feature is present */
         onView(withId(R.id.space_remaining)).check(matches(isDisplayed()))
-        Thread.sleep(3000)
+        Thread.sleep(1500)
 
         /** Close the shutter */
         onView(withId(R.id.shutter)).perform(click())
 
         /** Navigate to Settings */
         this.performClicks(onView(withId(R.id.settings)))
+
+        Thread.sleep(2000);
 
         /** Toggle OFF the space remaining feature */
         onView(withId(R.id.settings_space_remaining)).perform(click())
@@ -108,6 +112,8 @@ class SpaceRemainingTest : BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
 
         /** Navigate to Settings */
         this.performClicks(onView(withId(R.id.settings)))
+
+        Thread.sleep(1000)
 
         /** Verify if the space remaining toggle view is present */
         onView(withId(R.id.settings_space_remaining_holder)).check(matches(isDisplayed()))
@@ -137,7 +143,7 @@ class SpaceRemainingTest : BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
 
             /** Switch to photo mode */
             onView(withId(R.id.toggle_photo_video)).perform(click())
-            Thread.sleep(3000)
+            Thread.sleep(500)
         }
 
         /** Verify that the space remaining feature is NOT present by checking if countdown toggle is present */
@@ -148,7 +154,7 @@ class SpaceRemainingTest : BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
 
         /** Take a photo */
         onView(withId(R.id.shutter)).perform(click())
-        Thread.sleep(3000)
+        Thread.sleep(1500)
 
         /** Verify that the space remaining feature is NOT present by checking if countdown toggle is present */
         onView(withId(R.id.countdown_toggle)).check(matches(isDisplayed()))
@@ -158,6 +164,8 @@ class SpaceRemainingTest : BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
 
         /** Navigate to Settings */
         this.performClicks(onView(withId(R.id.settings)))
+
+        Thread.sleep(2000);
 
         /** Toggle OFF the space remaining feature */
         onView(withId(R.id.settings_space_remaining)).perform(click())
