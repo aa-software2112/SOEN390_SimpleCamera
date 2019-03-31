@@ -75,6 +75,14 @@ class SpaceRemainingTest : BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
                         isDisplayed()))
         appCompatImageButton.perform(click())
 
+        /** Verifying that the app is IN photo mode */
+        if (mMainActivity?.activity?.mIsInPhotoMode == true) {
+
+            /** Switch to video mode */
+            onView(withId(R.id.toggle_photo_video)).perform(click())
+            Thread.sleep(3000)
+        }
+
         /** Open the shutter */
         onView(withId(R.id.shutter)).perform(click())
 
@@ -124,9 +132,13 @@ class SpaceRemainingTest : BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
                         isDisplayed()))
         appCompatImageButton.perform(click())
 
-        /** Toggle photo mode */
-        onView(withId(R.id.toggle_photo_video)).perform(click())
-        Thread.sleep(3000)
+        /** Verifying that the app is IN video mode */
+        if (mMainActivity?.activity?.mIsInPhotoMode == false) {
+
+            /** Switch to photo mode */
+            onView(withId(R.id.toggle_photo_video)).perform(click())
+            Thread.sleep(3000)
+        }
 
         /** Verify that the space remaining feature is NOT present by checking if countdown toggle is present */
         onView(withId(R.id.countdown_toggle)).check(matches(isDisplayed()))
@@ -143,9 +155,6 @@ class SpaceRemainingTest : BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
 
         /** Verify if the space remaining feature is not present */
         onView(withId(R.id.space_remaining)).check(matches(not(isDisplayed())))
-
-        /** Toggle video mode */
-        onView(withId(R.id.toggle_photo_video)).perform(click())
 
         /** Navigate to Settings */
         this.performClicks(onView(withId(R.id.settings)))
