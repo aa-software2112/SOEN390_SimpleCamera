@@ -285,6 +285,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         btn_short_timer.setOnClickListener { setCountdownMode(TIMER_SHORT) }
         btn_medium_timer.setOnClickListener { setCountdownMode(TIMER_MEDIUM) }
         btn_long_timer.setOnClickListener { setCountdownMode(TIMER_LONG) }
+        share.setOnClickListener{ handleShare() }
 
         shutter.setOnTouchListener(object : OnTouchListener {
             override fun onTouch(view: View, event: MotionEvent): Boolean {
@@ -463,6 +464,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                 settings.beInvisible()
                 change_resolution.beInvisible()
                 toggle_flash.beInvisible()
+                share.beInvisible()
                 last_image.beInvisible()
                 swipe_area.beInvisible()
             } else {
@@ -476,6 +478,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             change_resolution.isClickable = !hide
             toggle_flash.isClickable = !hide
             last_image.isClickable = !hide
+            share.isClickable = !hide
         }
     }
 
@@ -503,6 +506,15 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     private fun handleChangeResolutionDialog() {
         if (change_resolution.alpha == 1f) mPreview?.showChangeResolutionDialog() else fadeInButtons()
+    }
+
+    private fun handleShare(){
+        val shareIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_STREAM, config.savePhotosFolder)
+            type = "image/jpeg"
+        }
+        startActivity(Intent.createChooser(shareIntent, "Share picture to"))
     }
 
     private fun togglePhotoVideo() {
@@ -603,6 +615,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         fadeAnim(btn_short_timer, .0f)
         fadeAnim(btn_medium_timer, .0f)
         fadeAnim(btn_long_timer, .0f)
+        fadeAnim(share, .5f)
     }
 
     private fun fadeInButtons() {
@@ -616,6 +629,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         fadeAnim(btn_short_timer, 1f)
         fadeAnim(btn_medium_timer, 1f)
         fadeAnim(btn_long_timer, 1f)
+        fadeAnim(share, 1f)
         scheduleFadeOut()
     }
 
