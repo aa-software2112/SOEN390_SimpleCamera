@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
+import android.os.SystemClock;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -244,6 +245,11 @@ public class QRScanner implements Runnable {
             this.UIHandler.sendMessage(Message.obtain(UIHandler, QRScanner.HIDE_PROGRESS_BAR));
         }
 
+
+        /** Shut the spinner after 10 seconds if some error occurs */
+        this.UIHandler.sendMessageAtTime(Message.obtain(UIHandler, QRScanner.HIDE_PROGRESS_BAR),
+                SystemClock.uptimeMillis() + 10000);
+
     }
 
     public void scanPhotos()
@@ -266,7 +272,10 @@ public class QRScanner implements Runnable {
                         public void onSuccess(List<FirebaseVisionBarcode> barcodes) {
 
                             /** Only process a single barcode - ignore the rest */
-                            if (barcodes.size() == 0) { return; }
+                            if (barcodes.size() == 0) {
+                                UIHandler.sendMessage(Message.obtain(UIHandler, QRScanner.HIDE_PROGRESS_BAR));
+                                return;
+                            }
 
                             FirebaseVisionBarcode bcode = barcodes.get(0);
 
@@ -282,17 +291,21 @@ public class QRScanner implements Runnable {
                                 UIHandler.sendMessage(Message.obtain(UIHandler,
                                         0, bcode));
                             }
+
+                            UIHandler.sendMessage(Message.obtain(UIHandler, QRScanner.HIDE_PROGRESS_BAR));
+
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
+                            UIHandler.sendMessage(Message.obtain(UIHandler, QRScanner.HIDE_PROGRESS_BAR));
                             e.printStackTrace();
                         }
                     });
         }
 
-        this.UIHandler.sendMessage(Message.obtain(UIHandler, QRScanner.HIDE_PROGRESS_BAR));
+
 
     }
 

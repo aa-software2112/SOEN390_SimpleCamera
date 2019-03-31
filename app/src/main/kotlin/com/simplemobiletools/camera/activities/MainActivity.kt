@@ -332,7 +332,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                 if (MotionEvent.ACTION_DOWN == event.getAction())
                 {
                     System.out.println("ACTION_DOWN")
-                    mQrScanner.scheduleQR(250);
+                    mQrScanner.scheduleQR(1000);
 
                    return true;
                 }
