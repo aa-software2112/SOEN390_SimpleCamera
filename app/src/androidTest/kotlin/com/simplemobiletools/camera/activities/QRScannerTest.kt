@@ -72,5 +72,4 @@ class QRScannerTest {
 
         onView(withId(R.id.swipe_area)).perform(ViewActionHelper.release())
     }
-
 }
