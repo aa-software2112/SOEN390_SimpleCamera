@@ -98,7 +98,7 @@ class PhotoProcessor(
                 // make sure the image itself is rotated at third party intents
                 image = rotate(image, totalRotation)
             }
-            if (activity.addressFirstLine != "" && activity.addressSecondLine != "" && activity.addressCoordinates != "") {
+            if (activity.addressFirstLine != null) {
                 image = addLocationStamp(image, activity.addressFirstLine, activity.addressSecondLine, activity.addressCoordinates)
             }
 
