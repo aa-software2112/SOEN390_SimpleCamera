@@ -119,18 +119,15 @@ class PhotoProcessor(
                 }
             }
 
-
-            if (QRScanner.qr_requested)
-            {
-                QRScanner.getInstance().addQrPhoto(rotate(image, totalRotation));
-                QRScanner.getInstance().scanPhotos();
-                QRScanner.qr_requested = false;
-                return "";
+            if (QRScanner.qr_requested) {
+                QRScanner.getInstance().addQrPhoto(rotate(image, totalRotation))
+                QRScanner.getInstance().scanPhotos()
+                QRScanner.qr_requested = false
+                return ""
             }
 
             try {
                 image.compress(Bitmap.CompressFormat.JPEG, activity.config.photoQuality, fos)
-
 
                 if (!isThirdPartyIntent) {
                     activity.saveImageRotation(path, totalRotation)
@@ -139,8 +136,6 @@ class PhotoProcessor(
                 activity.showErrorToast(e)
                 return ""
             }
-
-
 
             if (activity.config.savePhotoMetadata && !isThirdPartyIntent) {
                 val fileExif = ExifInterface(path)

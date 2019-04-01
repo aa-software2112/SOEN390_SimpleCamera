@@ -38,26 +38,12 @@ import com.google.android.gms.location.LocationServices
 import android.view.View
 import android.location.Geocoder
 import android.location.Address
-import android.os.HandlerThread
 import android.util.Log
-import androidx.annotation.NonNull
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.android.gms.tasks.Task
 import com.google.android.gms.vision.CameraSource
-import com.google.android.gms.vision.Detector
-import com.google.android.gms.vision.barcode.Barcode
-import com.google.android.gms.vision.barcode.BarcodeDetector
 import com.simplemobiletools.camera.implementations.QRScanner
 import java.util.Locale
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.ml.vision.FirebaseVision
-import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
-import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetectorOptions
-import com.google.firebase.ml.vision.common.FirebaseVisionImage
-import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata
 import com.google.zxing.BinaryBitmap
-import com.google.zxing.LuminanceSource
 import com.google.zxing.MultiFormatReader
 import com.google.zxing.RGBLuminanceSource
 import com.google.zxing.common.HybridBinarizer
@@ -281,7 +267,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         mQrScanner = QRScanner.getInstance().setContext(getApplicationContext())
                                             .setApplication(this)
                                             .setCameraPreview(mPreview)
-                                            .build();
+                                            .build()
 
         view_holder.addView(mPreview as ViewGroup)
         checkImageCaptureIntent()
@@ -304,7 +290,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     internal fun initButtons() {
 
-        System.out.println("Initializing Buttons");
+        System.out.println("Initializing Buttons")
         toggle_camera.setOnClickListener { toggleCamera() }
 
         swipe_area.setOnTouchListener(object : OnSwipeTouchListener(applicationContext) {
@@ -325,29 +311,23 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                 /** Must call super here in order to
                  * keep swipes working
                  */
-                super.onTouch(v, event);
+                super.onTouch(v, event)
 
-
-
-                if (MotionEvent.ACTION_DOWN == event.getAction())
-                {
+                if (MotionEvent.ACTION_DOWN == event.getAction()) {
                     System.out.println("ACTION_DOWN")
-                    mQrScanner.scheduleQR(1000);
+                    mQrScanner.scheduleQR(1000)
 
-                   return true;
-                }
-                else if (MotionEvent.ACTION_UP == event.getAction())
-                {
+                    return true
+                } else if (MotionEvent.ACTION_UP == event.getAction()) {
                     System.out.println("ACTION_UP")
 
-                    mQrScanner.cancelQr();
+                    mQrScanner.cancelQr()
 
-                   return true;
+                    return true
                 }
 
-                return true;
+                return true
             }
-
         })
 
         toggle_flash.setOnClickListener { toggleFlash() }
@@ -359,7 +339,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         btn_short_timer.setOnClickListener { setCountdownMode(TIMER_SHORT) }
         btn_medium_timer.setOnClickListener { setCountdownMode(TIMER_MEDIUM) }
         btn_long_timer.setOnClickListener { setCountdownMode(TIMER_LONG) }
-
 
         shutter.setOnTouchListener(object : OnTouchListener {
             override fun onTouch(view: View, event: MotionEvent): Boolean {
@@ -400,26 +379,25 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         filter_aqua.beGone()
     }
 
-    private fun scanQRImage(bMap: Bitmap) : String {
-        var contents = "";
+    private fun scanQRImage(bMap: Bitmap): String {
+        var contents = ""
 
-        var intArray:IntArray = IntArray(bMap.getWidth()*bMap.getHeight());
-        //copy pixel data from the Bitmap into the 'intArray' array
-        bMap.getPixels(intArray, 0, bMap.getWidth(), 0, 0, bMap.getWidth(), bMap.getHeight());
+        var intArray: IntArray = IntArray(bMap.getWidth()*bMap.getHeight())
+        // copy pixel data from the Bitmap into the 'intArray' array
+        bMap.getPixels(intArray, 0, bMap.getWidth(), 0, 0, bMap.getWidth(), bMap.getHeight())
 
-        var source = RGBLuminanceSource(bMap.getWidth(), bMap.getHeight(), intArray);
-        var bitmap = BinaryBitmap(HybridBinarizer(source));
+        var source = RGBLuminanceSource(bMap.getWidth(), bMap.getHeight(), intArray)
+        var bitmap = BinaryBitmap(HybridBinarizer(source))
 
-        var reader = MultiFormatReader();
+        var reader = MultiFormatReader()
 
         try {
-            var result = reader.decode(bitmap);
-            contents = result.getText();
+            var result = reader.decode(bitmap)
+            contents = result.getText()
+        } catch (e: Exception) {
+            Log.e("QrTest", "Error decoding barcode", e)
         }
-        catch (e: Exception) {
-            Log.e("QrTest", "Error decoding barcode", e);
-        }
-        return contents;
+        return contents
     }
 
     private fun toggleCamera() {

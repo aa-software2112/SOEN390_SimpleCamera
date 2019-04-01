@@ -1011,9 +1011,6 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
     }
 
     public fun isInPreviewMode(): Boolean {
-        return this.mCameraState == STATE_PREVIEW;
+        return this.mCameraState == STATE_PREVIEW
     }
-
-
-
 }
