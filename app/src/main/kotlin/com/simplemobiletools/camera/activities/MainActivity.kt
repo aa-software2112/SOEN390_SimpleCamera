@@ -285,6 +285,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         btn_short_timer.setOnClickListener { setCountdownMode(TIMER_SHORT) }
         btn_medium_timer.setOnClickListener { setCountdownMode(TIMER_MEDIUM) }
         btn_long_timer.setOnClickListener { setCountdownMode(TIMER_LONG) }
+        caption_button.setOnClickListener { openCaption() }
 
         shutter.setOnTouchListener(object : OnTouchListener {
             override fun onTouch(view: View, event: MotionEvent): Boolean {
@@ -722,7 +723,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     }
 
     private fun animateViews(degrees: Int) {
-        val views = arrayOf<View>(toggle_camera, toggle_flash, toggle_photo_video, change_resolution, shutter, settings, countdown_toggle, countdown_time_selected, countdown_times)
+        val views = arrayOf<View>(toggle_camera, toggle_flash, toggle_photo_video, change_resolution, shutter, settings, countdown_toggle, countdown_time_selected, countdown_times, caption_button)
         for (view in views) {
             rotate(view, degrees)
         }
@@ -954,5 +955,8 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     fun testPreviewFilterWrapper(index: Int): Boolean {
         return this.mPreview!!.previewFilter(index)
+    }
+
+    internal fun openCaption() {
     }
 }

@@ -7,6 +7,30 @@
     android:layout_height="match_parent"
     android:background="@android:color/black">
 
+    <LinearLayout
+        android:id="@+id/caption_holder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="100dp"
+        android:orientation="horizontal">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="ENTER CAPTION"
+                android:textColor="@color/white"
+                android:textColorHighlight="@color/white"
+                android:textColorHint="@color/white"
+                android:textColorLink="@color/common_google_signin_btn_text_dark_focused" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
     <com.simplemobiletools.camera.views.AutoFitTextureView
         android:id="@+id/camera_texture_view"
         android:layout_width="wrap_content"
@@ -231,6 +255,7 @@
             android:layout_weight="1"
             android:padding="@dimen/normal_margin"
             android:src="@drawable/ic_caption"
+            android:tint="@color/md_green_400_dark"
             android:visibility="visible" />
 
         <ImageView
@@ -265,7 +290,9 @@
         android:layout_weight="1"
         android:gravity="clip_vertical|center_horizontal|center_vertical"
         android:orientation="horizontal"
-        android:visibility="visible" />
+        android:visibility="visible" >
+
+    </LinearLayout>
 
     <HorizontalScrollView
         android:id="@+id/filter_scroll_area"
