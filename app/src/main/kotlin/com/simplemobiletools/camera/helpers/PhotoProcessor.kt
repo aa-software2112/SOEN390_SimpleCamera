@@ -100,7 +100,8 @@ class PhotoProcessor(
                 image = rotate(image, totalRotation)
             }
 
-            if (activity.addressFirstLine != "" && activity.addressSecondLine != "" && activity.addressCoordinates != "") {
+            if (activity.addressFirstLine != null) {
+
                 image = addLocationStamp(image, activity.addressFirstLine, activity.addressSecondLine, activity.addressCoordinates)
             }
 
