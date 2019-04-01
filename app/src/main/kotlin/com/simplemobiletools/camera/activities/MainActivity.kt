@@ -465,17 +465,20 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                 toggle_flash.beInvisible()
                 last_image.beInvisible()
                 swipe_area.beInvisible()
+                caption_button.beInvisible()
             } else {
                 settings.beVisible()
                 change_resolution.beVisible()
                 toggle_flash.beVisible()
                 last_image.beVisible()
                 swipe_area.beVisible()
+                caption_button.beVisible()
             }
             settings.isClickable = !hide
             change_resolution.isClickable = !hide
             toggle_flash.isClickable = !hide
             last_image.isClickable = !hide
+            caption_button.isClickable = !hide
         }
     }
 
@@ -604,6 +607,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         fadeAnim(btn_short_timer, .0f)
         fadeAnim(btn_medium_timer, .0f)
         fadeAnim(btn_long_timer, .0f)
+        fadeAnim(caption_button, .5f)
     }
 
     private fun fadeInButtons() {
@@ -617,6 +621,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         fadeAnim(btn_short_timer, 1f)
         fadeAnim(btn_medium_timer, 1f)
         fadeAnim(btn_long_timer, 1f)
+        fadeAnim(caption_button, 1f)
         scheduleFadeOut()
     }
 
