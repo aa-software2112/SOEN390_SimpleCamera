@@ -110,16 +110,19 @@ public class QRScanner implements Runnable {
         return QRScanner.getInstance();
     }
 
+
     public boolean isBuilt()
     {
         return this.bitmapQueue != null ? true : false;
     }
+
 
     public QRScanner setContext(Context context)
     {
         this.context = context;
         return QRScanner.getInstance();
     }
+
 
     public boolean isContextSet()
     {
@@ -132,6 +135,7 @@ public class QRScanner implements Runnable {
         this.activity = activity;
         return QRScanner.getInstance();
     }
+
 
     public boolean isApplicationSet()
     {
@@ -213,6 +217,7 @@ public class QRScanner implements Runnable {
         QRScanner.bitmapQueue.add(image);
         // for testing
         addedQrPhotoTest = true;
+
     }
 
     /** Sets the camera for taking photos */
@@ -222,6 +227,7 @@ public class QRScanner implements Runnable {
         return QRScanner.getInstance();
     }
 
+
     public boolean isCameraPreviewSet()
     {
         return this.cameraPreview != null ? true : false;
@@ -230,6 +236,7 @@ public class QRScanner implements Runnable {
     public static boolean isQrScheduled(){
         return qr_scheduled;
     }
+
 
     public synchronized void scheduleQR(int milliseconds)
     {
@@ -337,7 +344,6 @@ public class QRScanner implements Runnable {
                         }
                     });
         }
-
 
 
 
