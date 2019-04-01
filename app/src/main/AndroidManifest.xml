@@ -33,8 +33,14 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:theme="@style/AppTheme">
 
+
+        <meta-data
+            android:name="com.google.firebase.ml.vision.DEPENDENCIES"
+            android:value="barcode" />
+
         <meta-data android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
 
         <activity
             android:name=".activities.SplashActivity"
@@ -75,6 +81,7 @@
                 <action android:name="android.media.action.VIDEO_CAPTURE"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
+
         </activity>
 
         <activity
