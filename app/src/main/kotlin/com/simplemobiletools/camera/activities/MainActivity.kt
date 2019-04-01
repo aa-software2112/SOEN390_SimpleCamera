@@ -32,18 +32,42 @@ import android.view.MotionEvent
 import android.view.View.OnTouchListener
 import android.location.Location
 import android.annotation.SuppressLint
+
+
 import android.graphics.Bitmap
+import android.content.Context
+
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import android.view.View
 import android.location.Geocoder
 import android.location.Address
+
+import android.os.HandlerThread
+
 import android.util.Log
 import com.google.android.gms.vision.CameraSource
+
+import com.google.android.gms.vision.Detector
+import com.google.android.gms.vision.barcode.Barcode
+import com.google.android.gms.vision.barcode.BarcodeDetector
+
 import com.simplemobiletools.camera.implementations.QRScanner
+
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
+
 import java.util.Locale
 import com.google.firebase.analytics.FirebaseAnalytics
+
+import com.google.firebase.ml.vision.FirebaseVision
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetectorOptions
+import com.google.firebase.ml.vision.common.FirebaseVisionImage
+import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata
 import com.google.zxing.BinaryBitmap
+import com.google.zxing.LuminanceSource
+
 import com.google.zxing.MultiFormatReader
 import com.google.zxing.RGBLuminanceSource
 import com.google.zxing.common.HybridBinarizer
@@ -290,7 +314,8 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     internal fun initButtons() {
 
-        System.out.println("Initializing Buttons")
+        System.out.println("Initializing Buttons");
+
         toggle_camera.setOnClickListener { toggleCamera() }
 
         swipe_area.setOnTouchListener(object : OnSwipeTouchListener(applicationContext) {
@@ -379,8 +404,9 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         filter_aqua.beGone()
     }
 
-    private fun scanQRImage(bMap: Bitmap): String {
-        var contents = ""
+
+    private fun scanQRImage(bMap: Bitmap) : String {
+        var contents = "";
 
         var intArray: IntArray = IntArray(bMap.getWidth()*bMap.getHeight())
         // copy pixel data from the Bitmap into the 'intArray' array
@@ -397,7 +423,9 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         } catch (e: Exception) {
             Log.e("QrTest", "Error decoding barcode", e)
         }
-        return contents
+
+        return contents;
+
     }
 
     private fun toggleCamera() {
@@ -908,8 +936,19 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             addressFirstLine = ""
             addressSecondLine = ""
             addressCoordinates = ""
-        } else
-            stampGPS()
+        } else {
+            if (isInternetAvailable()) {
+                stampGPS()
+            }
+        }
+    }
+
+    internal fun isInternetAvailable(): Boolean {
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE)
+        return if (connectivityManager is ConnectivityManager) {
+            val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
+            networkInfo?.isConnected ?: false
+        } else false
     }
 
     /**
@@ -942,15 +981,17 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                         addresses = geocoder.getFromLocation(latitude, longitude, 1)
 
                         // Parse the first address in the array
-                        addressNumber = addresses[0].featureName
-                        addressStreet = addresses[0].thoroughfare
-                        addressFirstLine = addressNumber + " " + addressStreet
+                        if (addresses[0].featureName.isNotEmpty() && addresses[0].thoroughfare.isNotEmpty() && addresses[0].adminArea.isNotEmpty() && addresses[0].countryCode.isNotEmpty()) {
+                            addressNumber = addresses[0].featureName
+                            addressStreet = addresses[0].thoroughfare
+                            addressFirstLine = addressNumber + " " + addressStreet
 
-                        addressProvince = addresses[0].adminArea
-                        addressCountry = addresses[0].countryCode
-                        addressSecondLine = addressProvince + ", " + addressCountry
+                            addressProvince = addresses[0].adminArea
+                            addressCountry = addresses[0].countryCode
+                            addressSecondLine = addressProvince + ", " + addressCountry
 
-                        addressCoordinates = latitude.toString().dropLast(3) + "N," + longitude.toString().dropLast(3) + "E"
+                            addressCoordinates = latitude.toString().dropLast(3) + "N," + longitude.toString().dropLast(3) + "E"
+                        }
                     }
                 }
     }

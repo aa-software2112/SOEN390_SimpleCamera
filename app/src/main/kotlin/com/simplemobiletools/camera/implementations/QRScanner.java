@@ -75,6 +75,10 @@ public class QRScanner implements Runnable {
     /** Progress bar */
     private ProgressBar qrProgressBar = null;
 
+    /** Testing vars */
+    public static boolean addedQrPhotoTest = false;
+    public static boolean scanPhotoTest = false;
+
     /** This class must be a singleton because it deals with
      * the application interface and camera, and having multiple instances of these
      * interactions will add multiple levels of uncertainty and synchronization issues.
@@ -99,9 +103,16 @@ public class QRScanner implements Runnable {
         return QRScanner.getInstance();
     }
 
+
     public Context getContext()
     {
         return this.context;
+    }
+
+
+    public boolean isBuilt()
+    {
+        return this.bitmapQueue != null ? true : false;
     }
 
     public QRScanner setContext(Context context)
@@ -110,10 +121,23 @@ public class QRScanner implements Runnable {
         return QRScanner.getInstance();
     }
 
+
+    public boolean isContextSet()
+    {
+        return this.context != null ? true : false;
+    }
+
+
     public QRScanner setApplication(MainActivity activity)
     {
         this.activity = activity;
         return QRScanner.getInstance();
+    }
+
+
+    public boolean isApplicationSet()
+    {
+        return this.activity != null ? true : false;
     }
 
     private void init()
@@ -189,6 +213,9 @@ public class QRScanner implements Runnable {
     public void addQrPhoto(Bitmap image)
     {
         QRScanner.bitmapQueue.add(image);
+        // for testing
+        addedQrPhotoTest = true;
+
     }
 
     /** Sets the camera for taking photos */
@@ -197,6 +224,17 @@ public class QRScanner implements Runnable {
         this.cameraPreview = (CameraPreview) cameraPreview;
         return QRScanner.getInstance();
     }
+
+
+    public boolean isCameraPreviewSet()
+    {
+        return this.cameraPreview != null ? true : false;
+    }
+
+    public static boolean isQrScheduled(){
+        return qr_scheduled;
+    }
+
 
     public synchronized void scheduleQR(int milliseconds)
     {
@@ -256,6 +294,8 @@ public class QRScanner implements Runnable {
          * to navigate to the URL
          */
         while(!QRScanner.bitmapQueue.isEmpty()) {
+            // for testing
+            scanPhotoTest = true;
 
             /** Take a bitmap from the image queue and attempt to scan it */
             Bitmap bitmap = this.bitmapQueue.poll();

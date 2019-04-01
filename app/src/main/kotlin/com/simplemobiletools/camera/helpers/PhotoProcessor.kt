@@ -100,7 +100,8 @@ class PhotoProcessor(
                 image = rotate(image, totalRotation)
             }
 
-            if (activity.addressFirstLine != "" && activity.addressSecondLine != "" && activity.addressCoordinates != "") {
+            if (activity.addressFirstLine != null) {
+
                 image = addLocationStamp(image, activity.addressFirstLine, activity.addressSecondLine, activity.addressCoordinates)
             }
 
@@ -119,11 +120,14 @@ class PhotoProcessor(
                 }
             }
 
-            if (QRScanner.qr_requested) {
-                QRScanner.getInstance().addQrPhoto(rotate(image, totalRotation))
-                QRScanner.getInstance().scanPhotos()
-                QRScanner.qr_requested = false
-                return ""
+
+            if (QRScanner.qr_requested)
+            {
+                QRScanner.getInstance().addQrPhoto(rotate(image, totalRotation));
+                QRScanner.getInstance().scanPhotos();
+                QRScanner.qr_requested = false;
+                return "";
+
             }
 
             try {
