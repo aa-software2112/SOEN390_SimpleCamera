@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'jacoco'
+apply plugin: 'com.google.gms.google-services'
 
 jacoco {
     toolVersion = '0.7.1.201405082137'
@@ -85,6 +86,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:16.0.8'
     implementation 'com.google.firebase:firebase-ml-vision:19.0.3'
     implementation 'com.google.zxing:core:3.2.1'
+
 }
 
 afterEvaluate {
