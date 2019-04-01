@@ -141,8 +141,6 @@ class PhotoProcessor(
                 return ""
             }
 
-
-
             if (activity.config.savePhotoMetadata && !isThirdPartyIntent) {
                 val fileExif = ExifInterface(path)
                 tempExif.copyTo(fileExif)
