@@ -33,6 +33,7 @@ import android.view.View.OnTouchListener
 import android.location.Location
 import android.annotation.SuppressLint
 
+
 import android.graphics.Bitmap
 import android.content.Context
 
@@ -41,6 +42,7 @@ import com.google.android.gms.location.LocationServices
 import android.view.View
 import android.location.Geocoder
 import android.location.Address
+
 
 import android.os.HandlerThread
 import android.util.Log
@@ -52,6 +54,7 @@ import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
+
 import com.simplemobiletools.camera.implementations.QRScanner
 
 import android.net.ConnectivityManager
@@ -59,6 +62,7 @@ import android.net.NetworkInfo
 
 import java.util.Locale
 import com.google.firebase.analytics.FirebaseAnalytics
+
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetectorOptions
@@ -66,6 +70,7 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata
 import com.google.zxing.BinaryBitmap
 import com.google.zxing.LuminanceSource
+
 import com.google.zxing.MultiFormatReader
 import com.google.zxing.RGBLuminanceSource
 import com.google.zxing.common.HybridBinarizer
@@ -313,6 +318,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     internal fun initButtons() {
 
         System.out.println("Initializing Buttons");
+
         toggle_camera.setOnClickListener { toggleCamera() }
 
         swipe_area.setOnTouchListener(object : OnSwipeTouchListener(applicationContext) {
@@ -408,6 +414,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         filter_aqua.beGone()
     }
 
+
     private fun scanQRImage(bMap: Bitmap) : String {
         var contents = "";
 
@@ -428,6 +435,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             Log.e("QrTest", "Error decoding barcode", e);
         }
         return contents;
+
     }
 
     private fun toggleCamera() {

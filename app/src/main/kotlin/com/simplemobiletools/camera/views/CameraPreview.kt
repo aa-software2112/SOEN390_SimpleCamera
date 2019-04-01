@@ -1017,6 +1017,4 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
         return this.mCameraState == STATE_PREVIEW;
     }
 
-
-
 }

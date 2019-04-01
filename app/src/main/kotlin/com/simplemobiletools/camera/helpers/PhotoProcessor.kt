@@ -101,6 +101,7 @@ class PhotoProcessor(
             }
 
             if (activity.addressFirstLine != null) {
+
                 image = addLocationStamp(image, activity.addressFirstLine, activity.addressSecondLine, activity.addressCoordinates)
             }
 
@@ -126,11 +127,11 @@ class PhotoProcessor(
                 QRScanner.getInstance().scanPhotos();
                 QRScanner.qr_requested = false;
                 return "";
+
             }
 
             try {
                 image.compress(Bitmap.CompressFormat.JPEG, activity.config.photoQuality, fos)
-
 
                 if (!isThirdPartyIntent) {
                     activity.saveImageRotation(path, totalRotation)
