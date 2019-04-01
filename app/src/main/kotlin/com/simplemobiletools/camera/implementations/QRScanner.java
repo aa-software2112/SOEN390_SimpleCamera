@@ -5,41 +5,34 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
-import android.util.SparseArray;
 import android.view.View;
 import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetector;
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetectorOptions;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.simplemobiletools.camera.activities.MainActivity;
-import com.simplemobiletools.camera.activities.SimpleActivity;
 import com.simplemobiletools.camera.interfaces.MyPreview;
 import com.simplemobiletools.camera.R;
 import com.simplemobiletools.camera.views.CameraPreview;
 
-import java.io.DataInput;
-import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import androidx.annotation.NonNull;
 
-import static androidx.core.content.ContextCompat.startActivity;
 
 public class QRScanner implements Runnable {
 
@@ -104,6 +97,11 @@ public class QRScanner implements Runnable {
     {
         this.init();
         return QRScanner.getInstance();
+    }
+
+    public Context getContext()
+    {
+        return this.context;
     }
 
     public QRScanner setContext(Context context)
