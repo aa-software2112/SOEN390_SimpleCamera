@@ -1,5 +1,6 @@
 package test.kotlin
 
+import android.os.Environment
 import android.widget.TextView
 import com.simplemobiletools.camera.R
 import org.junit.runner.RunWith
@@ -40,7 +41,8 @@ class StorageUnitTest : KotlinRobolectric() {
         Assert.assertEquals(true, mMainActivity?.config?.spaceRemainingOn)
 
         // Fake Storage Capacity
-        ShadowStatFs.registerStats("/tmp", 100, 1230, 1120)
+        var path = Environment.getExternalStorageDirectory().absolutePath + ""
+        ShadowStatFs.registerStats(path, 100, 1230, 1120)
 
         mMainActivity?.setRecordingState(true)
         Assert.assertEquals(true, mMainActivity?.findViewById<TextView>(R.id.space_remaining)?.isVisible())
@@ -50,7 +52,7 @@ class StorageUnitTest : KotlinRobolectric() {
         mMainActivity?.setRecordingState(false)
 
         // Fake Storage Capacity
-        ShadowStatFs.registerStats("/tmp", 100, 1120, 12220)
+        ShadowStatFs.registerStats(path, 100, 1120, 12220)
 
         mMainActivity?.setRecordingState(true)
         Assert.assertEquals(true, mMainActivity?.findViewById<TextView>(R.id.space_remaining)?.isVisible())
