@@ -52,7 +52,7 @@ class SpaceRemainingTest : BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
         /** Navigate to Settings */
         this.performClicks(onView(withId(R.id.settings)))
 
-        Thread.sleep(1000);
+        Thread.sleep(1000)
 
         /** Verify if the space remaining toggle view is present */
         onView(withId(R.id.settings_space_remaining_holder)).check(matches(isDisplayed()))
@@ -98,7 +98,7 @@ class SpaceRemainingTest : BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
         /** Navigate to Settings */
         this.performClicks(onView(withId(R.id.settings)))
 
-        Thread.sleep(2000);
+        Thread.sleep(2000)
 
         /** Toggle OFF the space remaining feature */
         onView(withId(R.id.settings_space_remaining)).perform(click())
@@ -165,7 +165,7 @@ class SpaceRemainingTest : BaseUITestSetup(TestActivities.MAIN_ACTIVITY) {
         /** Navigate to Settings */
         this.performClicks(onView(withId(R.id.settings)))
 
-        Thread.sleep(2000);
+        Thread.sleep(2000)
 
         /** Toggle OFF the space remaining feature */
         onView(withId(R.id.settings_space_remaining)).perform(click())
