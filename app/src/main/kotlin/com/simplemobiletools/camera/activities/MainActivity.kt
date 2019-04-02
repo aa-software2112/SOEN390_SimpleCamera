@@ -609,8 +609,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         if (mIsInPhotoMode) {
             fadeAnim(countdown_toggle, .5f)
             fadeAnim(caption_toggle, .5f)
-        }
-        else {
+        } else {
             fadeAnim(space_remaining, .5f)
         }
         fadeAnim(countdown_time_selected, .5f)
@@ -992,5 +991,4 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         if (mIsInCaptionMode) {
         }
     }
-
 }
