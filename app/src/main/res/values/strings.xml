@@ -39,7 +39,7 @@
     <string name="shutter">Shutter</string>s
     <string name="advanced" translatable="false">Advanced Settings</string>
     <string name="change_resolution" translatable="false">Change Resolution</string>
-    <string name="caption_button" translatable="false">Stamp a caption onto photo</string>
+    <string name="caption_toggle" translatable="false">Stamp a caption onto photo</string>
 
     <!-- Strings displayed only on Google Playstore. Optional, but good to have -->
     <!-- Short description has to have less than 80 chars -->

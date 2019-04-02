@@ -65,6 +65,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     internal var mIsInCountdownMode = false
     internal var mCountdownTime = 0
     internal var mBurstEnabled = false
+    internal var mIsInCaptionMode = false
 
     internal var mFusedLocationClient: FusedLocationProviderClient? = null
     internal var mLastLocation: Location? = null
@@ -148,6 +149,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         mIsInCountdownMode = false
         mCountdownTime = 0
         mBurstHandler = Handler()
+        mIsInCaptionMode = false
 
         mBurstModeSetup = Runnable {
             // runs only once, that is after holding shutter button for 2 sec
@@ -285,7 +287,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         btn_short_timer.setOnClickListener { setCountdownMode(TIMER_SHORT) }
         btn_medium_timer.setOnClickListener { setCountdownMode(TIMER_MEDIUM) }
         btn_long_timer.setOnClickListener { setCountdownMode(TIMER_LONG) }
-        caption_button.setOnClickListener { openCaption() }
+        caption_toggle.setOnClickListener { toggleCaptionMode() }
 
         shutter.setOnTouchListener(object : OnTouchListener {
             override fun onTouch(view: View, event: MotionEvent): Boolean {
@@ -466,20 +468,20 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                 toggle_flash.beInvisible()
                 last_image.beInvisible()
                 swipe_area.beInvisible()
-                caption_button.beInvisible()
+                caption_toggle.beInvisible()
             } else {
                 settings.beVisible()
                 change_resolution.beVisible()
                 toggle_flash.beVisible()
                 last_image.beVisible()
                 swipe_area.beVisible()
-                caption_button.beVisible()
+                caption_toggle.beVisible()
             }
             settings.isClickable = !hide
             change_resolution.isClickable = !hide
             toggle_flash.isClickable = !hide
             last_image.isClickable = !hide
-            caption_button.isClickable = !hide
+            caption_toggle.isClickable = !hide
         }
     }
 
@@ -543,6 +545,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         space_remaining.beGone()
         mPreview?.initPhotoMode()
         setupPreviewImage(true)
+        caption_toggle.beVisible()
     }
 
     internal fun tryInitVideoMode() {
@@ -564,6 +567,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         shutter.setImageResource(R.drawable.ic_video_rec)
         setupPreviewImage(false)
         mPreview?.checkFlashlight()
+        caption_toggle.beGone()
     }
 
     private fun setupPreviewImage(isPhoto: Boolean) {
@@ -602,13 +606,18 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         fadeAnim(change_resolution, .5f)
         fadeAnim(last_image, .5f)
         fadeAnim(toggle_flash, .5f)
-        if (mIsInPhotoMode) fadeAnim(countdown_toggle, .5f) else fadeAnim(space_remaining, .5f)
+        if (mIsInPhotoMode) {
+            fadeAnim(countdown_toggle, .5f)
+            fadeAnim(caption_toggle, .5f)
+        }
+        else {
+            fadeAnim(space_remaining, .5f)
+        }
         fadeAnim(countdown_time_selected, .5f)
         fadeAnim(countdown_times, .0f)
         fadeAnim(btn_short_timer, .0f)
         fadeAnim(btn_medium_timer, .0f)
         fadeAnim(btn_long_timer, .0f)
-        fadeAnim(caption_button, .5f)
     }
 
     private fun fadeInButtons() {
@@ -616,13 +625,17 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         fadeAnim(change_resolution, 1f)
         fadeAnim(last_image, 1f)
         fadeAnim(toggle_flash, 1f)
-        if (mIsInPhotoMode) fadeAnim(countdown_toggle, 1f) else fadeAnim(space_remaining, 1f)
+        if (mIsInPhotoMode) {
+            fadeAnim(countdown_toggle, 1f)
+            fadeAnim(caption_toggle, 1f)
+        } else {
+            fadeAnim(space_remaining, 1f)
+        }
         fadeAnim(countdown_time_selected, 1f)
         fadeAnim(countdown_times, 1f)
         fadeAnim(btn_short_timer, 1f)
         fadeAnim(btn_medium_timer, 1f)
         fadeAnim(btn_long_timer, 1f)
-        fadeAnim(caption_button, 1f)
         scheduleFadeOut()
     }
 
@@ -723,7 +736,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     }
 
     private fun animateViews(degrees: Int) {
-        val views = arrayOf<View>(toggle_camera, toggle_flash, toggle_photo_video, change_resolution, shutter, settings, countdown_toggle, countdown_time_selected, countdown_times, caption_button)
+        val views = arrayOf<View>(toggle_camera, toggle_flash, toggle_photo_video, change_resolution, shutter, settings, countdown_toggle, countdown_time_selected, countdown_times, caption_toggle)
         for (view in views) {
             rotate(view, degrees)
         }
@@ -957,6 +970,27 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         return this.mPreview!!.previewFilter(index)
     }
 
-    internal fun openCaption() {
+    internal fun handleCaptionMode() {
+        if (caption_toggle.isChecked) {
+            mIsInCaptionMode = true
+            openCaptionInputAfterPhoto()
+        } else {
+            mIsInCaptionMode = false
+        }
     }
+
+    internal fun toggleCaptionMode() {
+            if (caption_toggle.alpha == .5f) {
+                fadeInButtons()
+                handleCaptionMode()
+            } else {
+                fadeOutButtons()
+            }
+        }
+
+    internal fun openCaptionInputAfterPhoto() {
+        if (mIsInCaptionMode) {
+        }
+    }
+
 }

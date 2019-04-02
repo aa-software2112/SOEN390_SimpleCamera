@@ -247,20 +247,21 @@
             android:padding="@dimen/normal_margin"
             android:src="@drawable/ic_flash_off" />
 
-        <ImageView
-            android:id="@+id/caption_button"
-            android:layout_width="@dimen/icon_size"
-            android:layout_height="@dimen/icon_size"
+        <ToggleButton
+            android:id="@+id/caption_toggle"
+            android:layout_width="20dp"
+            android:layout_height="35dp"
             android:layout_alignParentRight="true"
+            android:layout_marginTop="5dp"
             android:layout_weight="1"
-            android:padding="@dimen/normal_margin"
-            android:src="@drawable/ic_caption"
-            android:tint="@color/md_green_400_dark"
-            android:visibility="visible" />
+            android:background="@drawable/caption"
+            android:padding="12dp"
+            android:textOff=""
+            android:textOn="" />
 
         <ImageView
             android:id="@+id/change_resolution"
-            android:layout_width="@dimen/icon_size"
+            android:layout_width="56dp"
             android:layout_height="@dimen/icon_size"
             android:layout_alignParentRight="true"
             android:layout_weight="1"
