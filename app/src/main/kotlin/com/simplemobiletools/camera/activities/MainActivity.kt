@@ -351,7 +351,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         btn_short_timer.setOnClickListener { setCountdownMode(TIMER_SHORT) }
         btn_medium_timer.setOnClickListener { setCountdownMode(TIMER_MEDIUM) }
         btn_long_timer.setOnClickListener { setCountdownMode(TIMER_LONG) }
-        share.setOnClickListener{ handleShare() }
+        share.setOnClickListener { handleShare() }
 
         shutter.setOnTouchListener(object : OnTouchListener {
             override fun onTouch(view: View, event: MotionEvent): Boolean {
@@ -601,7 +601,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         if (change_resolution.alpha == 1f) mPreview?.showChangeResolutionDialog() else fadeInButtons()
     }
 
-    private fun handleShare(){
+    private fun handleShare() {
         val shareIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND
             putExtra(Intent.EXTRA_STREAM, config.savePhotosFolder)
