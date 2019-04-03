@@ -60,6 +60,9 @@ android {
             returnDefaultValues = true
             includeAndroidResources = true
         }
+        unitTests.all {
+            jvmArgs '-noverify'
+        }
 
     }
 }
