@@ -969,26 +969,29 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         return this.mPreview!!.previewFilter(index)
     }
 
+    internal fun toggleCaptionMode() {
+        if (caption_toggle.alpha == .5f) {
+            fadeInButtons()
+            handleCaptionMode()
+        } else {
+            fadeOutButtons()
+        }
+    }
+
     internal fun handleCaptionMode() {
         if (caption_toggle.isChecked) {
             mIsInCaptionMode = true
+
+            /** if inPhotoMode and shutter is pressed, call this method */
             openCaptionInputAfterPhoto()
         } else {
             mIsInCaptionMode = false
         }
     }
 
-    internal fun toggleCaptionMode() {
-            if (caption_toggle.alpha == .5f) {
-                fadeInButtons()
-                handleCaptionMode()
-            } else {
-                fadeOutButtons()
-            }
-        }
-
     internal fun openCaptionInputAfterPhoto() {
         if (mIsInCaptionMode) {
+            caption_holder.beVisible()
         }
     }
 }

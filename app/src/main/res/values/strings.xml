@@ -55,6 +55,7 @@
     </string>
     <string name="grid_line" translatable="false">Show grid line</string>
     <string name="space_remaining" translatable="false">Show space remaining when recording</string>
+    <string name="enter_caption">ENTER CAPTION</string>
 
     <!--
         Haven't found some strings? There's more at
