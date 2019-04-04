@@ -74,6 +74,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     internal lateinit var mBurstHandler: Handler
     internal lateinit var mBurstRunnable: Runnable
     internal lateinit var mBurstModeSetup: Runnable
+    internal lateinit var mPhotoVideoSender: PhotoVideoSender
 
     private var mSupportedFilter: IntArray? = null
     private var mPreview: MyPreview? = null
@@ -87,6 +88,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     internal var mIsInCountdownMode = false
     internal var mCountdownTime = 0
     internal var mBurstEnabled = false
+    internal var mWillShareNextMedia = false
 
     /** QR Scanner */
     internal lateinit var mQrScanner: QRScanner
@@ -191,6 +193,8 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                 mBurstHandler.postDelayed(this, BURSTMODE_INTERVAL_BETWEEN_CAPTURES)
             }
         }
+
+        mPhotoVideoSender = PhotoVideoSender(this)
 
         if (config.alwaysOpenBackCamera) {
             config.lastUsedCamera = mCameraImpl.getBackCameraId().toString()
@@ -351,7 +355,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         btn_short_timer.setOnClickListener { setCountdownMode(TIMER_SHORT) }
         btn_medium_timer.setOnClickListener { setCountdownMode(TIMER_MEDIUM) }
         btn_long_timer.setOnClickListener { setCountdownMode(TIMER_LONG) }
-        share.setOnClickListener{ handleShare() }
+        share.setOnClickListener{ toggleShareNextMedia() }
 
         shutter.setOnTouchListener(object : OnTouchListener {
             override fun onTouch(view: View, event: MotionEvent): Boolean {
@@ -601,13 +605,19 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         if (change_resolution.alpha == 1f) mPreview?.showChangeResolutionDialog() else fadeInButtons()
     }
 
-    private fun handleShare(){
-        val shareIntent: Intent = Intent().apply {
-            action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_STREAM, config.savePhotosFolder)
-            type = "image/jpeg"
-        }
-        startActivity(Intent.createChooser(shareIntent, "Share picture to"))
+    private fun toggleShareNextMedia(){
+//        val shareIntent: Intent = Intent().apply {
+//            action = Intent.ACTION_SEND
+//            type = "video/mp4"
+//            // "image/jpeg" for pictures
+//            val file = File(config.savePhotosFolder + "/VID_20190328_152008.mp4")
+//            val uri = FileProvider.getUriForFile(applicationContext,
+//                                        applicationContext.packageName + ".provider",
+//                                                 file)
+//            putExtra(Intent.EXTRA_STREAM, uri)
+//        }
+//        startActivity(Intent.createChooser(shareIntent, "Share picture to"))
+        mWillShareNextMedia = !mWillShareNextMedia
     }
 
     private fun togglePhotoVideo() {
