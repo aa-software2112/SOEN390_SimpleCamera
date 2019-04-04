@@ -24,8 +24,8 @@
         android:layout_height="473dp"
         android:layout_above="@+id/btn_holder"
         android:layout_alignTop="@+id/btn_bar"
-        android:layout_marginTop="200dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginTop="150dp"
+        android:layout_marginBottom="200dp"
         android:orientation="horizontal"
         android:visibility="invisible">
 
@@ -39,14 +39,25 @@
                 android:id="@+id/caption_input"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:gravity="center_horizontal"
                 android:hint="@string/enter_caption"
                 android:textColor="@color/white"
-                android:textColorHint="@color/white"
-                android:gravity="center_horizontal"/>
+                android:textColorHint="@color/white" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/caption_stamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btn_holder"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="150dp"
+        android:onClick="stampCaption"
+        android:text="STAMP"
+        android:visibility="invisible" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/gridline"
@@ -283,9 +294,7 @@
         android:layout_weight="1"
         android:gravity="clip_vertical|center_horizontal|center_vertical"
         android:orientation="horizontal"
-        android:visibility="visible" >
-
-    </LinearLayout>
+        android:visibility="visible" />
 
     <HorizontalScrollView
         android:id="@+id/filter_scroll_area"

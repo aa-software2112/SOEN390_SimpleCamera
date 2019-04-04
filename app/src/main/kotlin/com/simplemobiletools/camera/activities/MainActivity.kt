@@ -983,20 +983,32 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         }
     }
 
-    internal fun openCaptionInputAfterPhoto() {
+    internal fun displayCaption() {
         if (mIsInCaptionMode) {
             /**
              * TO DO
-             * if inPhotoMode and shutter is pressed, call this method */
+             * if inPhotoMode and shutter is pressed, call this method
+             * */
             caption_holder.beVisible()
+            caption_stamp.beVisible()
         } else {
             caption_holder.beGone()
+            caption_stamp.beGone()
             }
         }
+
+    fun stampCaption(v: View) {
+        /**
+         * TO DO
+         * this method is linked to button caption_stamp (android:onClick)
+         * when caption_stamp button is clicked, call this method
+         * make sure to implement caption_holder and caption_stamp beGone() after caption_stamp is clicked
+         * */
+    }
 
     internal fun handleCaptionMode() {
         toggleCaptionFade()
         checkCaptionMode()
-        openCaptionInputAfterPhoto()
+        displayCaption()
     }
 }
