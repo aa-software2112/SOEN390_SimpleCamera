@@ -1,3 +1,4 @@
+import os
 import subprocess
 
 from TravisEnvirExtractor import TravisEnvirExtractor
@@ -5,8 +6,15 @@ from TravisEnvirExtractor import TravisEnvirExtractor
 class GitApiHelper():
 
     @staticmethod
-    def push():
-        subprocess.Popen(['git', 'push', 'origin', 'master']).communicate()
+    def config(email, username):
+        subprocess.Popen(['git', 'config', '--global', 'user.email', email]).communicate()
+
+    @staticmethod
+    def push(use_token=False):
+        if not use_token:
+            subprocess.Popen(['git', 'push', '--quiet', 'https://github.com/aa-software2112/SOEN390_SimpleCamera.wiki.git/', 'refs/heads/master:refs/heads/master']).communicate()
+        else:
+            subprocess.Popen(['git', 'push', '--quiet', 'https://' + str(os.environ.get("GH_TOKEN")) + 'github.com/aa-software2112/SOEN390_SimpleCamera.wiki.git/' ,'origin', 'master']).communicate()
 
     @staticmethod
     def commit():

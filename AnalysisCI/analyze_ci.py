@@ -20,8 +20,8 @@ error_lines = []
 success_lines = []
 information_lines = []
 
+
 for line in sys.stdin:
-    print(line)
 
     # Prevents infinite looping over the same input
     previous_line = current_line
@@ -81,4 +81,4 @@ os.chdir(BASE_PATH_TO_WIKI)
 
 # Push changes to repo wiki
 Git.commit()
-Git.push()
+Git.push(use_token=(os.environ.get("TRAVIS") is not None))
