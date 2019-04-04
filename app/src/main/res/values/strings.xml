@@ -53,6 +53,7 @@
 
         This app is just one piece of a bigger series of apps. You can find the rest of them at https://www.simplemobiletools.com
     </string>
+    <string name="qr_alert_title" translatable="false">QR Navigation</string>
     <string name="grid_line" translatable="false">Show grid line</string>
     <string name="space_remaining" translatable="false">Show space remaining when recording</string>
     <string name="enter_caption">ENTER CAPTION</string>

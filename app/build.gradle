@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'jacoco'
+apply plugin: 'com.google.gms.google-services'
 
 jacoco {
     toolVersion = '0.7.1.201405082137'
@@ -59,6 +60,9 @@ android {
             returnDefaultValues = true
             includeAndroidResources = true
         }
+        unitTests.all {
+            jvmArgs '-noverify'
+        }
 
     }
 }
@@ -82,7 +86,10 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     implementation 'com.google.android.gms:play-services-location:16.0.0'
     implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.google.firebase:firebase-core:16.0.8'
+    implementation 'com.google.firebase:firebase-ml-vision:19.0.3'
+    implementation 'com.google.zxing:core:3.2.1'
+
 }
 
 afterEvaluate {
@@ -132,5 +139,6 @@ task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
     sourceDirectories = files([mainSrc])
     classDirectories = files([debugTree])
     executionData = files("${buildDir}/jacoco/testDebugUnitTest.exec")
-
 }
+
+apply plugin: 'com.google.gms.google-services'
