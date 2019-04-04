@@ -14,7 +14,7 @@ class GitApiHelper():
         if not use_token:
             subprocess.Popen(['git', 'push', '--quiet', 'https://github.com/aa-software2112/SOEN390_SimpleCamera.wiki.git/', 'refs/heads/master:refs/heads/master']).communicate()
         else:
-            subprocess.Popen(['git', 'push', '--quiet', 'https://' + str(os.environ.get("GH_TOKEN")) + 'github.com/aa-software2112/SOEN390_SimpleCamera.wiki.git/' ,'origin', 'master']).communicate()
+            subprocess.Popen(['git', 'push', '--quiet', 'https://' + str(os.environ.get("GH_TOKEN")) + '@github.com/aa-software2112/SOEN390_SimpleCamera.wiki.git/' ,'origin', 'master']).communicate()
 
     @staticmethod
     def commit():

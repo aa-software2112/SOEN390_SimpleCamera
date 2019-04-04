@@ -9,7 +9,7 @@ jobs:
     language: android
     before_script: chmod +x gradlew
     script:
-    - ./gradlew jacocoTestReport | python AnalysisCI/analyze_ci.py
+    - python AnalysisCI/analyze_ci.py
     - cd $TRAVIS_BUILD_DIR/displayJacoco/ && python output_jacoco_metrics.py
 env:
   global:

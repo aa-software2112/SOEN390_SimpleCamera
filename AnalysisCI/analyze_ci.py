@@ -20,32 +20,32 @@ error_lines = []
 success_lines = []
 information_lines = []
 
+if False:
+    for line in sys.stdin:
 
-for line in sys.stdin:
+        # Prevents infinite looping over the same input
+        previous_line = current_line
+        current_line = line.lower().strip("\n")
 
-    # Prevents infinite looping over the same input
-    previous_line = current_line
-    current_line = line.lower().strip("\n")
+        if current_line == previous_line:
+            continue
 
-    if current_line == previous_line:
-        continue
+        # Keep track of the last task executed
+        if ignore_keywords[TASK_STRING_INDEX] in current_line:
+            last_task_executed = current_line
 
-    # Keep track of the last task executed
-    if ignore_keywords[TASK_STRING_INDEX] in current_line:
-        last_task_executed = current_line
-
-    # Check if line should be skipped - this is the filtering stage for every line of output
-    [ignore_line.append(True) for keyword in ignore_keywords if keyword in current_line]
+        # Check if line should be skipped - this is the filtering stage for every line of output
+        [ignore_line.append(True) for keyword in ignore_keywords if keyword in current_line]
 
 
-    if (len(ignore_line) > 0):
-        ignore_line = []
-        continue
+        if (len(ignore_line) > 0):
+            ignore_line = []
+            continue
 
-    # Process the lines success or failure messages
-    [error_lines.append(current_line) for keyword in error_keywords if keyword in current_line]
-    [success_lines.append(current_line) for keyword in success_keywords if keyword in current_line]
-    [information_lines.append(current_line) for keyword in information_keywords if keyword in current_line]
+        # Process the lines success or failure messages
+        [error_lines.append(current_line) for keyword in error_keywords if keyword in current_line]
+        [success_lines.append(current_line) for keyword in success_keywords if keyword in current_line]
+        [information_lines.append(current_line) for keyword in information_keywords if keyword in current_line]
 
 
 # Clone git wiki page
