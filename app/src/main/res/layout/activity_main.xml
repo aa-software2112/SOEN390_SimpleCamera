@@ -32,7 +32,8 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/caption_layout"
             android:layout_width="match_parent"
-            android:layout_height="250dp">
+            android:layout_height="250dp"
+            android:theme="@style/CaptionHintColor">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/caption_input"
@@ -40,7 +41,8 @@
                 android:layout_height="match_parent"
                 android:hint="@string/enter_caption"
                 android:textColor="@color/white"
-                android:textColorHint="@color/white"/>
+                android:textColorHint="@color/white"
+                android:gravity="center_horizontal"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 

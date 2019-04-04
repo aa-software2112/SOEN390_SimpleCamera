@@ -287,7 +287,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         btn_short_timer.setOnClickListener { setCountdownMode(TIMER_SHORT) }
         btn_medium_timer.setOnClickListener { setCountdownMode(TIMER_MEDIUM) }
         btn_long_timer.setOnClickListener { setCountdownMode(TIMER_LONG) }
-        caption_toggle.setOnClickListener { toggleCaptionMode() }
+        caption_toggle.setOnClickListener { handleCaptionMode() }
 
         shutter.setOnTouchListener(object : OnTouchListener {
             override fun onTouch(view: View, event: MotionEvent): Boolean {
@@ -969,21 +969,15 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         return this.mPreview!!.previewFilter(index)
     }
 
-    internal fun toggleCaptionMode() {
+    internal fun toggleCaptionFade() {
         if (caption_toggle.alpha == .5f) {
             fadeInButtons()
-            handleCaptionMode()
-        } else {
-            fadeOutButtons()
         }
     }
 
-    internal fun handleCaptionMode() {
+    internal fun checkCaptionMode() {
         if (caption_toggle.isChecked) {
             mIsInCaptionMode = true
-
-            /** if inPhotoMode and shutter is pressed, call this method */
-            openCaptionInputAfterPhoto()
         } else {
             mIsInCaptionMode = false
         }
@@ -991,7 +985,18 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     internal fun openCaptionInputAfterPhoto() {
         if (mIsInCaptionMode) {
+            /**
+             * TO DO
+             * if inPhotoMode and shutter is pressed, call this method */
             caption_holder.beVisible()
+        } else {
+            caption_holder.beGone()
+            }
         }
+
+    internal fun handleCaptionMode() {
+        toggleCaptionFade()
+        checkCaptionMode()
+        openCaptionInputAfterPhoto()
     }
 }
