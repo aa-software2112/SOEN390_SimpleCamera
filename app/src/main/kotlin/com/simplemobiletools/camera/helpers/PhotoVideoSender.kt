@@ -3,7 +3,6 @@ package com.simplemobiletools.camera.helpers
 import android.content.Intent
 import androidx.core.content.FileProvider
 import com.simplemobiletools.camera.activities.MainActivity
-import com.simplemobiletools.camera.extensions.config
 import java.io.File
 
 class PhotoVideoSender(val activity: MainActivity) {
@@ -19,6 +18,7 @@ class PhotoVideoSender(val activity: MainActivity) {
                     file)
             putExtra(Intent.EXTRA_STREAM, uri)
         }
-        activity.startActivity(Intent.createChooser(shareIntent, "Share picture to"))
+        val text = if (isPhoto) "Share picture to" else "Share video to"
+        activity.startActivity(Intent.createChooser(shareIntent, text))
     }
 }
