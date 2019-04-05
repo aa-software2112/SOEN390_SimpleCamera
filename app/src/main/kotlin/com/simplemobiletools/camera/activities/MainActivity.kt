@@ -35,6 +35,7 @@ import android.annotation.SuppressLint
 
 import android.graphics.Bitmap
 import android.content.Context
+import android.graphics.Color
 
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -606,18 +607,13 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     }
 
     private fun toggleShareNextMedia(){
-//        val shareIntent: Intent = Intent().apply {
-//            action = Intent.ACTION_SEND
-//            type = "video/mp4"
-//            // "image/jpeg" for pictures
-//            val file = File(config.savePhotosFolder + "/VID_20190328_152008.mp4")
-//            val uri = FileProvider.getUriForFile(applicationContext,
-//                                        applicationContext.packageName + ".provider",
-//                                                 file)
-//            putExtra(Intent.EXTRA_STREAM, uri)
-//        }
-//        startActivity(Intent.createChooser(shareIntent, "Share picture to"))
         mWillShareNextMedia = !mWillShareNextMedia
+        if (mWillShareNextMedia == false){
+            share.clearColorFilter()
+        } else {
+            val color = Color.parseColor("#FFD700")
+            share.setColorFilter(color)
+        }
     }
 
     private fun togglePhotoVideo() {
