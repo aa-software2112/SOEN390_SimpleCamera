@@ -15,7 +15,8 @@ jobs:
     before_script: chmod +x gradlew
     script:
     - ./gradlew jacocoTestReport | python AnalysisCI/analyze_ci.py
-    - cd $TRAVIS_BUILD_DIR/displayJacoco/ && python output_jacoco_metrics.py
+    -  python2 AnalysisCI/output_jacoco_metrics.py | python2 AnalysisCI/jacoco_to_wiki.py
+    
 env:
   global:
     secure: akQYHs+x/VG1ogfCNmUV2Eqa+XluW4VsumYTyWHIHXVuSQB9tq9GgKcZ38NKKiEM1kd18PeG2cc3C+69rYM7wNBsJyJEbrt5F/GM/aUM1IhPoG7p4JNN4sMYhZiVxnVKEev2OEPb5LW7HxeyB5nmJpiQ2zPdIw4wsQW8Eqdrxao4FDT9PKzIwOZPXo4I0ysoMn530rCrvUGipwT7910wOwNY4siBVUMjlzLtzh6/soHoBVOHFLBmDuFNQVVi2f/tQBkL2bA212fJXtNwJoTmBZ4RgCZAgtmo1+a55RLORQ+5hoFmdJ5WAKqgBv/UhounbiL/+IafnRxKCsMqbFb2ZnOGddTEeP/NvqquFqPOrxw7IK2vWrprAYAGh9I7Xw5PtJ1OFOAtcDTq72nOabJmqQcN2efvmzmRE6ILOHoFLLph4RMTU15Fyzuz++AkLA9o6Kf3JYAsHjQ1S13xvWKeZJTJUCqMNR+C9q51d3E3dR1Ps80p3yJBBdB8rgqZQcFTDDpNMzEBqFec6gkkhi3+gL0Qirf0gzTLCE9ndsj/s7ewW5HdO8zRcKesLcye+Fc+mJJ6u5DoHbLPjtioXHKUhdwb9wwZ974Ji530FUMOpkU/GJi6eqRQWupCXgIOpNGR51+l4a9Mt9tlogilNnRBUWa8S6iZ5cw/6AYxX2IuFr0=

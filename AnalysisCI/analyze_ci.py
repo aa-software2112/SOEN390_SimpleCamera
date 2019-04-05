@@ -8,6 +8,7 @@ from TravisEnvirExtractor import TravisEnvirExtractor
 previous_line = ""
 current_line = ""
 last_task_executed = ""
+temp_line = ""
 
 error_keywords = ["fail", "error"]
 success_keywords = ["success", "pass", "complete"]
@@ -24,6 +25,7 @@ for line in sys.stdin:
 
     # Prevents infinite looping over the same input
     previous_line = current_line
+    temp_line = line.strip("\n")
     current_line = line.lower().strip("\n")
 
     if current_line == previous_line:
@@ -31,7 +33,7 @@ for line in sys.stdin:
 
     # Keep track of the last task executed
     if ignore_keywords[TASK_STRING_INDEX] in current_line:
-        last_task_executed = current_line
+        last_task_executed = temp_line
 
     # Check if line should be skipped - this is the filtering stage for every line of output
     [ignore_line.append(True) for keyword in ignore_keywords if keyword in current_line]
@@ -42,9 +44,9 @@ for line in sys.stdin:
         continue
 
     # Process the lines success or failure messages
-    [error_lines.append(current_line) for keyword in error_keywords if keyword in current_line]
-    [success_lines.append(current_line) for keyword in success_keywords if keyword in current_line]
-    [information_lines.append(current_line) for keyword in information_keywords if keyword in current_line]
+    [error_lines.append(temp_line) for keyword in error_keywords if keyword in current_line]
+    [success_lines.append(temp_line) for keyword in success_keywords if keyword in current_line]
+    [information_lines.append(temp_line) for keyword in information_keywords if keyword in current_line]
 
 
 # Clone git wiki page

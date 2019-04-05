@@ -114,6 +114,24 @@ class GitWikiFormatter():
         f = open(filename, 'w')
         f.writelines(self.lines)
 
+    def add_table(self, headers, rows):
+
+        header_text = "| " + " | ".join(headers) + " |"
+        header_data_split = "| ---: " + "| :---: "*(len(headers) -1) + " |"
+
+        self.add_line(header_text)
+        self.add_line(header_data_split)
+
+        # Expects a list of rows (strings)
+        for row in rows:
+
+            # Row is a string
+            row = " | ".join(row.split())
+            self.add_line(row)
+
+    def skip_line(self):
+        self.add_line("    ")
+
     def __add__(self, other):
         return GitWikiFormatter().add_lines(self.lines + other.lines)
 
