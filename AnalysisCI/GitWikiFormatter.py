@@ -54,6 +54,10 @@ class GitWikiFormatter():
 
 
     def add_lines(self, lines):
+
+        if len(lines) == 0:
+            lines.append("n/a")
+
         for line in lines:
             self.add_line(line)
         return self
@@ -63,7 +67,13 @@ class GitWikiFormatter():
         return self
 
     def add_key_value_pair(self, key, value):
-        self.add_line(self.surr_bold(key) + ": " + self.surr_italics(value))
+        if value == "":
+            value = "n/a"
+
+        if "_" in value:
+            self.add_line(self.surr_bold(key) + ": " + value)
+        else:
+            self.add_line(self.surr_bold(key) + ": " + self.surr_italics(value))
         return self
 
     def add_link(self, text, url):
