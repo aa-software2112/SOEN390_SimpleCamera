@@ -569,6 +569,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                 settings.beVisible()
                 change_resolution.beVisible()
                 toggle_flash.beVisible()
+                share.beVisible()
                 last_image.beVisible()
                 swipe_area.beVisible()
             }
