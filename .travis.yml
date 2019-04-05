@@ -5,13 +5,12 @@ android:
   - android-28
 jobs: 
   include:
-  - stage: compile
+  - stage: Linter
     language: android
     before_script: chmod +x gradlew
     script:
-    - ./gradlew ktlint
-    - ./gradlew assembleDebug
-  - stage: tests
+    - ./gradlew ktlint | python AnalysisCI/analyze_ci.py
+  - stage: Compile_n_Test
     language: android
     before_script: chmod +x gradlew
     script:
