@@ -867,7 +867,7 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
             val fileDirItem = FileDirItem(mLastVideoPath, mLastVideoPath.getFilenameFromPath())
             mActivity.deleteFile(fileDirItem, false)
         } finally {
-            if (mActivity.mWillShareNextMedia){
+            if (mActivity.mWillShareNextMedia) {
                 mActivity.mPhotoVideoSender.shareLastMedia(mLastVideoPath, false)
             } else {
                 Thread {

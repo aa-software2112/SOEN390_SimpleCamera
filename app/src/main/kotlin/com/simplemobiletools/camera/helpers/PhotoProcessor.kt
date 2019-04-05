@@ -143,7 +143,7 @@ class PhotoProcessor(
                 tempExif.copyTo(fileExif)
             }
 
-            if (activity.mWillShareNextMedia){
+            if (activity.mWillShareNextMedia) {
                 activity.mPhotoVideoSender.shareLastMedia(path, true)
             }
 

@@ -7,7 +7,7 @@ import java.io.File
 
 class PhotoVideoSender(val activity: MainActivity) {
 
-    fun shareLastMedia(mediaPath : String, isPhoto : Boolean){
+    fun shareLastMedia(mediaPath: String, isPhoto: Boolean) {
         val shareIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND
             type = if (isPhoto) "image/jpeg"
