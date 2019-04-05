@@ -182,7 +182,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
         mBurstModeSetup = Runnable {
             // runs only once, that is after holding shutter button for 2 sec
-            if (!mIsInCountdownMode && mIsInPhotoMode) {
+            if (!mIsInCountdownMode && mIsInPhotoMode && !mWillShareNextMedia) {
                 mBurstEnabled = true
                 handleShutter()
             }
