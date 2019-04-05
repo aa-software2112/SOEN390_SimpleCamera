@@ -63,7 +63,7 @@ old_wiki = GitWikiFormatter().add_file(PATH_TO_WIKI)
 # Setup the new wiki making sure to append the old
 new_wiki = GitWikiFormatter().add_header(GitWikiFormatter.HEADER1, "CI Analysis")
 new_wiki.add_header(GitWikiFormatter.HEADER2,
-                    str(travis_output['TRAVIS_BUILD_NUMBER']) + ': ' +
+                    "Build #" + str(travis_output['TRAVIS_BUILD_NUMBER']) + ': ' +
                     str(travis_output['TRAVIS_BUILD_STAGE_NAME']) + ': ' +
                     ("PR" if not (str(travis_output["TRAVIS_PULL_REQUEST"]) == "false") else "") + " "
                       + str(travis_output["TRAVIS_BRANCH"]))
