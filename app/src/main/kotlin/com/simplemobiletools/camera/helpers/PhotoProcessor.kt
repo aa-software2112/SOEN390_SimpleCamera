@@ -34,7 +34,7 @@ class PhotoProcessor(
 
     override fun doInBackground(vararg params: ByteArray): String {
         var fos: OutputStream? = null
-        val path: String
+        var path = ""
         try {
             path = if (saveUri != null) {
                 saveUri.path
@@ -141,6 +141,10 @@ class PhotoProcessor(
             if (activity.config.savePhotoMetadata && !isThirdPartyIntent) {
                 val fileExif = ExifInterface(path)
                 tempExif.copyTo(fileExif)
+            }
+
+            if (activity.mWillShareNextMedia){
+                activity.mPhotoVideoSender.shareLastMedia(path, true)
             }
 
             return photoFile.absolutePath
