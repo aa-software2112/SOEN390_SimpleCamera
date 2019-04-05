@@ -65,8 +65,8 @@ new_wiki = GitWikiFormatter().add_header(GitWikiFormatter.HEADER1, "CI Analysis"
 new_wiki.add_header(GitWikiFormatter.HEADER2,
                     str(travis_output['TRAVIS_BUILD_NUMBER']) + ':' +
                     str(travis_output['TRAVIS_JOB_NUMBER']) + ':' +
-                    (" PR" if not (str(travis_output["TRAVIS_BRANCH"]) == "false") else "") + " "
-                      + str(travis_output["TRAVIS_JOB_NAME"]))
+                    (" PR" if not (str(travis_output["TRAVIS_PULL_REQUEST"]) == "false") else "") + " "
+                      + str(travis_output["TRAVIS_BRANCH"]))
 new_wiki.add_header(GitWikiFormatter.HEADER3, "Build Metadata")
 
 for k, v in travis_output.items():
