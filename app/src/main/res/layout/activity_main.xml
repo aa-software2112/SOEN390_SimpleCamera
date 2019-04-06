@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/btn_holder"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="150dp"
+        android:layout_marginBottom="129dp"
         android:onClick="stampCaption"
         android:text="STAMP"
         android:visibility="invisible" />
@@ -253,10 +253,10 @@
 
         <ToggleButton
             android:id="@+id/caption_toggle"
-            android:layout_width="20dp"
-            android:layout_height="35dp"
+            android:layout_width="15dp"
+            android:layout_height="30dp"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="2dp"
             android:layout_weight="1"
             android:background="@drawable/caption"
             android:textOff=""

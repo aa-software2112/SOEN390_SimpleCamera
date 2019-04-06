@@ -49,6 +49,7 @@ import com.simplemobiletools.camera.implementations.QRScanner
 
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
+import com.google.android.material.textfield.TextInputEditText
 
 import java.util.Locale
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -58,6 +59,7 @@ import com.google.zxing.BinaryBitmap
 import com.google.zxing.MultiFormatReader
 import com.google.zxing.RGBLuminanceSource
 import com.google.zxing.common.HybridBinarizer
+import com.simplemobiletools.camera.implementations.CaptionStamper
 
 class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     private val FADE_DELAY = 6000L // in milliseconds
@@ -92,6 +94,9 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     /** QR Scanner */
     internal lateinit var mQrScanner: QRScanner
     internal lateinit var mCameraSource: CameraSource
+
+    /** Caption Stamper */
+    internal lateinit var mCaptionStamper: CaptionStamper
 
     internal var mFusedLocationClient: FusedLocationProviderClient? = null
     internal var mLastLocation: Location? = null
@@ -274,6 +279,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         checkVideoCaptureIntent()
 
         mPreview = CameraPreview(this, camera_texture_view, mIsInPhotoMode)
+
         /** QR scanner must maintain an instance of the preview
          * to capture an image
          */
@@ -281,6 +287,11 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                                             .setApplication(this)
                                             .setCameraPreview(mPreview)
                                             .build()
+
+        /** Set the Caption Scanner context */
+        CaptionStamper.setContext(getApplicationContext());
+        CaptionStamper.setActivity(this)
+        CaptionStamper.setCameraPreview(mPreview)
 
         view_holder.addView(mPreview as ViewGroup)
         checkImageCaptureIntent()
@@ -1111,11 +1122,17 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
              * */
             caption_holder.beVisible()
             caption_stamp.beVisible()
+
+            mCaptionStamper = CaptionStamper()
+            mCaptionStamper.showKeyboard()
+
         } else {
             caption_holder.beGone()
             caption_stamp.beGone()
-            }
+            caption_input.setText("")
+            mCaptionStamper.hideKeyboard()
         }
+    }
 
     fun stampCaption(v: View) {
         /**
@@ -1124,6 +1141,19 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
          * when caption_stamp button is clicked, call this method
          * make sure to implement caption_holder and caption_stamp beGone() after caption_stamp is clicked
          * */
+
+        System.out.println("in stamp caption")
+        System.out.println(caption_input.text)
+        mCaptionStamper.performStamp(caption_input.text.toString())
+        mCaptionStamper.hideKeyboard()
+
+        /** Toggle the mode off after this attempt at a caption */
+        caption_toggle.setChecked(false)
+        handleCaptionMode()
+
+        /** Clear the text */
+        caption_input.setText("")
+
     }
 
     internal fun handleCaptionMode() {
