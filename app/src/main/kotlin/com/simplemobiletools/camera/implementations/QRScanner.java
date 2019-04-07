@@ -56,7 +56,7 @@ public class QRScanner implements Runnable {
     private AlertDialog alert = null;
 
     /** Scheduling flags */
-    public static boolean qr_requested = true;
+    public static boolean qr_requested = false;
     private static boolean qr_scheduled = false;
 
     /** Necessary for processing background-thread tasks */
