@@ -19,6 +19,13 @@
         android:layout_marginEnd="0dp" />
 
 
+    <View
+        android:id="@+id/view3"
+        android:layout_width="67dp"
+        android:layout_height="56dp"
+        android:layout_marginLeft="68dp"
+        android:layout_marginTop="56dp" />
+
     <LinearLayout
         android:id="@+id/caption_holder"
         android:layout_width="match_parent"
@@ -252,15 +259,25 @@
             android:padding="15dp"
             android:src="@drawable/ic_flash_off" />
 
+        <View
+            android:id="@+id/filler_view"
+            android:layout_width="24dp"
+            android:layout_height="56dp" />
+
         <ToggleButton
             android:id="@+id/caption_toggle"
-            android:layout_width="10dp"
+            android:layout_width="19dp"
             android:layout_height="27dp"
             android:layout_alignParentRight="true"
             android:layout_weight="1"
             android:background="@drawable/caption"
             android:textOff=""
             android:textOn="" />
+
+        <View
+            android:id="@+id/filler_view2"
+            android:layout_width="24dp"
+            android:layout_height="56dp" />
 
         <ImageView
             android:id="@+id/share"
