@@ -23,23 +23,22 @@
         android:id="@+id/caption_holder"
         android:layout_width="match_parent"
         android:layout_height="473dp"
-        android:layout_above="@+id/btn_holder"
         android:layout_alignTop="@+id/btn_bar"
         android:layout_marginTop="150dp"
-        android:layout_marginBottom="200dp"
         android:orientation="horizontal"
         android:visibility="invisible">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/caption_layout"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="300dp"
             android:theme="@style/CaptionHintColor">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/caption_input"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@android:color/transparent"
                 android:gravity="center_horizontal"
                 android:hint="@string/enter_caption"
                 android:textColor="@color/white"
@@ -53,10 +52,12 @@
         android:id="@+id/caption_stamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btn_holder"
+        android:layout_alignBottom="@+id/btn_holder"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="129dp"
+        android:elevation="0dp"
+        android:gravity="bottom|center_horizontal"
         android:onClick="stampCaption"
+        android:padding="20dp"
         android:text="STAMP"
         android:visibility="invisible" />
 
@@ -253,10 +254,9 @@
 
         <ToggleButton
             android:id="@+id/caption_toggle"
-            android:layout_width="15dp"
-            android:layout_height="30dp"
+            android:layout_width="10dp"
+            android:layout_height="27dp"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="2dp"
             android:layout_weight="1"
             android:background="@drawable/caption"
             android:textOff=""

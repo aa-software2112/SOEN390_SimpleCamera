@@ -49,7 +49,6 @@ import com.simplemobiletools.camera.implementations.QRScanner
 
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
-import com.google.android.material.textfield.TextInputEditText
 
 import java.util.Locale
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -289,7 +288,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                                             .build()
 
         /** Set the Caption Scanner context */
-        CaptionStamper.setContext(getApplicationContext());
+        CaptionStamper.setContext(getApplicationContext())
         CaptionStamper.setActivity(this)
         CaptionStamper.setCameraPreview(mPreview)
 
@@ -1116,33 +1115,23 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     internal fun displayCaption() {
         if (mIsInCaptionMode) {
-            /**
-             * TO DO
-             * if inPhotoMode and shutter is pressed, call this method
-             * */
             caption_holder.beVisible()
             caption_stamp.beVisible()
+            shutter.beInvisible()
 
             mCaptionStamper = CaptionStamper()
             mCaptionStamper.showKeyboard()
-
         } else {
             caption_holder.beGone()
             caption_stamp.beGone()
             caption_input.setText("")
+            shutter.beVisible()
             mCaptionStamper.hideKeyboard()
         }
     }
 
     fun stampCaption(v: View) {
-        /**
-         * TO DO
-         * this method is linked to button caption_stamp (android:onClick)
-         * when caption_stamp button is clicked, call this method
-         * make sure to implement caption_holder and caption_stamp beGone() after caption_stamp is clicked
-         * */
-
-        System.out.println("in stamp caption")
+        System.out.println("In stamp caption")
         System.out.println(caption_input.text)
         mCaptionStamper.performStamp(caption_input.text.toString())
         mCaptionStamper.hideKeyboard()
@@ -1153,7 +1142,6 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
         /** Clear the text */
         caption_input.setText("")
-
     }
 
     internal fun handleCaptionMode() {
