@@ -853,7 +853,7 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
         if (mActivity.config.isSoundEnabled) {
             mMediaActionSound.play(MediaActionSound.STOP_VIDEO_RECORDING)
         }
-
+        var caughtError = false
         mIsRecording = false
         try {
             mMediaRecorder!!.stop()
@@ -866,11 +866,16 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
             openResolutionsDialog(true)
             val fileDirItem = FileDirItem(mLastVideoPath, mLastVideoPath.getFilenameFromPath())
             mActivity.deleteFile(fileDirItem, false)
+            caughtError = true
         } finally {
-            Thread {
-                closeCamera()
-                openCamera(mTextureView.width, mTextureView.height)
-            }.start()
+            if (mActivity.mWillShareNextMedia && !caughtError) {
+                mActivity.mPhotoVideoSender.shareLastMedia(mLastVideoPath, false)
+            } else {
+                Thread {
+                    closeCamera()
+                    openCamera(mTextureView.width, mTextureView.height)
+                }.start()
+            }
             mActivity.setRecordingState(false)
         }
     }

@@ -35,6 +35,7 @@ import android.annotation.SuppressLint
 
 import android.graphics.Bitmap
 import android.content.Context
+import android.graphics.Color
 
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -75,6 +76,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     internal lateinit var mBurstHandler: Handler
     internal lateinit var mBurstRunnable: Runnable
     internal lateinit var mBurstModeSetup: Runnable
+    internal lateinit var mPhotoVideoSender: PhotoVideoSender
 
     private var mSupportedFilter: IntArray? = null
     private var mPreview: MyPreview? = null
@@ -89,6 +91,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     internal var mCountdownTime = 0
     internal var mBurstEnabled = false
     internal var mIsInCaptionMode = false
+    internal var mWillShareNextMedia = false
 
     /** QR Scanner */
     internal lateinit var mQrScanner: QRScanner
@@ -185,7 +188,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
         mBurstModeSetup = Runnable {
             // runs only once, that is after holding shutter button for 2 sec
-            if (!mIsInCountdownMode && mIsInPhotoMode) {
+            if (!mIsInCountdownMode && mIsInPhotoMode && !mWillShareNextMedia) {
                 mBurstEnabled = true
                 handleShutter()
             }
@@ -197,6 +200,8 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                 mBurstHandler.postDelayed(this, BURSTMODE_INTERVAL_BETWEEN_CAPTURES)
             }
         }
+
+        mPhotoVideoSender = PhotoVideoSender(this)
 
         if (config.alwaysOpenBackCamera) {
             config.lastUsedCamera = mCameraImpl.getBackCameraId().toString()
@@ -364,7 +369,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         btn_medium_timer.setOnClickListener { setCountdownMode(TIMER_MEDIUM) }
         btn_long_timer.setOnClickListener { setCountdownMode(TIMER_LONG) }
         caption_toggle.setOnClickListener { handleCaptionMode() }
-        share.setOnClickListener { handleShare() }
+        share.setOnClickListener { toggleShareNextMedia() }
 
         shutter.setOnTouchListener(object : OnTouchListener {
             override fun onTouch(view: View, event: MotionEvent): Boolean {
@@ -578,6 +583,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                 settings.beVisible()
                 change_resolution.beVisible()
                 toggle_flash.beVisible()
+                share.beVisible()
                 last_image.beVisible()
                 swipe_area.beVisible()
                 caption_toggle.beVisible()
@@ -617,13 +623,14 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         if (change_resolution.alpha == 1f) mPreview?.showChangeResolutionDialog() else fadeInButtons()
     }
 
-    private fun handleShare() {
-        val shareIntent: Intent = Intent().apply {
-            action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_STREAM, config.savePhotosFolder)
-            type = "image/jpeg"
+    private fun toggleShareNextMedia() {
+        mWillShareNextMedia = !mWillShareNextMedia
+        if (mWillShareNextMedia == false) {
+            share.clearColorFilter()
+        } else {
+            val color = Color.parseColor("#FFD700")
+            share.setColorFilter(color)
         }
-        startActivity(Intent.createChooser(shareIntent, "Share picture to"))
     }
 
     private fun togglePhotoVideo() {
