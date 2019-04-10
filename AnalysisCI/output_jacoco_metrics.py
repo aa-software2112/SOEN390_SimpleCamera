@@ -69,9 +69,7 @@ def display_header():
     print_alt("{: <50}{: <20}{: <15}".format("-" * 49, "-" * 19, "-" * 14))
 
 
-EXTRA_BACK_REF = "../" if "dist" in os.getcwd() else ""
-
-REL_PATH_TO_JACOCO_XML = EXTRA_BACK_REF + "../app/build/reports/jacoco/jacocoTestReport/" + "jacocoTestReport.xml"
+REL_PATH_TO_JACOCO_XML = "app/build/reports/jacoco/jacocoTestReport/" + "jacocoTestReport.xml"
 
 if not os.path.isfile(REL_PATH_TO_JACOCO_XML):
     print_alt("Could not find " + REL_PATH_TO_JACOCO_XML + "... Exiting")
