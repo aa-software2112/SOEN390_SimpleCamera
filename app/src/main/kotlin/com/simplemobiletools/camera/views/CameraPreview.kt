@@ -1010,6 +1010,10 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
         }
     }
 
+    override fun getFilterIndex(): Int {
+        return mCurrentFilterIndex
+    }
+
     override fun getAvailableFilters(): IntArray {
 
         val characteristics = this.getCameraCharacteristics()
