@@ -130,6 +130,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             setupPreviewImage(mIsInPhotoMode)
             scheduleFadeOut()
             mFocusCircleView.setStrokeColor(getAdjustedPrimaryColor())
+            mPreview?.previewFilter(0) // reset the filter to default on resume
 
             if (mIsVideoCaptureIntent && mIsInPhotoMode) {
                 handleTogglePhotoVideo()
