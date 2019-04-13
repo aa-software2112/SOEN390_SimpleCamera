@@ -36,7 +36,6 @@ import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.content.Context
 import android.graphics.Color
-import android.graphics.Paint
 
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -1158,19 +1157,18 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         displayCaption()
     }
 
-     internal fun getCaptionStamper(): CaptionStamper{
-        if(mCaptionStamper != null){
+    internal fun getCaptionStamper(): CaptionStamper {
+        if (mCaptionStamper != null) {
             return mCaptionStamper
-        }
+            }
 
-        return CaptionStamper()
-    }
+        return CaptionStamper() }
 
-    internal fun setCaptionStamper(s: CaptionStamper){
+    internal fun setCaptionStamper(s: CaptionStamper) {
         mCaptionStamper = s
     }
 
-    internal fun setCameraPreview(c: CameraPreview){
+    internal fun setCameraPreview(c: CameraPreview) {
         mPreview = c
     }
 }
