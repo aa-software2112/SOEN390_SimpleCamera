@@ -36,6 +36,7 @@ import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.content.Context
 import android.graphics.Color
+import android.graphics.Paint
 
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -1126,7 +1127,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             caption_stamp.beVisible()
             shutter.beInvisible()
 
-            mCaptionStamper = CaptionStamper()
+            mCaptionStamper = getCaptionStamper()
             mCaptionStamper.showKeyboard()
         } else {
             caption_holder.beGone()
@@ -1155,5 +1156,21 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         toggleCaptionFade()
         checkCaptionMode()
         displayCaption()
+    }
+
+     internal fun getCaptionStamper(): CaptionStamper{
+        if(mCaptionStamper != null){
+            return mCaptionStamper
+        }
+
+        return CaptionStamper()
+    }
+
+    internal fun setCaptionStamper(s: CaptionStamper){
+        mCaptionStamper = s
+    }
+
+    internal fun setCameraPreview(c: CameraPreview){
+        mPreview = c
     }
 }
