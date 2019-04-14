@@ -2,6 +2,7 @@ package test.kotlin
 
 import android.widget.ImageView
 import com.simplemobiletools.camera.R
+import com.simplemobiletools.camera.helpers.PhotoVideoSender
 import com.simplemobiletools.commons.extensions.isVisible
 import org.junit.Assert
 import org.junit.Test
@@ -18,16 +19,22 @@ class SharePhotoUnitTest : KotlinRobolectric() {
     }
     @Test
     fun onCreate_initVariables_mWillShareNextMedia () {
-        //  Verifying that initially, mWillShareNextMedia  is false
+        //  Verifying that mWillShareNextMedia  is intially false
         println("Testing if mWillShareNextMedia is initialized as false")
         Assert.assertFalse(mMainActivity!!.mWillShareNextMedia )
     }
     @Test
     fun testButton_onClick_mWillShareNextMedia() {
-        // Verifying that, on clicking "share" mWillShareNextMedia becomes true
+        // Verifying that mWillShareNextMedia becomes true on clicking "share"
         println("Testing if mWillShareNextMedia is true on clicking share button")
         mMainActivity?.findViewById<ImageView>(R.id.share)?.performClick()
         Assert.assertTrue(mMainActivity!!.mWillShareNextMedia )
     }
-
+    @Test
+    fun testType_testmPhotoVideoSender () {
+        // Verifying that mPhotoVideoSender is of type PhotoVideoSender
+        println("Testing if mPhotoVideoSender is of the proper type")
+        mMainActivity?.findViewById<ImageView>(R.id.share)?.performClick()
+        Assert.assertTrue(mMainActivity?.mPhotoVideoSender is PhotoVideoSender)
+    }
 }
