@@ -59,6 +59,7 @@ import com.google.zxing.BinaryBitmap
 import com.google.zxing.MultiFormatReader
 import com.google.zxing.RGBLuminanceSource
 import com.google.zxing.common.HybridBinarizer
+import com.simplemobiletools.camera.implementations.CaptionStamper
 
 class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     private val FADE_DELAY = 6000L // in milliseconds
@@ -89,11 +90,15 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     internal var mIsInCountdownMode = false
     internal var mCountdownTime = 0
     internal var mBurstEnabled = false
+    internal var mIsInCaptionMode = false
     internal var mWillShareNextMedia = false
 
     /** QR Scanner */
     internal lateinit var mQrScanner: QRScanner
     internal lateinit var mCameraSource: CameraSource
+
+    /** Caption Stamper */
+    internal lateinit var mCaptionStamper: CaptionStamper
 
     internal var mFusedLocationClient: FusedLocationProviderClient? = null
     internal var mLastLocation: Location? = null
@@ -180,6 +185,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         mIsInCountdownMode = false
         mCountdownTime = 0
         mBurstHandler = Handler()
+        mIsInCaptionMode = false
 
         mBurstModeSetup = Runnable {
             // runs only once, that is after holding shutter button for 2 sec
@@ -278,6 +284,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         checkVideoCaptureIntent()
 
         mPreview = CameraPreview(this, camera_texture_view, mIsInPhotoMode)
+
         /** QR scanner must maintain an instance of the preview
          * to capture an image
          */
@@ -285,6 +292,11 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                                             .setApplication(this)
                                             .setCameraPreview(mPreview)
                                             .build()
+
+        /** Set the Caption Scanner context */
+        CaptionStamper.setContext(getApplicationContext())
+        CaptionStamper.setActivity(this)
+        CaptionStamper.setCameraPreview(mPreview)
 
         view_holder.addView(mPreview as ViewGroup)
         checkImageCaptureIntent()
@@ -357,6 +369,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         btn_short_timer.setOnClickListener { setCountdownMode(TIMER_SHORT) }
         btn_medium_timer.setOnClickListener { setCountdownMode(TIMER_MEDIUM) }
         btn_long_timer.setOnClickListener { setCountdownMode(TIMER_LONG) }
+        caption_toggle.setOnClickListener { handleCaptionMode() }
         share.setOnClickListener { toggleShareNextMedia() }
 
         shutter.setOnTouchListener(object : OnTouchListener {
@@ -566,6 +579,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                 share.beInvisible()
                 last_image.beInvisible()
                 swipe_area.beInvisible()
+                caption_toggle.beInvisible()
             } else {
                 settings.beVisible()
                 change_resolution.beVisible()
@@ -573,11 +587,13 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                 share.beVisible()
                 last_image.beVisible()
                 swipe_area.beVisible()
+                caption_toggle.beVisible()
             }
             settings.isClickable = !hide
             change_resolution.isClickable = !hide
             toggle_flash.isClickable = !hide
             last_image.isClickable = !hide
+            caption_toggle.isClickable = !hide
             share.isClickable = !hide
         }
     }
@@ -652,6 +668,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         space_remaining.beGone()
         mPreview?.initPhotoMode()
         setupPreviewImage(true)
+        caption_toggle.beVisible()
     }
 
     internal fun tryInitVideoMode() {
@@ -673,6 +690,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         shutter.setImageResource(R.drawable.ic_video_rec)
         setupPreviewImage(false)
         mPreview?.checkFlashlight()
+        caption_toggle.beGone()
     }
 
     private fun setupPreviewImage(isPhoto: Boolean) {
@@ -711,7 +729,12 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         fadeAnim(change_resolution, .5f)
         fadeAnim(last_image, .5f)
         fadeAnim(toggle_flash, .5f)
-        if (mIsInPhotoMode) fadeAnim(countdown_toggle, .5f) else fadeAnim(space_remaining, .5f)
+        if (mIsInPhotoMode) {
+            fadeAnim(countdown_toggle, .5f)
+            fadeAnim(caption_toggle, .5f)
+        } else {
+            fadeAnim(space_remaining, .5f)
+        }
         fadeAnim(countdown_time_selected, .5f)
         fadeAnim(countdown_times, .0f)
         fadeAnim(btn_short_timer, .0f)
@@ -725,7 +748,12 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         fadeAnim(change_resolution, 1f)
         fadeAnim(last_image, 1f)
         fadeAnim(toggle_flash, 1f)
-        if (mIsInPhotoMode) fadeAnim(countdown_toggle, 1f) else fadeAnim(space_remaining, 1f)
+        if (mIsInPhotoMode) {
+            fadeAnim(countdown_toggle, 1f)
+            fadeAnim(caption_toggle, 1f)
+        } else {
+            fadeAnim(space_remaining, 1f)
+        }
         fadeAnim(countdown_time_selected, 1f)
         fadeAnim(countdown_times, 1f)
         fadeAnim(btn_short_timer, 1f)
@@ -832,7 +860,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     }
 
     private fun animateViews(degrees: Int) {
-        val views = arrayOf<View>(toggle_camera, toggle_flash, toggle_photo_video, change_resolution, shutter, settings, countdown_toggle, countdown_time_selected, countdown_times)
+        val views = arrayOf<View>(toggle_camera, toggle_flash, toggle_photo_video, change_resolution, shutter, settings, countdown_toggle, countdown_time_selected, countdown_times, caption_toggle)
         for (view in views) {
             rotate(view, degrees)
         }
@@ -1077,5 +1105,56 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     fun testPreviewFilterWrapper(index: Int): Boolean {
         return this.mPreview!!.previewFilter(index)
+    }
+
+    internal fun toggleCaptionFade() {
+        if (caption_toggle.alpha == .5f) {
+            fadeInButtons()
+        }
+    }
+
+    internal fun checkCaptionMode() {
+        if (caption_toggle.isChecked) {
+            mIsInCaptionMode = true
+        } else {
+            mIsInCaptionMode = false
+        }
+    }
+
+    internal fun displayCaption() {
+        if (mIsInCaptionMode) {
+            caption_holder.beVisible()
+            caption_stamp.beVisible()
+            shutter.beInvisible()
+
+            mCaptionStamper = CaptionStamper()
+            mCaptionStamper.showKeyboard()
+        } else {
+            caption_holder.beGone()
+            caption_stamp.beGone()
+            caption_input.setText("")
+            shutter.beVisible()
+            mCaptionStamper.hideKeyboard()
+        }
+    }
+
+    fun stampCaption(v: View) {
+        System.out.println("In stamp caption")
+        System.out.println(caption_input.text)
+        mCaptionStamper.performStamp(caption_input.text.toString())
+        mCaptionStamper.hideKeyboard()
+
+        /** Toggle the mode off after this attempt at a caption */
+        caption_toggle.setChecked(false)
+        handleCaptionMode()
+
+        /** Clear the text */
+        caption_input.setText("")
+    }
+
+    internal fun handleCaptionMode() {
+        toggleCaptionFade()
+        checkCaptionMode()
+        displayCaption()
     }
 }

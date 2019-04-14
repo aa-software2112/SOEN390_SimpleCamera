@@ -20,6 +20,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
+import com.simplemobiletools.camera.implementations.CaptionStamper
 import com.simplemobiletools.camera.implementations.QRScanner
 
 class PhotoProcessor(
@@ -126,6 +127,10 @@ class PhotoProcessor(
                 QRScanner.qr_requested = false
                 return ""
             }
+
+            /** Adds a caption if there is on requested - otherwise does nothing
+             */
+            image = CaptionStamper.addCaptionToImage(image)
 
             try {
                 image.compress(Bitmap.CompressFormat.JPEG, activity.config.photoQuality, fos)

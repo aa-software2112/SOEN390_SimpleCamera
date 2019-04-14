@@ -20,18 +20,46 @@
 
 
     <LinearLayout
-        android:id="@+id/GPS"
+        android:id="@+id/caption_holder"
         android:layout_width="match_parent"
-        android:layout_height="228dp"
-        android:layout_alignBottom="@+id/btn_holder"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="224dp"
-        android:layout_marginBottom="279dp"
-        android:gravity="clip_vertical|center_horizontal|center_vertical"
-        android:orientation="horizontal">
+        android:layout_height="473dp"
+        android:layout_alignTop="@+id/btn_bar"
+        android:layout_marginTop="150dp"
+        android:orientation="horizontal"
+        android:visibility="invisible">
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/caption_layout"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:theme="@style/CaptionHintColor">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/caption_input"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:gravity="center_horizontal"
+                android:hint="@string/enter_caption"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/caption_stamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/btn_holder"
+        android:layout_centerHorizontal="true"
+        android:elevation="0dp"
+        android:gravity="bottom|center_horizontal"
+        android:onClick="stampCaption"
+        android:padding="20dp"
+        android:text="STAMP"
+        android:visibility="invisible" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/gridline"
@@ -147,7 +175,7 @@
                 android:layout_height="@dimen/icon_size"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:padding="@dimen/normal_margin"
+                android:padding="15dp"
                 android:visibility="visible"
                 app:srcCompat="@drawable/ic_clock" />
 
@@ -221,27 +249,47 @@
             android:layout_width="@dimen/icon_size"
             android:layout_height="@dimen/icon_size"
             android:layout_weight="1"
-            android:padding="@dimen/normal_margin"
+            android:padding="15dp"
             android:src="@drawable/ic_flash_off" />
+
+        <View
+            android:id="@+id/filler_view"
+            android:layout_width="24dp"
+            android:layout_height="56dp" />
+
+        <ToggleButton
+            android:id="@+id/caption_toggle"
+            android:layout_width="19dp"
+            android:layout_height="27dp"
+            android:layout_alignParentRight="true"
+            android:layout_weight="1"
+            android:background="@drawable/caption"
+            android:textOff=""
+            android:textOn="" />
+
+        <View
+            android:id="@+id/filler_view2"
+            android:layout_width="24dp"
+            android:layout_height="56dp" />
+
+        <ImageView
+            android:id="@+id/share"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_alignParentRight="true"
+            android:layout_weight="1"
+            android:padding="15dp"
+            android:src="@drawable/ic_share" />
 
         <ImageView
             android:id="@+id/change_resolution"
-            android:layout_width="@dimen/icon_size"
+            android:layout_width="56dp"
             android:layout_height="@dimen/icon_size"
             android:layout_alignParentRight="true"
             android:layout_weight="1"
-            android:padding="@dimen/normal_margin"
+            android:padding="15dp"
             android:src="@drawable/ic_resolution"
             android:visibility="visible" />
-
-        <ImageView
-                android:id="@+id/share"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_alignParentRight="true"
-                android:layout_weight="1"
-                android:padding="@dimen/normal_margin"
-                android:src="@drawable/ic_share"/>
 
         <ImageView
             android:id="@+id/settings"
@@ -249,7 +297,7 @@
             android:layout_height="@dimen/icon_size"
             android:layout_alignParentRight="true"
             android:layout_weight="1"
-            android:padding="@dimen/normal_margin"
+            android:padding="15dp"
             android:src="@drawable/ic_settings_cog" />
 
     </LinearLayout>

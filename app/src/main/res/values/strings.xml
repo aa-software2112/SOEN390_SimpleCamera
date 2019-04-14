@@ -39,6 +39,7 @@
     <string name="shutter">Shutter</string>s
     <string name="advanced" translatable="false">Advanced Settings</string>
     <string name="change_resolution" translatable="false">Change Resolution</string>
+    <string name="caption_toggle" translatable="false">Stamp a caption onto photo</string>
 
     <!-- Strings displayed only on Google Playstore. Optional, but good to have -->
     <!-- Short description has to have less than 80 chars -->
@@ -55,6 +56,8 @@
     <string name="qr_alert_title" translatable="false">QR Navigation</string>
     <string name="grid_line" translatable="false">Show grid line</string>
     <string name="space_remaining" translatable="false">Show space remaining when recording</string>
+    <string name="enter_caption" translatable="false">ENTER CAPTION</string>
+
     <!--
         Haven't found some strings? There's more at
         https://github.com/SimpleMobileTools/Simple-Commons/tree/master/commons/src/main/res
