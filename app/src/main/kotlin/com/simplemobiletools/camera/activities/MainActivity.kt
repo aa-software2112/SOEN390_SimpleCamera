@@ -98,7 +98,8 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     internal lateinit var mCameraSource: CameraSource
 
     /** Caption Stamper */
-    internal lateinit var mCaptionStamper: CaptionStamper
+    /* internal lateinit var mCaptionStamper: CaptionStamper */
+    internal var mCaptionStamper: CaptionStamper? = null
 
     internal var mFusedLocationClient: FusedLocationProviderClient? = null
     internal var mLastLocation: Location? = null
@@ -1128,21 +1129,21 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             shutter.beInvisible()
 
             mCaptionStamper = getCaptionStamper()
-            mCaptionStamper.showKeyboard()
+            mCaptionStamper!!.showKeyboard()
         } else {
             caption_holder.beGone()
             caption_stamp.beGone()
             caption_input.setText("")
             shutter.beVisible()
-            mCaptionStamper.hideKeyboard()
+            mCaptionStamper!!.hideKeyboard()
         }
     }
 
     fun stampCaption(v: View) {
         System.out.println("In stamp caption")
         System.out.println(caption_input.text)
-        mCaptionStamper.performStamp(caption_input.text.toString())
-        mCaptionStamper.hideKeyboard()
+        mCaptionStamper!!.performStamp(caption_input.text.toString())
+        mCaptionStamper!!.hideKeyboard()
 
         /** Toggle the mode off after this attempt at a caption */
         caption_toggle.setChecked(false)
@@ -1158,7 +1159,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         displayCaption()
     }
 
-    internal fun getCaptionStamper(): CaptionStamper {
+    internal fun getCaptionStamper(): CaptionStamper? {
         if (mCaptionStamper != null) {
             return mCaptionStamper
             }
