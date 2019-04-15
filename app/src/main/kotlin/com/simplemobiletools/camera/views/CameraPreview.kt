@@ -103,6 +103,7 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
     private val mMediaActionSound = MediaActionSound()
     private var mZoomRect: Rect? = null
     private var mUITestPhotoTaken = false
+    private var mCurrentFilterIndex = 0
 
     constructor(context: Context) : super(context)
 
@@ -572,6 +573,7 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
                 setFlashAndExposure(this)
                 set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE)
                 set(CaptureRequest.JPEG_ORIENTATION, jpegOrientation)
+                set(CaptureRequest.CONTROL_EFFECT_MODE, mCurrentFilterIndex)
                 set(CaptureRequest.CONTROL_CAPTURE_INTENT, CaptureRequest.CONTROL_CAPTURE_INTENT_STILL_CAPTURE)
                 set(CaptureRequest.CONTROL_AE_TARGET_FPS_RANGE, getFrameRange())
                 if (mZoomRect != null) {
@@ -851,7 +853,7 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
         if (mActivity.config.isSoundEnabled) {
             mMediaActionSound.play(MediaActionSound.STOP_VIDEO_RECORDING)
         }
-
+        var caughtError = false
         mIsRecording = false
         try {
             mMediaRecorder!!.stop()
@@ -864,11 +866,16 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
             openResolutionsDialog(true)
             val fileDirItem = FileDirItem(mLastVideoPath, mLastVideoPath.getFilenameFromPath())
             mActivity.deleteFile(fileDirItem, false)
+            caughtError = true
         } finally {
-            Thread {
-                closeCamera()
-                openCamera(mTextureView.width, mTextureView.height)
-            }.start()
+            if (mActivity.mWillShareNextMedia && !caughtError) {
+                mActivity.mPhotoVideoSender.shareLastMedia(mLastVideoPath, false)
+            } else {
+                Thread {
+                    closeCamera()
+                    openCamera(mTextureView.width, mTextureView.height)
+                }.start()
+            }
             mActivity.setRecordingState(false)
         }
     }
@@ -994,6 +1001,7 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
         try {
 
             mPreviewRequestBuilder!!.set(CaptureRequest.CONTROL_EFFECT_MODE, index)
+            mCurrentFilterIndex = index
             mPreviewRequest = mPreviewRequestBuilder!!.build()
             mCaptureSession?.setRepeatingRequest(mPreviewRequest, mCaptureCallback, mBackgroundHandler)
             return true
@@ -1002,11 +1010,19 @@ class CameraPreview : ViewGroup, TextureView.SurfaceTextureListener, MyPreview {
         }
     }
 
+    override fun getFilterIndex(): Int {
+        return mCurrentFilterIndex
+    }
+
     override fun getAvailableFilters(): IntArray {
 
         val characteristics = this.getCameraCharacteristics()
         val supported = characteristics.get(CameraCharacteristics.CONTROL_AVAILABLE_EFFECTS)
 
         return supported
+    }
+
+    public fun isInPreviewMode(): Boolean {
+        return this.mCameraState == STATE_PREVIEW
     }
 }

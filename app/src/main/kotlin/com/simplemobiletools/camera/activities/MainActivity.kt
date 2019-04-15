@@ -32,17 +32,41 @@ import android.view.MotionEvent
 import android.view.View.OnTouchListener
 import android.location.Location
 import android.annotation.SuppressLint
+
+import android.graphics.Bitmap
+import android.content.Context
+import android.graphics.Color
+
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import android.view.View
 import android.location.Geocoder
 import android.location.Address
+
+import android.util.Log
+import com.google.android.gms.vision.CameraSource
+
+import com.simplemobiletools.camera.implementations.QRScanner
+
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
+
 import java.util.Locale
+import com.google.firebase.analytics.FirebaseAnalytics
+
+import com.google.zxing.BinaryBitmap
+
+import com.google.zxing.MultiFormatReader
+import com.google.zxing.RGBLuminanceSource
+import com.google.zxing.common.HybridBinarizer
+import com.simplemobiletools.camera.implementations.CaptionStamper
 
 class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     private val FADE_DELAY = 6000L // in milliseconds
     private val COUNTDOWN_INTERVAL = 1000L
     private val BURSTMODE_INTERVAL_BETWEEN_CAPTURES = 100L // in milliseconds
+
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     lateinit var mTimerHandler: Handler
     private lateinit var mOrientationEventListener: OrientationEventListener
@@ -52,6 +76,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     internal lateinit var mBurstHandler: Handler
     internal lateinit var mBurstRunnable: Runnable
     internal lateinit var mBurstModeSetup: Runnable
+    internal lateinit var mPhotoVideoSender: PhotoVideoSender
 
     private var mSupportedFilter: IntArray? = null
     private var mPreview: MyPreview? = null
@@ -65,6 +90,16 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     internal var mIsInCountdownMode = false
     internal var mCountdownTime = 0
     internal var mBurstEnabled = false
+    internal var mIsInCaptionMode = false
+    internal var mWillShareNextMedia = false
+
+    /** QR Scanner */
+    internal lateinit var mQrScanner: QRScanner
+    internal lateinit var mCameraSource: CameraSource
+
+    /** Caption Stamper */
+    /* internal lateinit var mCaptionStamper: CaptionStamper */
+    internal var mCaptionStamper: CaptionStamper? = null
 
     internal var mFusedLocationClient: FusedLocationProviderClient? = null
     internal var mLastLocation: Location? = null
@@ -89,6 +124,8 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         checkWhatsNewDialog()
         setupOrientationEventListener()
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
     }
 
     override fun onResume() {
@@ -99,6 +136,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             setupPreviewImage(mIsInPhotoMode)
             scheduleFadeOut()
             mFocusCircleView.setStrokeColor(getAdjustedPrimaryColor())
+            mPreview?.previewFilter(mPreview?.getFilterIndex()!!)
 
             if (mIsVideoCaptureIntent && mIsInPhotoMode) {
                 handleTogglePhotoVideo()
@@ -148,10 +186,11 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         mIsInCountdownMode = false
         mCountdownTime = 0
         mBurstHandler = Handler()
+        mIsInCaptionMode = false
 
         mBurstModeSetup = Runnable {
             // runs only once, that is after holding shutter button for 2 sec
-            if (!mIsInCountdownMode && mIsInPhotoMode) {
+            if (!mIsInCountdownMode && mIsInPhotoMode && !mWillShareNextMedia) {
                 mBurstEnabled = true
                 handleShutter()
             }
@@ -163,6 +202,8 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                 mBurstHandler.postDelayed(this, BURSTMODE_INTERVAL_BETWEEN_CAPTURES)
             }
         }
+
+        mPhotoVideoSender = PhotoVideoSender(this)
 
         if (config.alwaysOpenBackCamera) {
             config.lastUsedCamera = mCameraImpl.getBackCameraId().toString()
@@ -195,6 +236,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         settings.beGone()
     }
 
+    @SuppressLint("MissingPermission")
     private fun tryInitCamera() {
         handlePermission(PERMISSION_CAMERA) {
             if (it) {
@@ -241,7 +283,22 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         (btn_holder.layoutParams as RelativeLayout.LayoutParams).setMargins(0, 0, 0, (navBarHeight + resources.getDimension(R.dimen.activity_margin)).toInt())
 
         checkVideoCaptureIntent()
+
         mPreview = CameraPreview(this, camera_texture_view, mIsInPhotoMode)
+
+        /** QR scanner must maintain an instance of the preview
+         * to capture an image
+         */
+        mQrScanner = QRScanner.getInstance().setContext(getApplicationContext())
+                                            .setApplication(this)
+                                            .setCameraPreview(mPreview)
+                                            .build()
+
+        /** Set the Caption Scanner context */
+        CaptionStamper.setContext(getApplicationContext())
+        CaptionStamper.setActivity(this)
+        CaptionStamper.setCameraPreview(mPreview)
+
         view_holder.addView(mPreview as ViewGroup)
         checkImageCaptureIntent()
         mPreview?.setIsImageCaptureIntent(isImageCaptureIntent())
@@ -262,7 +319,11 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     }
 
     internal fun initButtons() {
+
+        System.out.println("Initializing Buttons")
+
         toggle_camera.setOnClickListener { toggleCamera() }
+
         swipe_area.setOnTouchListener(object : OnSwipeTouchListener(applicationContext) {
             override fun onSwipeLeft() {
                 showLastMediaPreview()
@@ -275,7 +336,31 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             override fun onSwipeBottom() {
                 toggleFilterScrollArea(true)
             }
+
+            override fun onTouch(v: View, event: MotionEvent): Boolean {
+
+                /** Must call super here in order to
+                 * keep swipes working
+                 */
+                super.onTouch(v, event)
+
+                if (MotionEvent.ACTION_DOWN == event.getAction()) {
+                    System.out.println("ACTION_DOWN")
+                    mQrScanner.scheduleQR(1000)
+
+                    return true
+                } else if (MotionEvent.ACTION_UP == event.getAction()) {
+                    System.out.println("ACTION_UP")
+
+                    mQrScanner.cancelQr()
+
+                    return true
+                }
+
+                return true
+            }
         })
+
         toggle_flash.setOnClickListener { toggleFlash() }
         settings.setOnClickListener { launchSettings() }
         toggle_photo_video.setOnClickListener { handleTogglePhotoVideo() }
@@ -285,6 +370,8 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         btn_short_timer.setOnClickListener { setCountdownMode(TIMER_SHORT) }
         btn_medium_timer.setOnClickListener { setCountdownMode(TIMER_MEDIUM) }
         btn_long_timer.setOnClickListener { setCountdownMode(TIMER_LONG) }
+        caption_toggle.setOnClickListener { handleCaptionMode() }
+        share.setOnClickListener { toggleShareNextMedia() }
 
         shutter.setOnTouchListener(object : OnTouchListener {
             override fun onTouch(view: View, event: MotionEvent): Boolean {
@@ -323,6 +410,28 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         filter_whiteboard.beGone()
         filter_blackboard.beGone()
         filter_aqua.beGone()
+    }
+
+    private fun scanQRImage(bMap: Bitmap): String {
+        var contents = ""
+
+        var intArray: IntArray = IntArray(bMap.getWidth()*bMap.getHeight())
+        // copy pixel data from the Bitmap into the 'intArray' array
+        bMap.getPixels(intArray, 0, bMap.getWidth(), 0, 0, bMap.getWidth(), bMap.getHeight())
+
+        var source = RGBLuminanceSource(bMap.getWidth(), bMap.getHeight(), intArray)
+        var bitmap = BinaryBitmap(HybridBinarizer(source))
+
+        var reader = MultiFormatReader()
+
+        try {
+            var result = reader.decode(bitmap)
+            contents = result.getText()
+        } catch (e: Exception) {
+            Log.e("QrTest", "Error decoding barcode", e)
+        }
+
+        return contents
     }
 
     private fun toggleCamera() {
@@ -427,6 +536,11 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     }
 
     internal fun handleShutter() {
+
+        val bundle = Bundle()
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "handleShutter")
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
+
         if (mIsInPhotoMode && mBurstEnabled && !mIsInCountdownMode) {
             toggleBurstModeButton()
             mBurstHandler.post(mBurstRunnable)
@@ -463,19 +577,25 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                 settings.beInvisible()
                 change_resolution.beInvisible()
                 toggle_flash.beInvisible()
+                share.beInvisible()
                 last_image.beInvisible()
                 swipe_area.beInvisible()
+                caption_toggle.beInvisible()
             } else {
                 settings.beVisible()
                 change_resolution.beVisible()
                 toggle_flash.beVisible()
+                share.beVisible()
                 last_image.beVisible()
                 swipe_area.beVisible()
+                caption_toggle.beVisible()
             }
             settings.isClickable = !hide
             change_resolution.isClickable = !hide
             toggle_flash.isClickable = !hide
             last_image.isClickable = !hide
+            caption_toggle.isClickable = !hide
+            share.isClickable = !hide
         }
     }
 
@@ -503,6 +623,16 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     private fun handleChangeResolutionDialog() {
         if (change_resolution.alpha == 1f) mPreview?.showChangeResolutionDialog() else fadeInButtons()
+    }
+
+    private fun toggleShareNextMedia() {
+        mWillShareNextMedia = !mWillShareNextMedia
+        if (mWillShareNextMedia == false) {
+            share.clearColorFilter()
+        } else {
+            val color = Color.parseColor("#FFD700")
+            share.setColorFilter(color)
+        }
     }
 
     private fun togglePhotoVideo() {
@@ -536,8 +666,10 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         toggle_photo_video.setImageResource(R.drawable.ic_video)
         shutter.setImageResource(R.drawable.ic_shutter)
         countdown_toggle.beVisible()
+        space_remaining.beGone()
         mPreview?.initPhotoMode()
         setupPreviewImage(true)
+        caption_toggle.beVisible()
     }
 
     internal fun tryInitVideoMode() {
@@ -559,6 +691,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         shutter.setImageResource(R.drawable.ic_video_rec)
         setupPreviewImage(false)
         mPreview?.checkFlashlight()
+        caption_toggle.beGone()
     }
 
     private fun setupPreviewImage(isPhoto: Boolean) {
@@ -597,12 +730,18 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         fadeAnim(change_resolution, .5f)
         fadeAnim(last_image, .5f)
         fadeAnim(toggle_flash, .5f)
-        fadeAnim(countdown_toggle, .5f)
+        if (mIsInPhotoMode) {
+            fadeAnim(countdown_toggle, .5f)
+            fadeAnim(caption_toggle, .5f)
+        } else {
+            fadeAnim(space_remaining, .5f)
+        }
         fadeAnim(countdown_time_selected, .5f)
         fadeAnim(countdown_times, .0f)
         fadeAnim(btn_short_timer, .0f)
         fadeAnim(btn_medium_timer, .0f)
         fadeAnim(btn_long_timer, .0f)
+        fadeAnim(share, .5f)
     }
 
     private fun fadeInButtons() {
@@ -610,12 +749,18 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         fadeAnim(change_resolution, 1f)
         fadeAnim(last_image, 1f)
         fadeAnim(toggle_flash, 1f)
-        fadeAnim(countdown_toggle, 1f)
+        if (mIsInPhotoMode) {
+            fadeAnim(countdown_toggle, 1f)
+            fadeAnim(caption_toggle, 1f)
+        } else {
+            fadeAnim(space_remaining, 1f)
+        }
         fadeAnim(countdown_time_selected, 1f)
         fadeAnim(countdown_times, 1f)
         fadeAnim(btn_short_timer, 1f)
         fadeAnim(btn_medium_timer, 1f)
         fadeAnim(btn_long_timer, 1f)
+        fadeAnim(share, 1f)
         scheduleFadeOut()
     }
 
@@ -644,6 +789,9 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
         runOnUiThread(object : Runnable {
             override fun run() {
                 video_rec_curr_timer.text = mCurrVideoRecTimer++.getFormattedDuration()
+                if (config.spaceRemainingOn) {
+                    space_remaining.text = DeviceStorageUtil.bytesToHuman(DeviceStorageUtil.freeMemory()) + " left"
+                }
                 mTimerHandler.postDelayed(this, 1000L)
             }
         })
@@ -713,7 +861,7 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
     }
 
     private fun animateViews(degrees: Int) {
-        val views = arrayOf<View>(toggle_camera, toggle_flash, toggle_photo_video, change_resolution, shutter, settings, countdown_toggle, countdown_time_selected, countdown_times)
+        val views = arrayOf<View>(toggle_camera, toggle_flash, toggle_photo_video, change_resolution, shutter, settings, countdown_toggle, countdown_time_selected, countdown_times, caption_toggle)
         for (view in views) {
             rotate(view, degrees)
         }
@@ -747,10 +895,12 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             if (isRecording) {
                 shutter.setImageResource(R.drawable.ic_video_stop)
                 toggle_camera.beInvisible()
+                if (config.spaceRemainingOn) space_remaining.beVisible()
                 showTimer()
             } else {
                 shutter.setImageResource(R.drawable.ic_video_rec)
                 showToggleCameraIfNeeded()
+                space_remaining.beGone()
                 hideTimer()
             }
         }
@@ -822,8 +972,19 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
             addressFirstLine = ""
             addressSecondLine = ""
             addressCoordinates = ""
-        } else
-            stampGPS()
+        } else {
+            if (isInternetAvailable()) {
+                stampGPS()
+            }
+        }
+    }
+
+    internal fun isInternetAvailable(): Boolean {
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE)
+        return if (connectivityManager is ConnectivityManager) {
+            val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
+            networkInfo?.isConnected ?: false
+        } else false
     }
 
     /**
@@ -856,15 +1017,17 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
                         addresses = geocoder.getFromLocation(latitude, longitude, 1)
 
                         // Parse the first address in the array
-                        addressNumber = addresses[0].featureName
-                        addressStreet = addresses[0].thoroughfare
-                        addressFirstLine = addressNumber + " " + addressStreet
+                        if (addresses[0].featureName.isNotEmpty() && addresses[0].thoroughfare.isNotEmpty() && addresses[0].adminArea.isNotEmpty() && addresses[0].countryCode.isNotEmpty()) {
+                            addressNumber = addresses[0].featureName
+                            addressStreet = addresses[0].thoroughfare
+                            addressFirstLine = addressNumber + " " + addressStreet
 
-                        addressProvince = addresses[0].adminArea
-                        addressCountry = addresses[0].countryCode
-                        addressSecondLine = addressProvince + ", " + addressCountry
+                            addressProvince = addresses[0].adminArea
+                            addressCountry = addresses[0].countryCode
+                            addressSecondLine = addressProvince + ", " + addressCountry
 
-                        addressCoordinates = latitude.toString().dropLast(3) + "N," + longitude.toString().dropLast(3) + "E"
+                            addressCoordinates = latitude.toString().dropLast(3) + "N," + longitude.toString().dropLast(3) + "E"
+                        }
                     }
                 }
     }
@@ -943,5 +1106,71 @@ class MainActivity : SimpleActivity(), PhotoProcessor.MediaSavedListener {
 
     fun testPreviewFilterWrapper(index: Int): Boolean {
         return this.mPreview!!.previewFilter(index)
+    }
+
+    internal fun toggleCaptionFade() {
+        if (caption_toggle.alpha == .5f) {
+            fadeInButtons()
+        }
+    }
+
+    internal fun checkCaptionMode() {
+        if (caption_toggle.isChecked) {
+            mIsInCaptionMode = true
+        } else {
+            mIsInCaptionMode = false
+        }
+    }
+
+    internal fun displayCaption() {
+        if (mIsInCaptionMode) {
+            caption_holder.beVisible()
+            caption_stamp.beVisible()
+            shutter.beInvisible()
+
+            mCaptionStamper = getCaptionStamper()
+            mCaptionStamper!!.showKeyboard()
+        } else {
+            caption_holder.beGone()
+            caption_stamp.beGone()
+            caption_input.setText("")
+            shutter.beVisible()
+            mCaptionStamper!!.hideKeyboard()
+        }
+    }
+
+    fun stampCaption(v: View) {
+        System.out.println("In stamp caption")
+        System.out.println(caption_input.text)
+        mCaptionStamper!!.performStamp(caption_input.text.toString())
+        mCaptionStamper!!.hideKeyboard()
+
+        /** Toggle the mode off after this attempt at a caption */
+        caption_toggle.setChecked(false)
+        handleCaptionMode()
+
+        /** Clear the text */
+        caption_input.setText("")
+    }
+
+    internal fun handleCaptionMode() {
+        toggleCaptionFade()
+        checkCaptionMode()
+        displayCaption()
+    }
+
+    internal fun getCaptionStamper(): CaptionStamper? {
+        if (mCaptionStamper != null) {
+            return mCaptionStamper
+            }
+
+        return CaptionStamper() }
+
+    internal fun setCaptionStamper(s: CaptionStamper) {
+        mCaptionStamper = s
+    }
+
+    internal fun setCameraPreview(c: CameraPreview) {
+        mPreview = c
     }
 }

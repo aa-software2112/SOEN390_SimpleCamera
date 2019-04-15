@@ -20,6 +20,8 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
+import com.simplemobiletools.camera.implementations.CaptionStamper
+import com.simplemobiletools.camera.implementations.QRScanner
 
 class PhotoProcessor(
     val activity: MainActivity,
@@ -33,7 +35,7 @@ class PhotoProcessor(
 
     override fun doInBackground(vararg params: ByteArray): String {
         var fos: OutputStream? = null
-        val path: String
+        var path = ""
         try {
             path = if (saveUri != null) {
                 saveUri.path
@@ -98,7 +100,9 @@ class PhotoProcessor(
                 // make sure the image itself is rotated at third party intents
                 image = rotate(image, totalRotation)
             }
-            if (activity.addressFirstLine != "" && activity.addressSecondLine != "" && activity.addressCoordinates != "") {
+
+            if (activity.addressFirstLine != null) {
+
                 image = addLocationStamp(image, activity.addressFirstLine, activity.addressSecondLine, activity.addressCoordinates)
             }
 
@@ -117,8 +121,20 @@ class PhotoProcessor(
                 }
             }
 
+            if (QRScanner.qr_requested) {
+                QRScanner.getInstance().addQrPhoto(rotate(image, totalRotation))
+                QRScanner.getInstance().scanPhotos()
+                QRScanner.qr_requested = false
+                return ""
+            }
+
+            /** Adds a caption if there is on requested - otherwise does nothing
+             */
+            image = CaptionStamper.addCaptionToImage(image)
+
             try {
                 image.compress(Bitmap.CompressFormat.JPEG, activity.config.photoQuality, fos)
+
                 if (!isThirdPartyIntent) {
                     activity.saveImageRotation(path, totalRotation)
                 }
@@ -130,6 +146,10 @@ class PhotoProcessor(
             if (activity.config.savePhotoMetadata && !isThirdPartyIntent) {
                 val fileExif = ExifInterface(path)
                 tempExif.copyTo(fileExif)
+            }
+
+            if (activity.mWillShareNextMedia) {
+                activity.mPhotoVideoSender.shareLastMedia(path, true)
             }
 
             return photoFile.absolutePath
